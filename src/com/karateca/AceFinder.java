@@ -102,7 +102,6 @@ public class AceFinder {
       public void run() {
         results = findAllVisible();
       }
-
     });
 
     ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -113,7 +112,6 @@ public class AceFinder {
         int lineNumber = document.getLineNumber(caretOffset);
         final int lineStartOffset = document.getLineStartOffset(lineNumber);
         final int lineEndOffset = document.getLineEndOffset(lineNumber);
-
 
         Collections.sort(results, new Comparator<Integer>() {
           @Override
@@ -141,13 +139,7 @@ public class AceFinder {
 
         startResult = 0;
         endResult = allowedCount;
-
-                /*setChanged();
-                synchronized (this) {
-                    notifyObservers();
-                }*/
         myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("AceFinder"));
-
       }
     });
   }
@@ -193,7 +185,6 @@ public class AceFinder {
     return offsets;
   }
 
-
   private int checkFolded(int offset) {
         /*
             A contributor said casting as "FoldingModelImpl" fixes a bug on mac... So I'm leaving the casting in even
@@ -226,6 +217,4 @@ public class AceFinder {
       endResult = allowedCount;
     }
   }
-
-
 }
