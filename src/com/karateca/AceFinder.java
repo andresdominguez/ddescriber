@@ -104,6 +104,4 @@ public class AceFinder {
   public void addResultsReadyListener(ChangeListener changeListener) {
     myEventDispatcher.addListener(changeListener);
   }
-
-
 }
