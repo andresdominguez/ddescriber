@@ -1,47 +1,35 @@
 <idea-plugin version="2">
-  <id>com.karateca.describer</id>
+  <id>com.karateca.jasmineDescriber</id>
   <name>Jasmine D Describer</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
-      Quickly run jasmine unit tests and suites by switching between
-      describe() / ddescribe() and it() / iit()<br>
-      Just type shit ctrl O to launch a dialog the lets you choose
-      which suite of unit test you want to flip.
+      This is an idea plugin to quickly run jasmine unit tests and suites
+      by switching between describe() / ddescribe() and it() / iit()<br><br>
+      Just type shit+ctrl+D to launch a dialog the lets you choose which
+      suite of unit test you want to flip.<br><br>
+      I have tested it on Websotrm and Intellij.
       ]]></description>
 
   <change-notes><![CDATA[
-      First version<br>
+      First version 1.0<br>
       ]]>
   </change-notes>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="107.105"/>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
+  <depends>com.intellij.modules.platform</depends>
 
-  <application-components>
-    <!-- Add your application components here -->
-  </application-components>
+  <application-components></application-components>
 
-  <project-components>
-    <!-- Add your project components here -->
-  </project-components>
+  <project-components></project-components>
 
   <actions>
-    <!-- Add your actions here -->
       <action id="DoDdescribe" class="com.karateca.JasmineDescribeReplaceAction" text="Do the ddescribe">
-          <add-to-group group-id="ToolsMenu" anchor="last"/>
-          <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
+          <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl D"/>
       </action>
   </actions>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-  </extensions>
+  <extensions defaultExtensionNs="com.intellij"></extensions>
 </idea-plugin>
