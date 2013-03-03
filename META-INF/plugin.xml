@@ -5,13 +5,14 @@
   <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
+      Quickly run jasmine unit tests and suites by switching between
+      describe() / ddescribe() and it() / iit()<br>
+      Just type shit ctrl O to launch a dialog the lets you choose
+      which suite of unit test you want to flip.
       ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+      First version<br>
       ]]>
   </change-notes>
 
