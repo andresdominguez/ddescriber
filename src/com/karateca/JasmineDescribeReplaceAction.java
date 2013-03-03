@@ -19,13 +19,13 @@ import java.util.List;
 /**
  * @author Andres Dominguez.
  */
-public class DDescirberAction extends AnAction {
+public class JasmineDescribeReplaceAction extends AnAction {
 
   protected Project project;
   protected EditorImpl editor;
   protected VirtualFile virtualFile;
   protected DocumentImpl document;
-  private JsUnitFinder jsUnitFinder;
+  private JasmineFinder jasmineFinder;
 
   @Override
   public void update(AnActionEvent e) {
@@ -38,10 +38,10 @@ public class DDescirberAction extends AnAction {
     virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
 
-    jsUnitFinder = new JsUnitFinder(project, document, editor, virtualFile);
+    jasmineFinder = new JasmineFinder(project, document, editor, virtualFile);
 
     // Async callback to get the search results for it( and describe(
-    jsUnitFinder.addResultsReadyListener(new ChangeListener() {
+    jasmineFinder.addResultsReadyListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         if (changeEvent.getSource().equals("LinesFound")) {
@@ -49,7 +49,7 @@ public class DDescirberAction extends AnAction {
         }
       }
     });
-    jsUnitFinder.findText("iit\\(|ddescribe\\(|it\\(|describe\\(", true);
+    jasmineFinder.findText("iit\\(|ddescribe\\(|it\\(|describe\\(", true);
   }
 
   private void processSearchResultsAndShowDialog() {
@@ -58,7 +58,7 @@ public class DDescirberAction extends AnAction {
     List<LineFindResult> hierarchy = new ArrayList<LineFindResult>();
 
     // Find all the parents from the current scope.
-    for (LineFindResult line : jsUnitFinder.getLineFindResults()) {
+    for (LineFindResult line : jasmineFinder.getLineFindResults()) {
       if (line.getIndentation() < currentIndentation) {
         currentIndentation = line.getIndentation();
         hierarchy.add(line);

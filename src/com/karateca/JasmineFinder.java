@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Used to find suites and unit tests in a JsUnit JavaScript file.
  */
-public class JsUnitFinder {
+public class JasmineFinder {
 
   private final Project project;
   private final DocumentImpl document;
@@ -34,7 +34,7 @@ public class JsUnitFinder {
     return lineFindResults;
   }
 
-  public JsUnitFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
+  public JasmineFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
     this.project = project;
     this.document = document;
     this.editor = editor;

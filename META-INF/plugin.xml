@@ -1,6 +1,6 @@
 <idea-plugin version="2">
   <id>com.karateca.describer</id>
-  <name>Plugin display name here</name>
+  <name>Jasmine D Describer</name>
   <version>1.0</version>
   <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
@@ -34,7 +34,7 @@
 
   <actions>
     <!-- Add your actions here -->
-      <action id="DoDdescribe" class="com.karateca.DDescirberAction" text="Do the ddescribe">
+      <action id="DoDdescribe" class="com.karateca.JasmineDescribeReplaceAction" text="Do the ddescribe">
           <add-to-group group-id="ToolsMenu" anchor="last"/>
           <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
       </action>
