@@ -4,6 +4,9 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
@@ -85,14 +88,20 @@ public class JasmineDescribeReplaceAction extends AnAction {
   }
 
   private void processSelectedLine(final JBList theList, final List<LineFindResult> hierarchy) {
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+
+    CommandProcessor.getInstance().executeCommand(project, new Runnable() {
       @Override
       public void run() {
-        int selectedIndex = theList.getSelectedIndex();
-        LineFindResult lineFindResult = hierarchy.get(selectedIndex);
-        changeSelectedLine(lineFindResult);
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+          @Override
+          public void run() {
+            int selectedIndex = theList.getSelectedIndex();
+            LineFindResult lineFindResult = hierarchy.get(selectedIndex);
+            changeSelectedLine(lineFindResult);
+          }
+        });
       }
-    });
+    }, null, null);
   }
 
   private void changeSelectedLine(LineFindResult lineFindResult) {
