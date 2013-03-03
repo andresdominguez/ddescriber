@@ -1,7 +1,5 @@
 package com.karateca;
 
-import com.intellij.find.FindResult;
-import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -10,18 +8,15 @@ import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.popup.AbstractPopup;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Andres Dominguez.
@@ -71,14 +66,18 @@ public class DDescirberAction extends AnAction {
   }
 
   private void showResultsFound() {
-    System.out.println("Done");
-    CharSequence charsSequence = document.getCharsSequence();
-    for (FindResult findResult : aceFinder.getFindResults()) {
+    // Filter the hierarchy.
+    int currentIndentation = Integer.MAX_VALUE;
+    List<LineFindResult> hierarchy = new ArrayList<LineFindResult>();
 
-      LineFindResult line = new LineFindResult(document, findResult);
-      System.out.println("");
+    // Find all the parents from the current scope.
+    for (LineFindResult line : aceFinder.getLineFindResults()) {
+      if (line.getIndentation() < currentIndentation) {
+        currentIndentation = line.getIndentation();
+        hierarchy.add(line);
+      }
     }
 
-
+    System.out.println("");
   }
 }

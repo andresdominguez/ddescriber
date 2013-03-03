@@ -29,25 +29,19 @@ import java.util.List;
  */
 public class AceFinder {
 
-  public static final CharSequence ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
-
-
   private final Project project;
   private final DocumentImpl document;
   private final EditorImpl editor;
   private final VirtualFile virtualFile;
   private FindManager findManager;
   private FindModel findModel;
+  private List<LineFindResult> lineFindResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
-  private List<FindResult> findResults;
-
-  public List<FindResult> getFindResults() {
-    return findResults;
+  public List<LineFindResult> getLineFindResults() {
+    return lineFindResults;
   }
-
-  private List<Integer> results;
 
   public AceFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
     this.project = project;
@@ -86,9 +80,10 @@ public class AceFinder {
   }
 
   private void findAll() {
-    findResults = new ArrayList<FindResult>();
+    lineFindResults = new ArrayList<LineFindResult>();
     CharSequence text = document.getCharsSequence();
     int offset = editor.getCaretModel().getOffset();
+
     while (true) {
       FindResult result = findManager.findString(text, offset, findModel, virtualFile);
 
@@ -96,8 +91,8 @@ public class AceFinder {
         return;
       }
 
-      findResults.add(result);
       offset = result.getStartOffset();
+      lineFindResults.add(new LineFindResult(document, result));
     }
   }
 
