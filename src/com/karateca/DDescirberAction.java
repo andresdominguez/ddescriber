@@ -3,19 +3,14 @@ package com.karateca;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.popup.AbstractPopup;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.Font;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,16 +20,10 @@ public class DDescirberAction extends AnAction {
 
   protected Project project;
   protected EditorImpl editor;
-  protected AbstractPopup popup;
   protected VirtualFile virtualFile;
   protected DocumentImpl document;
 
-  private Font font;
-  private EditorColorsScheme scheme;
-
   private AceFinder aceFinder;
-
-  private HashMap<String, Integer> textAndOffsetHash = new HashMap<String, Integer>();
 
 
   @Override
@@ -47,9 +36,6 @@ public class DDescirberAction extends AnAction {
     editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
     virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
-
-    scheme = EditorColorsManager.getInstance().getGlobalScheme();
-    font = new Font(scheme.getEditorFontName(), Font.BOLD, scheme.getEditorFontSize());
 
     aceFinder = new AceFinder(project, document, editor, virtualFile);
 
