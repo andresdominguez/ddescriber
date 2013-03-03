@@ -88,6 +88,27 @@ public class JasmineFinder {
   }
 
   /**
+   * Get the search results in the form a a hierarchy starting from the current
+   * scope, then going to the parents all the way to the top. The hierarchy is
+   * calculated with the indentation of the describe() or the it().
+   * @return The current test of suite and the parents.
+   */
+  public List<LineFindResult> getHierarchy() {
+    // Filter the hierarchy.
+    int currentIndentation = Integer.MAX_VALUE;
+    List<LineFindResult> hierarchy = new ArrayList<LineFindResult>();
+
+    // Find all the parents from the current scope.
+    for (LineFindResult line : lineFindResults) {
+      if (line.getIndentation() < currentIndentation) {
+        currentIndentation = line.getIndentation();
+        hierarchy.add(line);
+      }
+    }
+    return hierarchy;
+  }
+
+  /**
    * Register for change events.
    *
    * @param changeListener
