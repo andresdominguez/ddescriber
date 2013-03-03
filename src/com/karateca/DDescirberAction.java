@@ -3,11 +3,16 @@ package com.karateca;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.*;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.CheckBoxList;
+import com.intellij.ui.components.JBList;
 
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
@@ -64,6 +69,33 @@ public class DDescirberAction extends AnAction {
       }
     }
 
-    System.out.println("");
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        //showDialog();
+      }
+    });
+    showDialog(hierarchy);
+  }
+
+  private void showDialog(List<LineFindResult> hierarchy) {
+    List<String> itemNames = new ArrayList<String>();
+    for (LineFindResult lineFindResult : hierarchy) {
+      itemNames.add(lineFindResult.getLineText());
+    }
+
+    final JList valueList = new JList(itemNames.toArray());
+
+
+    JBPopupFactory.getInstance()
+            .createListPopupBuilder(valueList)
+            .setTitle("Select the test or suite to add / remove")
+            .setItemChoosenCallback(new Runnable() {
+              public void run() {
+                System.out.println("fds");
+              }
+            })
+            .createPopup()
+            .showCenteredInCurrentWindow(project);
   }
 }
