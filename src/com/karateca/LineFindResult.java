@@ -13,14 +13,19 @@ public class LineFindResult {
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;
+  private final int endOffset;
+  private final int startOffset;
 
   public LineFindResult(DocumentImpl document, FindResult findResult) {
-    int lineNumber = document.getLineNumber(findResult.getEndOffset());
+    startOffset = findResult.getStartOffset();
+    endOffset = findResult.getEndOffset();
+
+    int lineNumber = document.getLineNumber(endOffset);
     int startOfLine = document.getLineStartOffset(lineNumber);
     int endOfLine = document.getLineEndOffset(lineNumber);
 
     lineText = document.getText(new TextRange(startOfLine, endOfLine));
-    indentation = findResult.getStartOffset() - startOfLine;
+    indentation = startOffset - startOfLine;
 
     isDescribe = lineText.contains("describe(");
     markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
@@ -40,5 +45,13 @@ public class LineFindResult {
 
   public boolean isMarkedForRun() {
     return markedForRun;
+  }
+
+  public int getEndOffset() {
+    return endOffset;
+  }
+
+  public int getStartOffset() {
+    return startOffset;
   }
 }

@@ -7,12 +7,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.*;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.components.JBList;
 
-import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
@@ -27,9 +25,7 @@ public class DDescirberAction extends AnAction {
   protected EditorImpl editor;
   protected VirtualFile virtualFile;
   protected DocumentImpl document;
-
   private JsUnitFinder jsUnitFinder;
-
 
   @Override
   public void update(AnActionEvent e) {
@@ -44,19 +40,19 @@ public class DDescirberAction extends AnAction {
 
     jsUnitFinder = new JsUnitFinder(project, document, editor, virtualFile);
 
+    // Async callback to get the search results for it( and describe(
     jsUnitFinder.addResultsReadyListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         if (changeEvent.getSource().equals("LinesFound")) {
-          showResultsFound();
-
+          processSearchResultsAndShowDialog();
         }
       }
     });
     jsUnitFinder.findText("iit\\(|ddescribe\\(|it\\(|describe\\(", true);
   }
 
-  private void showResultsFound() {
+  private void processSearchResultsAndShowDialog() {
     // Filter the hierarchy.
     int currentIndentation = Integer.MAX_VALUE;
     List<LineFindResult> hierarchy = new ArrayList<LineFindResult>();
@@ -69,33 +65,53 @@ public class DDescirberAction extends AnAction {
       }
     }
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        //showDialog();
-      }
-    });
     showDialog(hierarchy);
   }
 
-  private void showDialog(List<LineFindResult> hierarchy) {
+  private void showDialog(final List<LineFindResult> hierarchy) {
     List<String> itemNames = new ArrayList<String>();
     for (LineFindResult lineFindResult : hierarchy) {
       itemNames.add(lineFindResult.getLineText());
     }
 
-    final JList valueList = new JList(itemNames.toArray());
-
+    final JBList theList = new JBList(itemNames.toArray());
 
     JBPopupFactory.getInstance()
-            .createListPopupBuilder(valueList)
+            .createListPopupBuilder(theList)
             .setTitle("Select the test or suite to add / remove")
+
             .setItemChoosenCallback(new Runnable() {
               public void run() {
-                System.out.println("fds");
+                processSelectedLine(theList, hierarchy);
               }
             })
-            .createPopup()
-            .showCenteredInCurrentWindow(project);
+            .createPopup().
+            showCenteredInCurrentWindow(project);
+  }
+
+  private void processSelectedLine(final JBList theList, final List<LineFindResult> hierarchy) {
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        int selectedIndex = theList.getSelectedIndex();
+        LineFindResult lineFindResult = hierarchy.get(selectedIndex);
+        changeSelectedLine(lineFindResult);
+      }
+    });
+  }
+
+  private void changeSelectedLine(LineFindResult lineFindResult) {
+    int start = lineFindResult.getStartOffset();
+    int end = lineFindResult.getEndOffset();
+    String newText = "";
+    boolean markedForRun = lineFindResult.isMarkedForRun();
+    if (lineFindResult.isDescribe()) {
+
+      newText = markedForRun ? "describe(" : "ddescribe(";
+    } else {
+      newText = markedForRun ? "it(" : "iit(";
+    }
+
+    document.replaceString(start, end, newText);
   }
 }
