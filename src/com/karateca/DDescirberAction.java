@@ -105,6 +105,7 @@ public class DDescirberAction extends AnAction {
     int end = lineFindResult.getEndOffset();
     String newText = "";
     boolean markedForRun = lineFindResult.isMarkedForRun();
+
     if (lineFindResult.isDescribe()) {
       newText = markedForRun ? "describe(" : "ddescribe(";
     } else {
