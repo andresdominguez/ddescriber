@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
+  <id>com.karateca.describer</id>
   <name>Plugin display name here</name>
   <version>1.0</version>
   <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
@@ -34,9 +34,9 @@
 
   <actions>
     <!-- Add your actions here -->
-      <action id="addDtoDescribe" class="com.karateca.DDescirberAction" text="Add ddescribe"
-              description="Add ddescribe or iit">
-          <keyboard-shortcut keymap="$default" first-keystroke="ctrl QUOTE"/>
+      <action id="DoDdescribe" class="com.karateca.DDescirberAction" text="Do the ddescribe">
+          <add-to-group group-id="ToolsMenu" anchor="last"/>
+          <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
       </action>
   </actions>
 
