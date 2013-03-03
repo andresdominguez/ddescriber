@@ -116,7 +116,6 @@ public class JasmineDescribeReplaceAction extends AnAction {
       newText = markedForRun ? "it(" : "iit(";
     }
 
-    // TODO: add undo here.
     document.replaceString(start, end, newText);
   }
 }
