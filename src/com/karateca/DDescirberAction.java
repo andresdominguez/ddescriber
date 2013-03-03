@@ -23,7 +23,7 @@ public class DDescirberAction extends AnAction {
   protected VirtualFile virtualFile;
   protected DocumentImpl document;
 
-  private AceFinder aceFinder;
+  private JsUnitFinder jsUnitFinder;
 
 
   @Override
@@ -37,9 +37,9 @@ public class DDescirberAction extends AnAction {
     virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
 
-    aceFinder = new AceFinder(project, document, editor, virtualFile);
+    jsUnitFinder = new JsUnitFinder(project, document, editor, virtualFile);
 
-    aceFinder.addResultsReadyListener(new ChangeListener() {
+    jsUnitFinder.addResultsReadyListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         if (changeEvent.getSource().equals("LinesFound")) {
@@ -48,7 +48,7 @@ public class DDescirberAction extends AnAction {
         }
       }
     });
-    aceFinder.findText("it\\(|describe\\(", true);
+    jsUnitFinder.findText("iit\\(|ddescribe\\(|it\\(|describe\\(", true);
   }
 
   private void showResultsFound() {
@@ -57,7 +57,7 @@ public class DDescirberAction extends AnAction {
     List<LineFindResult> hierarchy = new ArrayList<LineFindResult>();
 
     // Find all the parents from the current scope.
-    for (LineFindResult line : aceFinder.getLineFindResults()) {
+    for (LineFindResult line : jsUnitFinder.getLineFindResults()) {
       if (line.getIndentation() < currentIndentation) {
         currentIndentation = line.getIndentation();
         hierarchy.add(line);

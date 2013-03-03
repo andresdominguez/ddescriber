@@ -16,12 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: johnlindquist
- * Date: 8/23/12
- * Time: 3:47 PM
+ * Used to find suites and unit tests in a JsUnit JavaScript file.
  */
-public class AceFinder {
+public class JsUnitFinder {
 
   private final Project project;
   private final DocumentImpl document;
@@ -37,7 +34,7 @@ public class AceFinder {
     return lineFindResults;
   }
 
-  public AceFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
+  public JsUnitFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
     this.project = project;
     this.document = document;
     this.editor = editor;

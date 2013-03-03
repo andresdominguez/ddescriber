@@ -12,6 +12,7 @@ public class LineFindResult {
   private final String lineText;
   private final int indentation;
   private final boolean isDescribe;
+  private final boolean markedForRun;
 
   public LineFindResult(DocumentImpl document, FindResult findResult) {
     int lineNumber = document.getLineNumber(findResult.getEndOffset());
@@ -22,6 +23,7 @@ public class LineFindResult {
     indentation = findResult.getStartOffset() - startOfLine;
 
     isDescribe = lineText.contains("describe(");
+    markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
   }
 
   public String getLineText() {
@@ -34,5 +36,9 @@ public class LineFindResult {
 
   public boolean isDescribe() {
     return isDescribe;
+  }
+
+  public boolean isMarkedForRun() {
+    return markedForRun;
   }
 }
