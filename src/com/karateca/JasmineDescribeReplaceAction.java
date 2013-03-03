@@ -69,20 +69,15 @@ public class JasmineDescribeReplaceAction extends AnAction {
   }
 
   private void showDialog(final List<LineFindResult> hierarchy) {
-    List<String> itemNames = new ArrayList<String>();
-    for (LineFindResult lineFindResult : hierarchy) {
-      itemNames.add(lineFindResult.getLineText());
-    }
+    final JBList jbList = new JBList(hierarchy.toArray());
 
-    final JBList theList = new JBList(itemNames.toArray());
-
+    // Open a pop-up to select which describe or it you want to change.
     JBPopupFactory.getInstance()
-            .createListPopupBuilder(theList)
+            .createListPopupBuilder(jbList)
             .setTitle("Select the test or suite to add / remove")
-
             .setItemChoosenCallback(new Runnable() {
               public void run() {
-                processSelectedLine(theList, hierarchy);
+                processSelectedLine(jbList, hierarchy);
               }
             })
             .createPopup().
@@ -112,6 +107,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
       newText = markedForRun ? "it(" : "iit(";
     }
 
+    // TODO: add undo here.
     document.replaceString(start, end, newText);
   }
 }
