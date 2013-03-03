@@ -55,7 +55,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
   private void showDialog(final List<LineFindResult> hierarchy) {
     final JBList jbList = new JBList(hierarchy.toArray());
 
-    // Open a pop-up to select which describe or it you want to change.
+    // Open a pop-up to select which describe() or it() you want to change.
     JBPopupFactory.getInstance()
             .createListPopupBuilder(jbList)
             .setTitle("Select the test or suite to add / remove")
@@ -68,21 +68,24 @@ public class JasmineDescribeReplaceAction extends AnAction {
             showCenteredInCurrentWindow(project);
   }
 
-  private void processSelectedLine(final JBList theList, final List<LineFindResult> hierarchy) {
-
+  private void processSelectedLine(final JBList listItems, final List<LineFindResult> hierarchy) {
+    // Change the contents of the selected line. Wrap the call in a
+    // command and write actions to support undo.
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
       @Override
       public void run() {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
           @Override
           public void run() {
-            int selectedIndex = theList.getSelectedIndex();
-            LineFindResult lineFindResult = hierarchy.get(selectedIndex);
-            changeSelectedLine(lineFindResult);
+            int selectedIndex = listItems.getSelectedIndex();
+            // It returns -1 when no matches were found.
+            if (selectedIndex != -1) {
+              changeSelectedLine(hierarchy.get(selectedIndex));
+            }
           }
         });
       }
-    }, null, null);
+    }, "Change describe", null);
   }
 
   private void changeSelectedLine(LineFindResult lineFindResult) {
