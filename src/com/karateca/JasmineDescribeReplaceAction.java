@@ -14,6 +14,7 @@ import com.intellij.ui.components.JBList;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,15 +46,22 @@ public class JasmineDescribeReplaceAction extends AnAction {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         if (changeEvent.getSource().equals("LinesFound")) {
-          showDialog(jasmineFinder.getHierarchy());
+          showDialog();
         }
       }
     });
     jasmineFinder.findText("iit\\(|ddescribe\\(|it\\(|describe\\(", true);
   }
 
-  private void showDialog(final List<LineFindResult> hierarchy) {
+  private void showDialog() {
+    // Reverse the order to show the top parent first all the way down
+    // to the current position.
+    final List<LineFindResult> hierarchy = jasmineFinder.getHierarchy();
+    Collections.reverse(hierarchy);
+
+    // Select the closest element found from the current position.
     final JBList jbList = new JBList(hierarchy.toArray());
+    jbList.setSelectedIndex(hierarchy.size() - 1);
 
     // Open a pop-up to select which describe() or it() you want to change.
     JBPopupFactory.getInstance()
@@ -61,36 +69,40 @@ public class JasmineDescribeReplaceAction extends AnAction {
             .setTitle("Select the test or suite to add / remove")
             .setItemChoosenCallback(new Runnable() {
               public void run() {
-                processSelectedLine(jbList, hierarchy);
+                if (jbList.getSelectedValue() != null) {
+                  changeSelectedLineRunningCommand((LineFindResult) jbList.getSelectedValue());
+                }
               }
             })
-            .createPopup().
-            showCenteredInCurrentWindow(project);
+            .createPopup()
+            .showCenteredInCurrentWindow(project);
   }
 
-  private void processSelectedLine(final JBList listItems, final List<LineFindResult> hierarchy) {
-    // Change the contents of the selected line. Wrap the call in a
-    // command and write actions to support undo.
+  /**
+   * Change the contents of the selected line. Wrap the call into command and
+   * write actions to support undo.
+   * @param selectedValue
+   */
+  private void changeSelectedLineRunningCommand(final LineFindResult selectedValue) {
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
       @Override
       public void run() {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
           @Override
           public void run() {
-            int selectedIndex = listItems.getSelectedIndex();
-            // It returns -1 when no matches were found.
-            if (selectedIndex != -1) {
-              changeSelectedLine(hierarchy.get(selectedIndex));
-            }
+            changeSelectedLine(selectedValue);
           }
         });
       }
     }, "Change describe", null);
   }
 
+  /**
+   * Perform the replace for the selected line. It will add or remove a
+   * "d" from describe() and an "i" form it().
+   * @param lineFindResult The line that has to change.
+   */
   private void changeSelectedLine(LineFindResult lineFindResult) {
-    int start = lineFindResult.getStartOffset();
-    int end = lineFindResult.getEndOffset();
     String newText = "";
     boolean markedForRun = lineFindResult.isMarkedForRun();
 
@@ -99,6 +111,9 @@ public class JasmineDescribeReplaceAction extends AnAction {
     } else {
       newText = markedForRun ? "it(" : "iit(";
     }
+
+    int start = lineFindResult.getStartOffset();
+    int end = lineFindResult.getEndOffset();
 
     document.replaceString(start, end, newText);
   }
