@@ -22,10 +22,8 @@ import java.util.List;
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 
-  protected Project project;
-  protected EditorImpl editor;
-  protected VirtualFile virtualFile;
-  protected DocumentImpl document;
+  private Project project;
+  private DocumentImpl document;
   private JasmineFinder jasmineFinder;
 
   @Override
@@ -35,8 +33,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   public void actionPerformed(AnActionEvent actionEvent) {
     project = actionEvent.getData(PlatformDataKeys.PROJECT);
-    editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
-    virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
+    EditorImpl editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
+    VirtualFile virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
 
     jasmineFinder = new JasmineFinder(project, document, editor, virtualFile);
@@ -81,7 +79,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
   /**
    * Change the contents of the selected line. Wrap the call into command and
    * write actions to support undo.
-   * @param selectedValue
+   * @param selectedValue The line that has to change.
    */
   private void changeSelectedLineRunningCommand(final LineFindResult selectedValue) {
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
@@ -103,7 +101,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
    * @param lineFindResult The line that has to change.
    */
   private void changeSelectedLine(LineFindResult lineFindResult) {
-    String newText = "";
+    String newText;
     boolean markedForRun = lineFindResult.isMarkedForRun();
 
     if (lineFindResult.isDescribe()) {

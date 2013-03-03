@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Used to find suites and unit tests in a JsUnit JavaScript file.
  */
-public class JasmineFinder {
+class JasmineFinder {
 
   private final Project project;
   private final DocumentImpl document;
@@ -30,10 +30,6 @@ public class JasmineFinder {
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
-  public List<LineFindResult> getLineFindResults() {
-    return lineFindResults;
-  }
-
   public JasmineFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
     this.project = project;
     this.document = document;
@@ -41,7 +37,7 @@ public class JasmineFinder {
     this.virtualFile = virtualFile;
   }
 
-  protected FindModel createFindModel(FindManager findManager) {
+  FindModel createFindModel(FindManager findManager) {
     FindModel clone = (FindModel) findManager.getFindInFileModel().clone();
     clone.setFindAll(true);
     clone.setFromCursor(true);
@@ -110,8 +106,7 @@ public class JasmineFinder {
 
   /**
    * Register for change events.
-   *
-   * @param changeListener
+   * @param changeListener The listener to be added.
    */
   public void addResultsReadyListener(ChangeListener changeListener) {
     myEventDispatcher.addListener(changeListener);

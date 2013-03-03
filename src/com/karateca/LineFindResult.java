@@ -7,7 +7,7 @@ import com.intellij.openapi.util.TextRange;
 /**
  * @author Andres Dominguez.
  */
-public class LineFindResult {
+class LineFindResult {
 
   private final String lineText;
   private final int indentation;
@@ -31,10 +31,6 @@ public class LineFindResult {
 
     isDescribe = lineText.contains("describe(");
     markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
-  }
-
-  public String getLineText() {
-    return lineText;
   }
 
   public int getIndentation() {
