@@ -13,6 +13,6 @@ public class JasmineFinderTest extends BaseTestCase {
     jasmineFinder.findAll();
 
     // Then ensure the unit tests and the suites were found.
-    assertEquals(7, jasmineFinder.testFindResults.size());
+    assertEquals(7, jasmineFinder.getFindResults().size());
   }
 }

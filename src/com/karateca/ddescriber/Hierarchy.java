@@ -12,13 +12,7 @@ import java.util.List;
 public class Hierarchy {
   private Document document;
   private final TestFindResult closest;
-  private final List<TestFindResult> testElements;
   private List<TestFindResult> testFindResults;
-
-  public Hierarchy(TestFindResult closest, List<TestFindResult> testElements) {
-    this.closest = closest;
-    this.testElements = testElements;
-  }
 
   public Hierarchy(Document document, List<FindResult> findResults, int caretOffset) {
     this.document = document;
@@ -29,8 +23,6 @@ public class Hierarchy {
     }
 
     this.closest = getClosestTestFromCaret(caretOffset);
-
-    this.testElements = null;
   }
 
   /**
@@ -100,13 +92,5 @@ public class Hierarchy {
 
   public TestFindResult getClosest() {
     return closest;
-  }
-
-  public List<TestFindResult> getTestElements() {
-    return testElements;
-  }
-
-  public int getClosestIndex() {
-    return testElements.indexOf(closest);
   }
 }

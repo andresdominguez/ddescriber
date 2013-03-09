@@ -5,7 +5,6 @@ import com.intellij.find.FindModel;
 import com.intellij.find.FindResult;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.impl.DocumentImpl;
-import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.EventDispatcher;
@@ -26,7 +25,6 @@ class JasmineFinder {
   private final VirtualFile virtualFile;
   private FindManager findManager;
   private FindModel findModel;
-  List<TestFindResult> testFindResults;
   List<FindResult> findResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
@@ -66,7 +64,6 @@ class JasmineFinder {
     findModel.setStringToFind(FIND_REGEXP);
     findModel.setRegularExpressions(true);
 
-    testFindResults = new ArrayList<TestFindResult>();
     findResults = new ArrayList<FindResult>();
 
     CharSequence text = document.getCharsSequence();
@@ -82,75 +79,7 @@ class JasmineFinder {
       offset = result.getEndOffset();
 
       findResults.add(result);
-      testFindResults.add(new TestFindResult(document, result));
     }
-  }
-
-  public Hierarchy getHierarchy(int offset) {
-    TestFindResult closest = getClosestTestFromCaret(offset);
-
-    List<TestFindResult> matches = new ArrayList<TestFindResult>();
-
-    int index = testFindResults.indexOf(closest);
-
-    matches.add(closest);
-
-    if (!closest.isDescribe()) {
-      // Add elements after with the same indentation.
-      for (int i = index + 1; i < testFindResults.size(); i++) {
-        TestFindResult element = testFindResults.get(i);
-        if (element.getIndentation() != closest.getIndentation()) {
-          break;
-        }
-        matches.add(element);
-      }
-
-      // Add elements before with the same indentation.
-      for (int i = index - 1; i >= 0; i--) {
-        TestFindResult element = testFindResults.get(i);
-        if (element.getIndentation() != closest.getIndentation()) {
-          break;
-        }
-        matches.add(0, element);
-      }
-    }
-
-    // Add the parents.
-    int currentIndentation = closest.getIndentation();
-    for (int i = index - 1; i >= 0; i--) {
-      TestFindResult element = testFindResults.get(i);
-      if (element.getIndentation() < currentIndentation) {
-        matches.add(0, element);
-        currentIndentation = element.getIndentation();
-      }
-    }
-
-    return new Hierarchy(closest, matches);
-  }
-
-  /**
-   * Get the closest unit test or suite from the current caret position.
-   *
-   * @param caretOffset
-   * @return The closest test or suite.
-   */
-  TestFindResult getClosestTestFromCaret(int caretOffset) {
-    int lineNumber = document.getLineNumber(caretOffset) + 1;
-    TestFindResult closest = null;
-    int minDistance = Integer.MAX_VALUE;
-
-    // Get the closest unit test or suite from the current caret.
-    for (TestFindResult testFindResult : testFindResults) {
-      int distance = Math.abs(lineNumber - testFindResult.getLineNumber());
-      if (distance < minDistance) {
-        closest = testFindResult;
-        minDistance = distance;
-      } else {
-        return closest;
-      }
-    }
-
-    return closest;
   }
 
   /**
@@ -160,5 +89,9 @@ class JasmineFinder {
    */
   public void addResultsReadyListener(ChangeListener changeListener) {
     myEventDispatcher.addListener(changeListener);
+  }
+
+  public List<FindResult> getFindResults() {
+    return findResults;
   }
 }

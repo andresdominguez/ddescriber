@@ -32,12 +32,13 @@ public class Dialog extends DialogWrapper {
   }
 
   private void createDialogList() {
-    List<TestFindResult> elements = hierarchy.getTestElements();
+    List<TestFindResult> elements = hierarchy.getUnitTestsForCurrentDescribe();
     jbList = new JBList(elements.toArray());
     jbList.setCellRenderer(new CellRenderer());
 
     // Select the closest element found from the current position.
-    jbList.setSelectedIndex(hierarchy.getClosestIndex());
+    int closestIndex = elements.indexOf(hierarchy.getClosest());
+    jbList.setSelectedIndex(closestIndex);
   }
 
   @Nullable

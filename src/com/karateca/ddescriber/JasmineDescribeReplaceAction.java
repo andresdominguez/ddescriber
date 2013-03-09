@@ -1,5 +1,6 @@
 package com.karateca.ddescriber;
 
+import com.intellij.find.FindResult;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -13,6 +14,7 @@ import com.karateca.ddescriber.dialog.Dialog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.List;
 
 /**
  * @author Andres Dominguez.
@@ -51,7 +53,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
-    Hierarchy hierarchy = jasmineFinder.getHierarchy(editor.getCaretModel().getOffset());
+    List<FindResult> findResults = jasmineFinder.getFindResults();
+    Hierarchy hierarchy = new Hierarchy(document, findResults, editor.getCaretModel().getOffset());
     Dialog dialog = new Dialog(project, hierarchy);
     dialog.show();
     int exitCode = dialog.getExitCode();
