@@ -14,14 +14,14 @@ import java.util.List;
  * @author Andres Dominguez.
  */
 public class Dialog extends DialogWrapper {
-  final List<LineFindResult> hierarchy;
+  private final List<LineFindResult> hierarchy;
   private JBList jbList;
 
   public Dialog(@Nullable Project project, List<LineFindResult> hierarchy) {
     super(project);
     this.hierarchy = hierarchy;
     init();
-    setTitle("Select the test or suite to add / remove");
+    setTitle("Select the Test or Suite to Add / Remove");
   }
 
   @Nullable
