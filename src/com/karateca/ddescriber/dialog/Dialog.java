@@ -3,6 +3,7 @@ package com.karateca.ddescriber.dialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.components.JBList;
+import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.TestFindResult;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,10 +14,10 @@ import java.util.List;
  * @author Andres Dominguez.
  */
 public class Dialog extends DialogWrapper {
-  private final List<TestFindResult> hierarchy;
+  private final Hierarchy hierarchy;
   private JBList jbList;
 
-  public Dialog(@Nullable Project project, List<TestFindResult> hierarchy) {
+  public Dialog(@Nullable Project project, Hierarchy hierarchy) {
     super(project);
     this.hierarchy = hierarchy;
     init();
@@ -31,11 +32,12 @@ public class Dialog extends DialogWrapper {
   }
 
   private void createDialogList() {
-    jbList = new JBList(hierarchy.toArray());
+    List<TestFindResult> elements = hierarchy.getTestElements();
+    jbList = new JBList(elements.toArray());
     jbList.setCellRenderer(new CellRenderer());
 
     // Select the closest element found from the current position.
-    jbList.setSelectedIndex(hierarchy.size() - 1);
+    jbList.setSelectedIndex(hierarchy.getClosestIndex());
   }
 
   @Nullable

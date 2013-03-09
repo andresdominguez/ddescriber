@@ -51,7 +51,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
   private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
     Hierarchy hierarchy = jasmineFinder.getHierarchy();
-    Dialog dialog = new Dialog(project, hierarchy.getHierarchy());
+    Dialog dialog = new Dialog(project, hierarchy);
     dialog.show();
     int exitCode = dialog.getExitCode();
 

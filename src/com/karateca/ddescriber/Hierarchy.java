@@ -7,18 +7,22 @@ import java.util.List;
  */
 public class Hierarchy {
   private final TestFindResult closest;
-  private final List<TestFindResult> hierarchy;
+  private final List<TestFindResult> testElements;
 
-  public Hierarchy(TestFindResult closest, List<TestFindResult> hierarchy) {
+  public Hierarchy(TestFindResult closest, List<TestFindResult> testElements) {
     this.closest = closest;
-    this.hierarchy = hierarchy;
+    this.testElements = testElements;
   }
 
   public TestFindResult getClosest() {
     return closest;
   }
 
-  public List<TestFindResult> getHierarchy() {
-    return hierarchy;
+  public List<TestFindResult> getTestElements() {
+    return testElements;
+  }
+
+  public int getClosestIndex() {
+    return testElements.indexOf(closest);
   }
 }
