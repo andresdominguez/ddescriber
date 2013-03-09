@@ -58,8 +58,7 @@ public class Hierarchy {
     return closest;
   }
 
-  public List<TestFindResult> getHierarchy(TestFindResult closest) {
-
+  public List<TestFindResult> getUnitTestsForCurrentDescribe() {
     List<TestFindResult> matches = new ArrayList<TestFindResult>();
 
     int index = testFindResults.indexOf(closest);

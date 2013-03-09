@@ -31,8 +31,7 @@ public class HierarchyTest extends BaseTestCase {
   public void testGetHierarchy() throws Exception {
     // Given that the caret is under "inner it 2".
     // When you get the hierarchy.
-    TestFindResult closest = hierarchy.getClosest();
-    List<TestFindResult> elements = hierarchy.getHierarchy(closest);
+    List<TestFindResult> elements = hierarchy.getUnitTestsForCurrentDescribe();
 
     // Then ensure all the 'its' in the current describe and the parents
     // are returned.
