@@ -7,7 +7,7 @@ describe('top describe', function () {
         console.log('WWWW');
     });
 
-    describe('inner describe', function () {
+    ddescribe('inner describe', function () {
         it('inner it 1', function () {
             var a;
         });
