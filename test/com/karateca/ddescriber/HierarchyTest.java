@@ -28,6 +28,17 @@ public class HierarchyTest extends BaseTestCase {
     assertEquals("        it('inner it 2', function () {", closest.lineText);
   }
 
+  public void testGetHierarchy() throws Exception {
+    // Given that the caret is under "inner it 2".
+    // When you get the hierarchy.
+    TestFindResult closest = hierarchy.getClosest();
+    List<TestFindResult> elements = hierarchy.getHierarchy(closest);
+
+    // Then ensure all the 'its' in the current describe and the parents
+    // are returned.
+    assertEquals(5, elements.size());
+  }
+
   public void testGetTestElements() throws Exception {
 
   }
