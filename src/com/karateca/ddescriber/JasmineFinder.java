@@ -83,6 +83,7 @@ class JasmineFinder {
     }
   }
 
+
   /**
    * Get the search results in the form a a hierarchy starting from the current
    * scope, then going to the parents all the way to the top. The hierarchy is
