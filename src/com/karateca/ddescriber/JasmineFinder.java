@@ -20,20 +20,19 @@ import java.util.List;
  */
 class JasmineFinder {
 
+  public static final String FIND_REGEXP = "iit\\(|ddescribe\\(|it\\(|describe\\(";
   private final Project project;
   private final DocumentImpl document;
-  private final EditorImpl editor;
   private final VirtualFile virtualFile;
   private FindManager findManager;
   private FindModel findModel;
-  private List<TestFindResult> testFindResults;
+  List<TestFindResult> testFindResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
-  public JasmineFinder(Project project, DocumentImpl document, EditorImpl editor, VirtualFile virtualFile) {
+  public JasmineFinder(Project project, DocumentImpl document, VirtualFile virtualFile) {
     this.project = project;
     this.document = document;
-    this.editor = editor;
     this.virtualFile = virtualFile;
   }
 
@@ -50,13 +49,7 @@ class JasmineFinder {
     return clone;
   }
 
-  public void findText(final String text, boolean isRegEx) {
-    findManager = FindManager.getInstance(project);
-    findModel = createFindModel(findManager);
-
-    findModel.setStringToFind(text);
-    findModel.setRegularExpressions(isRegEx);
-
+  public void findText() {
     ApplicationManager.getApplication().runReadAction(new Runnable() {
       @Override
       public void run() {
@@ -66,7 +59,12 @@ class JasmineFinder {
     });
   }
 
-  private void findAll() {
+  void findAll() {
+    findManager = FindManager.getInstance(project);
+    findModel = createFindModel(findManager);
+    findModel.setStringToFind(FIND_REGEXP);
+    findModel.setRegularExpressions(true);
+
     testFindResults = new ArrayList<TestFindResult>();
     CharSequence text = document.getCharsSequence();
     int offset = 0;
@@ -83,8 +81,8 @@ class JasmineFinder {
     }
   }
 
-  public Hierarchy getHierarchy() {
-    TestFindResult closest = getClosestTestFromCaret();
+  public Hierarchy getHierarchy(int offset) {
+    TestFindResult closest = getClosestTestFromCaret(offset);
 
     List<TestFindResult> matches = new ArrayList<TestFindResult>();
 
@@ -128,10 +126,10 @@ class JasmineFinder {
   /**
    * Get the closest unit test or suite from the current caret position.
    *
+   * @param caretOffset
    * @return The closest test or suite.
    */
-  public TestFindResult getClosestTestFromCaret() {
-    int caretOffset = editor.getCaretModel().getOffset();
+  TestFindResult getClosestTestFromCaret(int caretOffset) {
     int lineNumber = document.getLineNumber(caretOffset) + 1;
     TestFindResult closest = null;
     int minDistance = Integer.MAX_VALUE;

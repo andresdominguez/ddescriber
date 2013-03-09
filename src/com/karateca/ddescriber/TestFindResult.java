@@ -1,7 +1,7 @@
 package com.karateca.ddescriber;
 
 import com.intellij.find.FindResult;
-import com.intellij.openapi.editor.impl.DocumentImpl;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 
 /**
@@ -17,7 +17,7 @@ public class TestFindResult {
   private final int startOffset;
   private final int lineNumber;
 
-  public TestFindResult(DocumentImpl document, FindResult findResult) {
+  public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
     endOffset = findResult.getEndOffset();
 

@@ -22,6 +22,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
   private Project project;
   private DocumentImpl document;
   private JasmineFinder jasmineFinder;
+  private EditorImpl editor;
 
   @Override
   public void update(AnActionEvent e) {
@@ -30,11 +31,11 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   public void actionPerformed(AnActionEvent actionEvent) {
     project = actionEvent.getData(PlatformDataKeys.PROJECT);
-    EditorImpl editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
+    editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
     VirtualFile virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
 
-    jasmineFinder = new JasmineFinder(project, document, editor, virtualFile);
+    jasmineFinder = new JasmineFinder(project, document, virtualFile);
 
     // Async callback to get the search results for it( and describe(
     jasmineFinder.addResultsReadyListener(new ChangeListener() {
@@ -45,12 +46,12 @@ public class JasmineDescribeReplaceAction extends AnAction {
         }
       }
     });
-    jasmineFinder.findText("iit\\(|ddescribe\\(|it\\(|describe\\(", true);
+    jasmineFinder.findText();
   }
 
   private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
-    Hierarchy hierarchy = jasmineFinder.getHierarchy();
+    Hierarchy hierarchy = jasmineFinder.getHierarchy(editor.getCaretModel().getOffset());
     Dialog dialog = new Dialog(project, hierarchy);
     dialog.show();
     int exitCode = dialog.getExitCode();

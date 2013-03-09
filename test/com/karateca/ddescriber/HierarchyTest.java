@@ -78,7 +78,6 @@ public class HierarchyTest extends LightCodeInsightFixtureTestCase {
     };
   }
 
-  @Test
   public void testFindClosest() throws Exception {
     configureTest();
 
