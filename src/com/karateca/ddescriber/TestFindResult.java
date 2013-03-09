@@ -9,7 +9,7 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResult {
 
-  private final String lineText;
+  final String lineText;
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;
@@ -59,6 +59,6 @@ public class TestFindResult {
 
   @Override
   public String toString() {
-    return  String.format("line: %5d: %s", lineNumber, lineText);
+    return String.format("line: %5d: %s", lineNumber, lineText);
   }
 }

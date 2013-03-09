@@ -25,7 +25,6 @@ public class Hierarchy {
     testFindResults = new ArrayList<TestFindResult>();
     for (FindResult findResult : findResults) {
       TestFindResult result = new TestFindResult(document, findResult);
-      System.out.println(result);
       testFindResults.add(result);
     }
 

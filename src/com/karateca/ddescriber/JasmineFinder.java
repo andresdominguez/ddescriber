@@ -27,6 +27,7 @@ class JasmineFinder {
   private FindManager findManager;
   private FindModel findModel;
   List<TestFindResult> testFindResults;
+  List<FindResult> findResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
@@ -66,6 +67,8 @@ class JasmineFinder {
     findModel.setRegularExpressions(true);
 
     testFindResults = new ArrayList<TestFindResult>();
+    findResults = new ArrayList<FindResult>();
+
     CharSequence text = document.getCharsSequence();
     int offset = 0;
 
@@ -77,6 +80,8 @@ class JasmineFinder {
       }
 
       offset = result.getEndOffset();
+
+      findResults.add(result);
       testFindResults.add(new TestFindResult(document, result));
     }
   }
