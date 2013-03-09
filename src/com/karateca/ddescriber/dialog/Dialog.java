@@ -3,7 +3,7 @@ package com.karateca.ddescriber.dialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.components.JBList;
-import com.karateca.LineFindResult;
+import com.karateca.ddescriber.LineFindResult;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

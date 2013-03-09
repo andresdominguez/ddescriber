@@ -1,4 +1,4 @@
-package com.karateca;
+package com.karateca.ddescriber;
 
 import com.intellij.find.FindManager;
 import com.intellij.find.FindModel;

@@ -1,6 +1,6 @@
 package com.karateca.ddescriber.dialog;
 
-import com.karateca.LineFindResult;
+import com.karateca.ddescriber.LineFindResult;
 
 import javax.swing.*;
 import java.awt.*;

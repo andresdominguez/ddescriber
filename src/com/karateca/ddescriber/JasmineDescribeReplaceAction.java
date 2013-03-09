@@ -1,4 +1,4 @@
-package com.karateca;
+package com.karateca.ddescriber;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
