@@ -37,6 +37,11 @@ public class HierarchyTest extends BaseTestCase {
     // Then ensure all the 'its' in the current describe and the parents
     // are returned.
     assertEquals(5, elements.size());
+    assertEquals("describe('top describe', function () {", elements.get(0).lineText);
+    assertEquals("    ddescribe('inner describe', function () {", elements.get(1).lineText);
+    assertEquals("        it('inner it 1', function () {", elements.get(2).lineText);
+    assertEquals("        it('inner it 2', function () {", elements.get(3).lineText);
+    assertEquals("        iit('inner it 3', function () {", elements.get(4).lineText);
   }
 
   public void testGetTestElements() throws Exception {
