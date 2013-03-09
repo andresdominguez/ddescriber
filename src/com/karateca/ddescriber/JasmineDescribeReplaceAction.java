@@ -50,7 +50,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
-    Dialog dialog = new Dialog(project, jasmineFinder.getHierarchy());
+    Hierarchy hierarchy = jasmineFinder.getHierarchy();
+    Dialog dialog = new Dialog(project, hierarchy.getHierarchy());
     dialog.show();
     int exitCode = dialog.getExitCode();
 
@@ -62,7 +63,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
    * write actions to support undo.
    * @param selectedValue The line that has to change.
    */
-  private void changeSelectedLineRunningCommand(final LineFindResult selectedValue) {
+  private void changeSelectedLineRunningCommand(final TestFindResult selectedValue) {
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
       @Override
       public void run() {
@@ -79,20 +80,20 @@ public class JasmineDescribeReplaceAction extends AnAction {
   /**
    * Perform the replace for the selected line. It will add or remove a
    * "d" from describe() and an "i" form it().
-   * @param lineFindResult The line that has to change.
+   * @param testFindResult The line that has to change.
    */
-  private void changeSelectedLine(LineFindResult lineFindResult) {
+  private void changeSelectedLine(TestFindResult testFindResult) {
     String newText;
-    boolean markedForRun = lineFindResult.isMarkedForRun();
+    boolean markedForRun = testFindResult.isMarkedForRun();
 
-    if (lineFindResult.isDescribe()) {
+    if (testFindResult.isDescribe()) {
       newText = markedForRun ? "describe(" : "ddescribe(";
     } else {
       newText = markedForRun ? "it(" : "iit(";
     }
 
-    int start = lineFindResult.getStartOffset();
-    int end = lineFindResult.getEndOffset();
+    int start = testFindResult.getStartOffset();
+    int end = testFindResult.getEndOffset();
 
     document.replaceString(start, end, newText);
   }

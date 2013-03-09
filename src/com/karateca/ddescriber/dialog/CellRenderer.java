@@ -1,6 +1,6 @@
 package com.karateca.ddescriber.dialog;
 
-import com.karateca.ddescriber.LineFindResult;
+import com.karateca.ddescriber.TestFindResult;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ class CellRenderer extends DefaultListCellRenderer {
     Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
     // Paint the cell as green if it is an iit or ddescribe.
-    if (((LineFindResult) value).isMarkedForRun()) {
+    if (((TestFindResult) value).isMarkedForRun()) {
       component.setForeground(new Color(0, 102, 0));
     }
 

@@ -7,7 +7,7 @@ import com.intellij.openapi.util.TextRange;
 /**
  * @author Andres Dominguez.
  */
-public class LineFindResult {
+public class TestFindResult {
 
   private final String lineText;
   private final int indentation;
@@ -15,9 +15,9 @@ public class LineFindResult {
   private final boolean markedForRun;
   private final int endOffset;
   private final int startOffset;
-  private final int locNumber;
+  private final int lineNumber;
 
-  public LineFindResult(DocumentImpl document, FindResult findResult) {
+  public TestFindResult(DocumentImpl document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
     endOffset = findResult.getEndOffset();
 
@@ -25,7 +25,7 @@ public class LineFindResult {
     int startOfLine = document.getLineStartOffset(lineNumber);
     int endOfLine = document.getLineEndOffset(lineNumber);
 
-    locNumber = lineNumber + 1;
+    this.lineNumber = lineNumber + 1;
     lineText = document.getText(new TextRange(startOfLine, endOfLine));
     indentation = startOffset - startOfLine;
 
@@ -53,8 +53,12 @@ public class LineFindResult {
     return startOffset;
   }
 
+  public int getLineNumber() {
+    return lineNumber;
+  }
+
   @Override
   public String toString() {
-    return  String.format("line: %5d: %s", locNumber, lineText);
+    return  String.format("line: %5d: %s", lineNumber, lineText);
   }
 }

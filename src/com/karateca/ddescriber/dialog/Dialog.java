@@ -3,21 +3,20 @@ package com.karateca.ddescriber.dialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.components.JBList;
-import com.karateca.ddescriber.LineFindResult;
+import com.karateca.ddescriber.TestFindResult;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.util.Collections;
+import javax.swing.JComponent;
 import java.util.List;
 
 /**
  * @author Andres Dominguez.
  */
 public class Dialog extends DialogWrapper {
-  private final List<LineFindResult> hierarchy;
+  private final List<TestFindResult> hierarchy;
   private JBList jbList;
 
-  public Dialog(@Nullable Project project, List<LineFindResult> hierarchy) {
+  public Dialog(@Nullable Project project, List<TestFindResult> hierarchy) {
     super(project);
     this.hierarchy = hierarchy;
     init();
@@ -32,10 +31,6 @@ public class Dialog extends DialogWrapper {
   }
 
   private void createDialogList() {
-    // Reverse the order to show the top parent first all the way down
-    // to the current position.
-    Collections.reverse(hierarchy);
-
     jbList = new JBList(hierarchy.toArray());
     jbList.setCellRenderer(new CellRenderer());
 
@@ -49,8 +44,8 @@ public class Dialog extends DialogWrapper {
     return jbList;
   }
 
-  public LineFindResult getSelectedValue() {
-    return (LineFindResult) jbList.getSelectedValue();
+  public TestFindResult getSelectedValue() {
+    return (TestFindResult) jbList.getSelectedValue();
   }
 
 //  @Override

@@ -26,7 +26,7 @@ class JasmineFinder {
   private final VirtualFile virtualFile;
   private FindManager findManager;
   private FindModel findModel;
-  private List<LineFindResult> lineFindResults;
+  private List<TestFindResult> testFindResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
@@ -41,7 +41,7 @@ class JasmineFinder {
     FindModel clone = (FindModel) findManager.getFindInFileModel().clone();
     clone.setFindAll(true);
     clone.setFromCursor(true);
-    clone.setForward(false);
+    clone.setForward(true);
     clone.setWholeWordsOnly(false);
     clone.setCaseSensitive(true);
     clone.setSearchHighlighters(true);
@@ -67,9 +67,9 @@ class JasmineFinder {
   }
 
   private void findAll() {
-    lineFindResults = new ArrayList<LineFindResult>();
+    testFindResults = new ArrayList<TestFindResult>();
     CharSequence text = document.getCharsSequence();
-    int offset = editor.getCaretModel().getOffset();
+    int offset = 0;
 
     while (true) {
       FindResult result = findManager.findString(text, offset, findModel, virtualFile);
@@ -78,34 +78,81 @@ class JasmineFinder {
         return;
       }
 
-      offset = result.getStartOffset();
-      lineFindResults.add(new LineFindResult(document, result));
+      offset = result.getEndOffset();
+      testFindResults.add(new TestFindResult(document, result));
     }
   }
 
-  /**
-   * Get the search results in the form a a hierarchy starting from the current
-   * scope, then going to the parents all the way to the top. The hierarchy is
-   * calculated with the indentation of the describe() or the it().
-   * @return The current test of suite and the parents.
-   */
-  public List<LineFindResult> getHierarchy() {
-    // Filter the hierarchy.
-    int currentIndentation = Integer.MAX_VALUE;
-    List<LineFindResult> hierarchy = new ArrayList<LineFindResult>();
+  public Hierarchy getHierarchy() {
+    TestFindResult closest = getClosestTestFromCaret();
 
-    // Find all the parents from the current scope.
-    for (LineFindResult line : lineFindResults) {
-      if (line.getIndentation() < currentIndentation) {
-        currentIndentation = line.getIndentation();
-        hierarchy.add(line);
+    List<TestFindResult> matches = new ArrayList<TestFindResult>();
+
+    int index = testFindResults.indexOf(closest);
+
+    matches.add(closest);
+
+    if (!closest.isDescribe()) {
+      // Add elements after with the same indentation.
+      for (int i = index + 1; i < testFindResults.size(); i++) {
+        TestFindResult element = testFindResults.get(i);
+        if (element.getIndentation() != closest.getIndentation()) {
+          break;
+        }
+        matches.add(element);
+      }
+
+      // Add elements before with the same indentation.
+      for (int i = index - 1; i >= 0; i--) {
+        TestFindResult element = testFindResults.get(i);
+        if (element.getIndentation() != closest.getIndentation()) {
+          break;
+        }
+        matches.add(0, element);
       }
     }
-    return hierarchy;
+
+    // Add the parents.
+    int currentIndentation = closest.getIndentation();
+    for (int i = index - 1; i >= 0; i--) {
+      TestFindResult element = testFindResults.get(i);
+      if (element.getIndentation() < currentIndentation) {
+        matches.add(0, element);
+        currentIndentation = element.getIndentation();
+      }
+    }
+
+    return new Hierarchy(closest, matches);
+  }
+
+  /**
+   * Get the closest unit test or suite from the current caret position.
+   *
+   * @return The closest test or suite.
+   */
+  public TestFindResult getClosestTestFromCaret() {
+    int caretOffset = editor.getCaretModel().getOffset();
+    int lineNumber = document.getLineNumber(caretOffset) + 1;
+    TestFindResult closest = null;
+    int minDistance = Integer.MAX_VALUE;
+
+    // Get the closest unit test or suite from the current caret.
+    for (TestFindResult testFindResult : testFindResults) {
+      int distance = Math.abs(lineNumber - testFindResult.getLineNumber());
+      if (distance < minDistance) {
+        closest = testFindResult;
+        minDistance = distance;
+      } else {
+        return closest;
+      }
+    }
+
+    return closest;
   }
 
   /**
    * Register for change events.
+   *
    * @param changeListener The listener to be added.
    */
   public void addResultsReadyListener(ChangeListener changeListener) {
