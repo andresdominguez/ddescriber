@@ -7,7 +7,7 @@ import com.intellij.openapi.util.TextRange;
 /**
  * @author Andres Dominguez.
  */
-class LineFindResult {
+public class LineFindResult {
 
   private final String lineText;
   private final int indentation;

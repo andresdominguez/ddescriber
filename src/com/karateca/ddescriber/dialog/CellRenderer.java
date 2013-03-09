@@ -13,14 +13,10 @@ class CellRenderer extends DefaultListCellRenderer {
   public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
     Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-    if (value instanceof LineFindResult) {
-      if (((LineFindResult) value).isMarkedForRun()) {
-        component.setForeground(new Color(0, 102, 0));
-
-      }
+    // Paint the cell as green if it is an iit or ddescribe.
+    if (((LineFindResult) value).isMarkedForRun()) {
+      component.setForeground(new Color(0, 102, 0));
     }
-
-    System.out.println("");
 
     return component;
   }

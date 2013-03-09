@@ -11,6 +11,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBList;
+import com.karateca.ddescriber.dialog.Dialog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -52,28 +53,12 @@ public class JasmineDescribeReplaceAction extends AnAction {
   }
 
   private void showDialog() {
-    // Reverse the order to show the top parent first all the way down
-    // to the current position.
-    final List<LineFindResult> hierarchy = jasmineFinder.getHierarchy();
-    Collections.reverse(hierarchy);
-
-    // Select the closest element found from the current position.
-    final JBList jbList = new JBList(hierarchy.toArray());
-    jbList.setSelectedIndex(hierarchy.size() - 1);
-
     // Open a pop-up to select which describe() or it() you want to change.
-    JBPopupFactory.getInstance()
-            .createListPopupBuilder(jbList)
-            .setTitle("Select the test or suite to add / remove")
-            .setItemChoosenCallback(new Runnable() {
-              public void run() {
-                if (jbList.getSelectedValue() != null) {
-                  changeSelectedLineRunningCommand((LineFindResult) jbList.getSelectedValue());
-                }
-              }
-            })
-            .createPopup()
-            .showCenteredInCurrentWindow(project);
+    Dialog dialog = new Dialog(project, jasmineFinder.getHierarchy());
+    dialog.show();
+    int exitCode = dialog.getExitCode();
+
+    changeSelectedLineRunningCommand(dialog.getSelectedValue());
   }
 
   /**

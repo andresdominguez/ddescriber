@@ -32,9 +32,14 @@ public class Dialog extends DialogWrapper {
   }
 
   private void createDialogList() {
+    // Reverse the order to show the top parent first all the way down
+    // to the current position.
     Collections.reverse(hierarchy);
+
     jbList = new JBList(hierarchy.toArray());
     jbList.setCellRenderer(new CellRenderer());
+
+    // Select the closest element found from the current position.
     jbList.setSelectedIndex(hierarchy.size() - 1);
   }
 
@@ -43,4 +48,16 @@ public class Dialog extends DialogWrapper {
   public JComponent getPreferredFocusedComponent() {
     return jbList;
   }
+
+  public LineFindResult getSelectedValue() {
+    return (LineFindResult) jbList.getSelectedValue();
+  }
+
+//  @Override
+//  protected Action[] createActions() {
+//    DialogWrapperExitAction okButton = new DialogWrapperExitAction("OK", 1);
+//    DialogWrapperExitAction removeAll = new DialogWrapperExitAction("A", 2);
+//
+//    return new Action[]{okButton, removeAll};
+//  }
 }
