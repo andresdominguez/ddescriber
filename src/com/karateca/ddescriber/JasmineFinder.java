@@ -53,7 +53,9 @@ class JasmineFinder {
       @Override
       public void run() {
         findAll();
-        myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("LinesFound"));
+        if (findResults.size() > 0) {
+          myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("LinesFound"));
+        }
       }
     });
   }
