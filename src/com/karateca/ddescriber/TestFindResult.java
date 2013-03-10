@@ -9,13 +9,14 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResult {
 
-  final String lineText;
+  public static final String REMOVE_END_OF_LINE = "([\\\"\\'])(\\s*[\\,\\+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;
   private final int endOffset;
   private final int startOffset;
   private final int lineNumber;
+  private final String testText;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -26,7 +27,9 @@ public class TestFindResult {
     int endOfLine = document.getLineEndOffset(lineNumber);
 
     this.lineNumber = lineNumber + 1;
-    lineText = document.getText(new TextRange(startOfLine, endOfLine));
+    String lineText = document.getText(new TextRange(startOfLine, endOfLine));
+    testText = lineText.replaceAll(REMOVE_END_OF_LINE, "$1");
+
     indentation = startOffset - startOfLine;
 
     isDescribe = lineText.contains("describe(");
@@ -57,8 +60,12 @@ public class TestFindResult {
     return lineNumber;
   }
 
+  public String getTestText() {
+    return testText;
+  }
+
   @Override
   public String toString() {
-    return String.format("line: %5d: %s", lineNumber, lineText);
+    return String.format("line: %5d: %s", lineNumber, testText);
   }
 }
