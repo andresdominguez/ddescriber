@@ -57,7 +57,10 @@ public class JasmineDescribeReplaceAction extends AnAction {
     Hierarchy hierarchy = new Hierarchy(document, findResults, editor.getCaretModel().getOffset());
     Dialog dialog = new Dialog(project, hierarchy);
     dialog.show();
-    int exitCode = dialog.getExitCode();
+
+    if (dialog.getExitCode() != Dialog.OK_EXIT_CODE) {
+      return;
+    }
 
     changeSelectedLineRunningCommand(dialog.getSelectedValue());
   }
@@ -65,6 +68,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
   /**
    * Change the contents of the selected line. Wrap the call into command and
    * write actions to support undo.
+   *
    * @param selectedValue The line that has to change.
    */
   private void changeSelectedLineRunningCommand(final TestFindResult selectedValue) {
@@ -84,6 +88,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
   /**
    * Perform the replace for the selected line. It will add or remove a
    * "d" from describe() and an "i" form it().
+   *
    * @param testFindResult The line that has to change.
    */
   private void changeSelectedLine(TestFindResult testFindResult) {
