@@ -23,6 +23,11 @@ describe('top describe', function () {
     ddescribe('inner describe', function () {
         it('inner it 1', function () {
             var a;
+
+            exit(-1);
+            fixit('');
+            split('');
+
         });
 
         it('inner it 2', function () {

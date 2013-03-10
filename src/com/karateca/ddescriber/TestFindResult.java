@@ -9,7 +9,7 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResult {
 
-  public static final String REMOVE_END_OF_LINE = "([\\\"\\'])(\\s*[\\,\\+]\\s*.*$)";
+  public static final String REMOVE_END_OF_LINE = "([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;

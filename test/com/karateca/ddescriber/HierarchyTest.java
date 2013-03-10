@@ -22,7 +22,7 @@ public class HierarchyTest extends BaseTestCase {
     TestFindResult closest = hierarchy.getClosest();
 
     // Then ensure the closest test is "inner it 2".
-    assertEquals(28, closest.getLineNumber());
+    assertEquals(33, closest.getLineNumber());
     assertEquals("        it('inner it 2'", closest.getTestText());
   }
 

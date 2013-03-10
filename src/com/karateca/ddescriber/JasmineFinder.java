@@ -40,8 +40,9 @@ class JasmineFinder {
     clone.setForward(true);
     clone.setWholeWordsOnly(false);
     clone.setCaseSensitive(true);
-    clone.setSearchHighlighters(true);
-    clone.setPreserveCase(false);
+    clone.setRegularExpressions(true);
+    clone.setWholeWordsOnly(true);
+    clone.setStringToFind(FIND_REGEXP);
 
     return clone;
   }
@@ -61,8 +62,7 @@ class JasmineFinder {
   void findAll() {
     FindManager findManager = FindManager.getInstance(project);
     FindModel findModel = createFindModel(findManager);
-    findModel.setStringToFind(FIND_REGEXP);
-    findModel.setRegularExpressions(true);
+
 
     findResults = new ArrayList<FindResult>();
 

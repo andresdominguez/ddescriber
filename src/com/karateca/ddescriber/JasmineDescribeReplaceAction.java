@@ -21,7 +21,6 @@ import java.util.List;
  * TODO: Add a checkbox to show all the file
  * TODO: Show red for tests that will not run
  * TODO: Add button to remove all dd, ii in the project
- * TODO: Fix regular expression bug for fooit(
  * TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
