@@ -34,7 +34,7 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
     jasmineFinder = new JasmineFinder(getProject(), document, psiFile.getVirtualFile());
   }
 
-  protected JasmineFinder createJasmineFinder() {
+  JasmineFinder createJasmineFinder() {
     PsiFile psiFile = myFixture.configureByFile("jasmineTestBefore.js");
     return new JasmineFinder(getProject(), getDocument(), psiFile.getVirtualFile());
   }

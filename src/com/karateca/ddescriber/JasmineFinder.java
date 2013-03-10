@@ -19,12 +19,10 @@ import java.util.List;
  */
 class JasmineFinder {
 
-  public static final String FIND_REGEXP = "iit\\(|ddescribe\\(|it\\(|describe\\(";
+  private static final String FIND_REGEXP = "iit\\(|ddescribe\\(|it\\(|describe\\(";
   private final Project project;
   private final DocumentImpl document;
   private final VirtualFile virtualFile;
-  private FindManager findManager;
-  private FindModel findModel;
   List<FindResult> findResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
@@ -61,8 +59,8 @@ class JasmineFinder {
   }
 
   void findAll() {
-    findManager = FindManager.getInstance(project);
-    findModel = createFindModel(findManager);
+    FindManager findManager = FindManager.getInstance(project);
+    FindModel findModel = createFindModel(findManager);
     findModel.setStringToFind(FIND_REGEXP);
     findModel.setRegularExpressions(true);
 

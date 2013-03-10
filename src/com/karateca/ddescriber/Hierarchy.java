@@ -10,9 +10,9 @@ import java.util.List;
  * @author Andres Dominguez.
  */
 public class Hierarchy {
-  private Document document;
+  private final Document document;
   private final TestFindResult closest;
-  private List<TestFindResult> testFindResults;
+  private final List<TestFindResult> testFindResults;
 
   public Hierarchy(Document document, List<FindResult> findResults, int caretOffset) {
     this.document = document;

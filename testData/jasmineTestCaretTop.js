@@ -7,7 +7,7 @@ describe('top describe', function () {
 
     function someFn(foo, bar) {
 
-    };
+    }
 
     var otherFn = function (hey) {
     };
