@@ -18,6 +18,12 @@ import java.util.List;
 
 /**
  * @author Andres Dominguez.
+ * TODO: Add a quick shortcut to find the test quickly ABC
+ * TODO: Add a checkbox to show all the file
+ * TODO: Add a button to remove all dd, ii
+ * TODO: Show green bg
+ * TODO: Show red for tests that will not run
+ * TODO: Add button to remove all dd, ii in the project
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 

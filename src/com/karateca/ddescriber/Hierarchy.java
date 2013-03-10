@@ -58,23 +58,14 @@ public class Hierarchy {
     matches.add(closest);
 
     if (!closest.isDescribe()) {
-      // Add elements after with the same indentation.
-      for (int i = index + 1; i < testFindResults.size(); i++) {
-        TestFindResult element = testFindResults.get(i);
-        if (element.getIndentation() != closest.getIndentation()) {
-          break;
-        }
-        matches.add(element);
-      }
-
-      // Add elements before with the same indentation.
-      for (int i = index - 1; i >= 0; i--) {
-        TestFindResult element = testFindResults.get(i);
-        if (element.getIndentation() != closest.getIndentation()) {
-          break;
-        }
-        matches.add(0, element);
-      }
+      // The closest match is an 'it()'. Add all the elements before and after
+      // with the same indentation
+      addAllElementsWithSameIndentation(matches, index, closest.getIndentation());
+    } else if (testFindResults.size() > index + 1) {
+      // The closest match is a 'describe()'. Add all the elements inside this
+      // describe.
+      int indentation = testFindResults.get(index + 1).getIndentation();
+      addAllElementsWithSameIndentation(matches, index, indentation);
     }
 
     // Add the parents.
@@ -88,6 +79,27 @@ public class Hierarchy {
     }
 
     return matches;
+  }
+
+  private void addAllElementsWithSameIndentation(List<TestFindResult> matches, int pivotIndex, int indentation) {
+    // Add elements before with the same indentation.
+    for (int i = pivotIndex - 1; i >= 0; i--) {
+      TestFindResult element = testFindResults.get(i);
+      if (element.getIndentation() != indentation) {
+        break;
+      }
+      matches.add(0, element);
+    }
+
+    // Add elements after with the same indentation.
+    for (int i = pivotIndex + 1; i < testFindResults.size(); i++) {
+      TestFindResult element = testFindResults.get(i);
+
+      if (element.getIndentation() != indentation) {
+        break;
+      }
+      matches.add(element);
+    }
   }
 
   public TestFindResult getClosest() {
