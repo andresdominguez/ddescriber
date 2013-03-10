@@ -23,7 +23,7 @@ public class HierarchyTest extends BaseTestCase {
 
     // Then ensure the closest test is "inner it 2".
     assertEquals(28, closest.getLineNumber());
-    assertEquals("        it('inner it 2', function () {", closest.lineText);
+    assertEquals("        it('inner it 2'", closest.getTestText());
   }
 
   public void testGetUnitTestsForCurrentDescribe() throws Exception {
@@ -36,11 +36,11 @@ public class HierarchyTest extends BaseTestCase {
     // Then ensure all the 'its' in the current describe and the parents
     // are returned.
     assertEquals(5, elements.size());
-    assertEquals("describe('top describe', function () {", elements.get(0).lineText);
-    assertEquals("    ddescribe('inner describe', function () {", elements.get(1).lineText);
-    assertEquals("        it('inner it 1', function () {", elements.get(2).lineText);
-    assertEquals("        it('inner it 2', function () {", elements.get(3).lineText);
-    assertEquals("        iit('inner it 3', function () {", elements.get(4).lineText);
+    assertEquals("describe('top describe'", elements.get(0).getTestText());
+    assertEquals("    ddescribe('inner describe'", elements.get(1).getTestText());
+    assertEquals("        it('inner it 1'", elements.get(2).getTestText());
+    assertEquals("        it('inner it 2'", elements.get(3).getTestText());
+    assertEquals("        iit('inner it 3'", elements.get(4).getTestText());
   }
 
   public void testUnitTestsForCurrentDescribeAndCaretAtTheTop() {
@@ -53,10 +53,10 @@ public class HierarchyTest extends BaseTestCase {
     // Then ensure the first level inside the top describe is returned.
     assertEquals(4, elements.size());
     int i = 0;
-    assertEquals("describe('top describe', function () {", elements.get(i++).lineText);
-    assertEquals("    it('first it', function () {", elements.get(i++).lineText);
-    assertEquals("    it('second it', function () {", elements.get(i++).lineText);
-    assertEquals("    ddescribe('inner describe', function () {", elements.get(i++).lineText);
+    assertEquals("describe('top describe'", elements.get(i++).getTestText());
+    assertEquals("    it('first it'", elements.get(i++).getTestText());
+    assertEquals("    it('second it'", elements.get(i++).getTestText());
+    assertEquals("    ddescribe('inner describe'", elements.get(i++).getTestText());
   }
 
   public void testGetMarkedElements() {
