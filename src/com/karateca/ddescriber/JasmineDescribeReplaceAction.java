@@ -14,6 +14,7 @@ import com.karateca.ddescriber.dialog.Dialog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,31 +67,37 @@ public class JasmineDescribeReplaceAction extends AnAction {
     Dialog dialog = new Dialog(project, hierarchy);
     dialog.show();
 
-    if (dialog.getExitCode() != Dialog.OK_EXIT_CODE) {
-      return;
-    }
+    int exitCode = dialog.getExitCode();
 
-    changeSelectedLineRunningCommand(dialog.getSelectedValue());
+    switch (exitCode) {
+      case Dialog.CLEAN_CURRENT_EXIT_CODE:
+        // Clean the current file. Reverse the order to do it from
+        // bottom to top.
+        List<TestFindResult> elements = hierarchy.getMarkedElements();
+        Collections.reverse(elements);
+        changeSelectedLineRunningCommand(elements.toArray(new TestFindResult[elements.size()]));
+        break;
+      case Dialog.OK_EXIT_CODE:
+        changeSelectedLineRunningCommand(dialog.getSelectedValue());
+        break;
+    }
   }
 
   /**
    * Change the contents of the selected line. Wrap the call into command and
    * write actions to support undo.
    *
-   * @param selectedValue The line that has to change.
+   * @param testFindResults The lines that have to change.
    */
-  private void changeSelectedLineRunningCommand(final TestFindResult selectedValue) {
-    CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+  private void changeSelectedLineRunningCommand(final TestFindResult... testFindResults) {
+    ActionUtil.runWriteActionInsideCommand(project, new Runnable() {
       @Override
       public void run() {
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          @Override
-          public void run() {
-            changeSelectedLine(selectedValue);
-          }
-        });
+        for (TestFindResult testFindResult : testFindResults) {
+          changeSelectedLine(testFindResult);
+        }
       }
-    }, "Change describe", null);
+    });
   }
 
   /**
