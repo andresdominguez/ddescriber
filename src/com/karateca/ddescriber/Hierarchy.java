@@ -147,6 +147,9 @@ public class Hierarchy {
   }
 
   public List<TestFindResult> getAllUnitTests() {
+    for (TestFindResult findResult : testFindResults) {
+      findResult.setExcluded(false);
+    }
     return testFindResults;
   }
 }
