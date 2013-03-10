@@ -26,7 +26,7 @@
   <project-components></project-components>
 
   <actions>
-      <action id="DoDdescribe" class="com.karateca.ddescriber.JasmineDescribeReplaceAction" text="Do the ddescribe">
+      <action id="DoDdescribe" class="com.karateca.ddescriber.JasmineDescribeReplaceAction" text="ddescriber">
           <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl D"/>
       </action>
   </actions>
