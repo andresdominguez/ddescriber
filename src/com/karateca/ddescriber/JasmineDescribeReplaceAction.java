@@ -1,6 +1,5 @@
 package com.karateca.ddescriber;
 
-import com.intellij.find.FindResult;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -17,8 +16,7 @@ import java.util.List;
 
 /**
  * @author Andres Dominguez.
- *         TODO: Add a checkbox to show all the file
- *         TODO: Show red for tests that will not run
+ *         TODO: Persist show all / show current describe
  *         TODO: Add button to remove all dd, ii in the project
  *         TODO: Add tests for js files with double quotes
  */
@@ -47,18 +45,18 @@ public class JasmineDescribeReplaceAction extends AnAction {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         if (changeEvent.getSource().equals("LinesFound")) {
-          showDialog();
+          showDialog(false);
         }
       }
     });
     jasmineFinder.findText();
   }
 
-  private void showDialog() {
+  private void showDialog(boolean showAllInFile) {
     // Open a pop-up to select which describe() or it() you want to change.
-    List<FindResult> findResults = jasmineFinder.getFindResults();
-    Hierarchy hierarchy = new Hierarchy(document, findResults, editor.getCaretModel().getOffset());
-    Dialog dialog = new Dialog(project, hierarchy);
+    Hierarchy hierarchy = new Hierarchy(document, jasmineFinder.getFindResults(), editor.getCaretModel().getOffset());
+
+    Dialog dialog = new Dialog(project, hierarchy, showAllInFile);
     dialog.show();
 
     int exitCode = dialog.getExitCode();
@@ -73,6 +71,13 @@ public class JasmineDescribeReplaceAction extends AnAction {
       case Dialog.OK_EXIT_CODE:
         // Flip the selected elements.
         elements = dialog.getSelectedValues();
+        break;
+      case Dialog.SHOW_ALL_EXIT_CODE:
+        // Re-open the dialog. Now show all the elements in the file.
+        showDialog(true);
+        break;
+      case Dialog.SHOW_DESCRIBE_EXIT_CODE:
+        showDialog(false);
         break;
     }
 

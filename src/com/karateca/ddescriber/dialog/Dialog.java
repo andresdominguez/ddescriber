@@ -19,14 +19,24 @@ import java.util.List;
  */
 public class Dialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
+  public static final int SHOW_ALL_EXIT_CODE = 101;
+  public static final int SHOW_DESCRIBE_EXIT_CODE = 102;
   public static final int REMOVE_ALL_PROJECT_EXIT_CODE = 200;
+
   private final Hierarchy hierarchy;
   private JBList jbList;
-  public static final int VISIBLE_ROW_COUNT = 13;
+  private static final int VISIBLE_ROW_COUNT = 13;
+  private final boolean showAll;
 
-  public Dialog(@Nullable Project project, Hierarchy hierarchy) {
+  private final DialogWrapper.DialogWrapperExitAction showDescribeAction =
+      new DialogWrapperExitAction("Show current describe", SHOW_DESCRIBE_EXIT_CODE);
+  private final DialogWrapper.DialogWrapperExitAction showFileAction =
+      new DialogWrapperExitAction("Show all in file", SHOW_ALL_EXIT_CODE);
+
+  public Dialog(@Nullable Project project, Hierarchy hierarchy, boolean showAll) {
     super(project);
     this.hierarchy = hierarchy;
+    this.showAll = showAll;
     init();
     setTitle("Select the Test or Suite to Add / Remove");
   }
@@ -34,7 +44,7 @@ public class Dialog extends DialogWrapper {
   @Nullable
   @Override
   protected JComponent createCenterPanel() {
-    List<TestFindResult> elements = hierarchy.getUnitTestsForCurrentDescribe();
+    List<TestFindResult> elements = getElementsToShow();
 
     jbList = new JBList(elements.toArray());
     jbList.setVisibleRowCount(VISIBLE_ROW_COUNT);
@@ -63,6 +73,10 @@ public class Dialog extends DialogWrapper {
     return scrollPane;
   }
 
+  private List<TestFindResult> getElementsToShow() {
+    return showAll ? hierarchy.getAllUnitTests() : hierarchy.getUnitTestsForCurrentDescribe();
+  }
+
   @Nullable
   @Override
   public JComponent getPreferredFocusedComponent() {
@@ -80,8 +94,13 @@ public class Dialog extends DialogWrapper {
   @Override
   protected Action[] createLeftSideActions() {
     return new Action[]{
-        new DialogWrapperExitAction("Clean file", CLEAN_CURRENT_EXIT_CODE)
+        new DialogWrapperExitAction("Clean file", CLEAN_CURRENT_EXIT_CODE),
+        getShowInAction(),
 //        , new DialogWrapperExitAction("Remove all in project", REMOVE_ALL_PROJECT_EXIT_CODE)
     };
+  }
+
+  private DialogWrapperExitAction getShowInAction() {
+    return showAll ? showDescribeAction : showFileAction;
   }
 }

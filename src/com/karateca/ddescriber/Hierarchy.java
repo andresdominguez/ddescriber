@@ -145,4 +145,8 @@ public class Hierarchy {
 
     return results;
   }
+
+  public List<TestFindResult> getAllUnitTests() {
+    return testFindResults;
+  }
 }
