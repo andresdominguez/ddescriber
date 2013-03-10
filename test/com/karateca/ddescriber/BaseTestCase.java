@@ -12,6 +12,10 @@ import java.io.File;
  * @author Andres Dominguez.
  */
 public class BaseTestCase extends LightCodeInsightFixtureTestCase {
+
+  DocumentImpl document;
+  JasmineFinder jasmineFinder;
+
   @Override
   protected String getTestDataPath() {
     String testPath = PathManager.getJarPathForClass(BaseTestCase.class);
@@ -22,6 +26,12 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
   public void testDummyTest() {
     // Created this test to get rid of the warning.
     Assert.assertEquals(1, 1);
+  }
+
+  void prepareScenarioWithTestFile(String fileName) {
+    PsiFile psiFile = myFixture.configureByFile(fileName);
+    document = new DocumentImpl(psiFile.getText());
+    jasmineFinder = new JasmineFinder(getProject(), document, psiFile.getVirtualFile());
   }
 
   protected JasmineFinder createJasmineFinder() {

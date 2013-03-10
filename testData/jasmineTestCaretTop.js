@@ -1,7 +1,7 @@
 /**
  * Some comments.
  */
-
+//<caret>
 describe('top describe', function () {
     var a, b, c;
 
@@ -26,7 +26,7 @@ describe('top describe', function () {
         });
 
         it('inner it 2', function () {
-            // <caret>
+
             var a;
         });
 
