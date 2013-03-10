@@ -68,19 +68,18 @@ public class Hierarchy {
       addAllElementsWithSameIndentation(matches, index, indentation);
     }
 
-    // Add the parents.
-    int currentIndentation = closest.getIndentation();
-    for (int i = index - 1; i >= 0; i--) {
-      TestFindResult element = testFindResults.get(i);
-      if (element.getIndentation() < currentIndentation) {
-        matches.add(0, element);
-        currentIndentation = element.getIndentation();
-      }
-    }
+    addParentElements(matches, index);
 
     return matches;
   }
 
+  /**
+   * Add all the it() and describe() elements before and after with the same indentation.
+   *
+   * @param matches     the elements in the current describe block.
+   * @param pivotIndex  the index of the closest it() or describe().
+   * @param indentation filter elements before and after with this indentation value.
+   */
   private void addAllElementsWithSameIndentation(List<TestFindResult> matches, int pivotIndex, int indentation) {
     // Add elements before with the same indentation.
     for (int i = pivotIndex - 1; i >= 0; i--) {
@@ -99,6 +98,23 @@ public class Hierarchy {
         break;
       }
       matches.add(element);
+    }
+  }
+
+  /**
+   * Add the parent elements to the current set of matched elements.
+   *
+   * @param matches    the elements in the current describe block.
+   * @param pivotIndex the index of the closest it() or describe().
+   */
+  private void addParentElements(List<TestFindResult> matches, int pivotIndex) {
+    int currentIndentation = closest.getIndentation();
+    for (int i = pivotIndex - 1; i >= 0; i--) {
+      TestFindResult element = testFindResults.get(i);
+      if (element.getIndentation() < currentIndentation) {
+        matches.add(0, element);
+        currentIndentation = element.getIndentation();
+      }
     }
   }
 
