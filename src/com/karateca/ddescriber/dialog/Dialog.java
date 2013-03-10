@@ -2,6 +2,8 @@ package com.karateca.ddescriber.dialog;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.ListSpeedSearch;
+import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
 import com.karateca.ddescriber.Hierarchy;
@@ -38,6 +40,14 @@ public class Dialog extends DialogWrapper {
 
     // Use a custom cell renderer to paint green.
     jbList.setCellRenderer(new CellRenderer());
+
+    // Add case insensitive search
+    new ListSpeedSearch(jbList) {
+      @Override
+      protected boolean compare(String text, String pattern) {
+        return super.compare(text.toLowerCase(), pattern.toLowerCase());
+      }
+    }.setComparator(new SpeedSearchComparator(false));
 
     // Select the closest element found from the current position.
     int closestIndex = elements.indexOf(hierarchy.getClosest());
