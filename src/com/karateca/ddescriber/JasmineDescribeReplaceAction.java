@@ -24,6 +24,8 @@ import java.util.List;
  * TODO: Show green bg
  * TODO: Show red for tests that will not run
  * TODO: Add button to remove all dd, ii in the project
+ * TODO: Fix regular expression bug for fooit(
+ * TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 
