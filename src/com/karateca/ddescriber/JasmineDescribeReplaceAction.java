@@ -17,11 +17,10 @@ import java.util.List;
 
 /**
  * @author Andres Dominguez.
- * TODO: Add a quick shortcut to find the test quickly ABC
- * TODO: Add a checkbox to show all the file
- * TODO: Show red for tests that will not run
- * TODO: Add button to remove all dd, ii in the project
- * TODO: Add tests for js files with double quotes
+ *         TODO: Add a checkbox to show all the file
+ *         TODO: Show red for tests that will not run
+ *         TODO: Add button to remove all dd, ii in the project
+ *         TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 
@@ -64,17 +63,23 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
     int exitCode = dialog.getExitCode();
 
+    List<TestFindResult> elements = null;
+
     switch (exitCode) {
       case Dialog.CLEAN_CURRENT_EXIT_CODE:
-        // Clean the current file. Reverse the order to do it from
-        // bottom to top.
-        List<TestFindResult> elements = hierarchy.getMarkedElements();
-        Collections.reverse(elements);
-        changeSelectedLineRunningCommand(elements.toArray(new TestFindResult[elements.size()]));
+        // Clean the current file.
+        elements = hierarchy.getMarkedElements();
         break;
       case Dialog.OK_EXIT_CODE:
-        changeSelectedLineRunningCommand(dialog.getSelectedValue());
+        // Flip the selected elements.
+        elements = dialog.getSelectedValues();
         break;
+    }
+
+    // Reverse the order to do it from bottom to top.
+    if (elements != null) {
+      Collections.reverse(elements);
+      changeSelectedLineRunningCommand(elements.toArray(new TestFindResult[elements.size()]));
     }
   }
 

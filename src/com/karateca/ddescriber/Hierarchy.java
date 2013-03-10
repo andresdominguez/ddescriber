@@ -68,6 +68,18 @@ public class Hierarchy {
       addAllElementsWithSameIndentation(matches, index, indentation);
     }
 
+    // Mark excluded.
+    int includedCount = 0;
+    for (TestFindResult findResult : matches) {
+      includedCount += findResult.isMarkedForRun() ? 1 : 0;
+    }
+
+    if (includedCount > 0) {
+      for (TestFindResult findResult : matches) {
+        findResult.setExcluded(!findResult.isMarkedForRun());
+      }
+    }
+
     addParentElements(matches, index);
 
     return matches;

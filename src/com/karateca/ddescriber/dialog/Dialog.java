@@ -11,6 +11,7 @@ import com.karateca.ddescriber.TestFindResult;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,14 +69,18 @@ public class Dialog extends DialogWrapper {
     return jbList;
   }
 
-  public TestFindResult getSelectedValue() {
-    return (TestFindResult) jbList.getSelectedValue();
+  public List<TestFindResult> getSelectedValues() {
+    ArrayList<TestFindResult> elements = new ArrayList<TestFindResult>();
+    for (Object item : jbList.getSelectedValues()) {
+      elements.add((TestFindResult) item);
+    }
+    return elements;
   }
 
   @Override
   protected Action[] createLeftSideActions() {
     return new Action[]{
-        new DialogWrapperExitAction("Remove all", CLEAN_CURRENT_EXIT_CODE)
+        new DialogWrapperExitAction("Clean file", CLEAN_CURRENT_EXIT_CODE)
 //        , new DialogWrapperExitAction("Remove all in project", REMOVE_ALL_PROJECT_EXIT_CODE)
     };
   }

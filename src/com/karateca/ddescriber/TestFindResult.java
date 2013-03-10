@@ -17,6 +17,7 @@ public class TestFindResult {
   private final int startOffset;
   private final int lineNumber;
   private final String testText;
+  private boolean excluded;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -62,6 +63,14 @@ public class TestFindResult {
 
   public String getTestText() {
     return testText;
+  }
+
+  public boolean isExcluded() {
+    return excluded;
+  }
+
+  public void setExcluded(boolean excluded) {
+    this.excluded = excluded;
   }
 
   @Override
