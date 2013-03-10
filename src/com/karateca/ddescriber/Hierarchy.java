@@ -105,4 +105,16 @@ public class Hierarchy {
   public TestFindResult getClosest() {
     return closest;
   }
+
+  public List<TestFindResult> getMarkedElements() {
+    ArrayList<TestFindResult> results = new ArrayList<TestFindResult>();
+
+    for (TestFindResult element : testFindResults) {
+      if (element.isMarkedForRun()) {
+        results.add(element);
+      }
+    }
+
+    return results;
+  }
 }

@@ -59,11 +59,16 @@ public class HierarchyTest extends BaseTestCase {
     assertEquals("    ddescribe('inner describe', function () {", elements.get(i++).lineText);
   }
 
-  public void testGetTestElements() throws Exception {
+  public void testGetMarkedElements() {
+    // Given that you have the caret at the top.
+    Hierarchy hierarchy = getHierarchyForTestFile("jasmineTestCaretTop.js");
 
-  }
+    // When you get the marked elements.
+    List<TestFindResult> elements = hierarchy.getMarkedElements();
 
-  public void testGetClosestIndex() throws Exception {
-
+    // Then ensure two elements are returned.
+    assertEquals(2, elements.size());
+    assertEquals(23, elements.get(0).getLineNumber());
+    assertEquals(33, elements.get(1).getLineNumber());
   }
 }
