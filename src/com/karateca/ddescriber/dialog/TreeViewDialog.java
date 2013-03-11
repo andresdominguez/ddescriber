@@ -11,10 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -40,6 +39,22 @@ public class TreeViewDialog extends Dialog {
     DefaultMutableTreeNode root = populateTree(elements);
 
     tree = new Tree(root);
+
+    // Perform the OK action on enter.
+    tree.addKeyListener(new KeyListener() {
+      @Override
+      public void keyTyped(KeyEvent keyEvent) {}
+
+      @Override
+      public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+          doOKAction();
+        }
+      }
+
+      @Override
+      public void keyReleased(KeyEvent keyEvent) {}
+    });
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
     tree.setCellRenderer(new CustomTreeCellRenderer());
 
@@ -123,5 +138,12 @@ public class TreeViewDialog extends Dialog {
     }
 
     return selected;
+  }
+
+  @Override
+  protected Action[] createLeftSideActions() {
+    return new Action[]{
+        new DialogWrapperExitAction("Clean file", CLEAN_CURRENT_EXIT_CODE)
+    };
   }
 }
