@@ -1,6 +1,8 @@
 package com.karateca.ddescriber.dialog;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.SpeedSearchComparator;
+import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import com.karateca.ddescriber.Hierarchy;
@@ -10,8 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Stack;
 
@@ -30,20 +35,44 @@ public class TreeViewDialog extends Dialog {
   @Override
   protected JComponent createCenterPanel() {
     List<TestFindResult> elements = hierarchy.getAllUnitTests();
+    final TestFindResult closest = hierarchy.getClosest();
 
     DefaultMutableTreeNode root = populateTree(elements);
 
     tree = new Tree(root);
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
-    DefaultTreeCellRenderer cellRenderer = new DefaultTreeCellRenderer();
-
-    cellRenderer.setBackgroundNonSelectionColor(Color.RED);
-
     tree.setCellRenderer(new CustomTreeCellRenderer());
+
+    // Add search.
+    new TreeSpeedSearch(tree) {
+      @Override
+      protected boolean compare(String text, String pattern) {
+        return super.compare(text.toLowerCase(), pattern.toLowerCase());
+      }
+    }.setComparator(new SpeedSearchComparator(false));
+
+    selectClosestTest(root, closest);
 
     JBScrollPane scrollPane = new JBScrollPane(tree);
 
     return scrollPane;
+  }
+
+  private void selectClosestTest(DefaultMutableTreeNode root, final TestFindResult closest) {
+    DefaultMutableTreeNode selectedNode = null;
+    Enumeration enumeration = root.breadthFirstEnumeration();
+    while (enumeration.hasMoreElements()) {
+      DefaultMutableTreeNode node = (DefaultMutableTreeNode) enumeration.nextElement();
+      if (node.getUserObject() == closest) {
+        selectedNode = node;
+        break;
+      }
+    }
+
+    TreePath treePath = new TreePath(selectedNode.getPath());
+
+    tree.setSelectionPath(treePath);
+    tree.scrollPathToVisible(treePath);
   }
 
   private DefaultMutableTreeNode populateTree(List<TestFindResult> elements) {
