@@ -23,7 +23,7 @@ public class Dialog extends DialogWrapper {
   public static final int SHOW_DESCRIBE_EXIT_CODE = 102;
   public static final int REMOVE_ALL_PROJECT_EXIT_CODE = 200;
 
-  private final Hierarchy hierarchy;
+  protected final Hierarchy hierarchy;
   private JBList jbList;
   private static final int VISIBLE_ROW_COUNT = 13;
   private final boolean showAll;
@@ -73,7 +73,7 @@ public class Dialog extends DialogWrapper {
     return scrollPane;
   }
 
-  private List<TestFindResult> getElementsToShow() {
+  List<TestFindResult> getElementsToShow() {
     return showAll ? hierarchy.getAllUnitTests() : hierarchy.getUnitTestsForCurrentDescribe();
   }
 
