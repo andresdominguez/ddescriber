@@ -75,6 +75,6 @@ public class TestFindResult {
 
   @Override
   public String toString() {
-    return String.format("line: %5d: %s", lineNumber, testText);
+    return String.format("%s (line: %d)", testText.trim(), lineNumber);
   }
 }
