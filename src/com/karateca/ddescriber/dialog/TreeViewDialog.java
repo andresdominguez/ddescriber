@@ -51,8 +51,7 @@ public class TreeViewDialog extends Dialog {
     DefaultMutableTreeNode parent = root;
     DefaultMutableTreeNode last = root;
 
-    List<TestFindResult> rest = elements.subList(1, elements.size());
-    for (TestFindResult element : rest) {
+    for (TestFindResult element : elements.subList(1, elements.size())) {
       int ind = element.getIndentation();
 
       DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(element);

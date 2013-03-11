@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.dialog.Dialog;
+import com.karateca.ddescriber.dialog.TreeViewDialog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -56,7 +57,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
     // Open a pop-up to select which describe() or it() you want to change.
     Hierarchy hierarchy = new Hierarchy(document, jasmineFinder.getFindResults(), editor.getCaretModel().getOffset());
 
-    Dialog dialog = new Dialog(project, hierarchy, showAllInFile);
+    Dialog dialog = new TreeViewDialog(project, hierarchy, showAllInFile);
     dialog.show();
 
     int exitCode = dialog.getExitCode();
