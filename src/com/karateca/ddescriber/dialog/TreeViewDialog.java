@@ -9,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -31,6 +34,12 @@ public class TreeViewDialog extends Dialog {
     DefaultMutableTreeNode root = populateTree(elements);
 
     tree = new Tree(root);
+    tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
+    DefaultTreeCellRenderer cellRenderer = new DefaultTreeCellRenderer();
+
+    cellRenderer.setBackgroundNonSelectionColor(Color.RED);
+
+    tree.setCellRenderer(new CustomTreeCellRenderer());
 
     JBScrollPane scrollPane = new JBScrollPane(tree);
 
@@ -75,5 +84,16 @@ public class TreeViewDialog extends Dialog {
   @Override
   public JComponent getPreferredFocusedComponent() {
     return tree;
+  }
+
+  @Override
+  public List<TestFindResult> getSelectedValues() {
+    List<TestFindResult> selected = new ArrayList<TestFindResult>();
+
+    for (DefaultMutableTreeNode node : tree.getSelectedNodes(DefaultMutableTreeNode.class, null)) {
+      selected.add((TestFindResult) node.getUserObject());
+    }
+
+    return selected;
   }
 }

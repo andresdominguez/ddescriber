@@ -25,7 +25,7 @@ public class Dialog extends DialogWrapper {
 
   protected final Hierarchy hierarchy;
   private JBList jbList;
-  private static final int VISIBLE_ROW_COUNT = 13;
+  protected static final int VISIBLE_ROW_COUNT = 13;
   private final boolean showAll;
 
   private final DialogWrapper.DialogWrapperExitAction showDescribeAction =
