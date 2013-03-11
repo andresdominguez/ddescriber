@@ -59,20 +59,19 @@ public class TreeViewDialog extends Dialog {
   }
 
   private void selectClosestTest(DefaultMutableTreeNode root, final TestFindResult closest) {
-    DefaultMutableTreeNode selectedNode = null;
     Enumeration enumeration = root.breadthFirstEnumeration();
+
     while (enumeration.hasMoreElements()) {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) enumeration.nextElement();
+
       if (node.getUserObject() == closest) {
-        selectedNode = node;
-        break;
+        TreePath treePath = new TreePath(node.getPath());
+        tree.setSelectionPath(treePath);
+        tree.scrollPathToVisible(treePath);
+
+        return;
       }
     }
-
-    TreePath treePath = new TreePath(selectedNode.getPath());
-
-    tree.setSelectionPath(treePath);
-    tree.scrollPathToVisible(treePath);
   }
 
   private DefaultMutableTreeNode populateTree(List<TestFindResult> elements) {
