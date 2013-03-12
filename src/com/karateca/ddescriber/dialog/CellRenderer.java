@@ -10,10 +10,10 @@ import java.awt.*;
  */
 class CellRenderer extends DefaultListCellRenderer {
 
-  static final Color GREEN_BG_COLOR = new Color(182, 232, 172);
-  static final Color GREEN_SELECTED_COLOR = new Color(9, 203, 0);
-  static final Color RED_BG_COLOR = new Color(255, 162, 149);
-  static final Color RED_SELECTED_COLOR = new Color(255, 69, 30);
+  private static final Color GREEN_BG_COLOR = new Color(182, 232, 172);
+  private static final Color GREEN_SELECTED_COLOR = new Color(9, 203, 0);
+  private static final Color RED_BG_COLOR = new Color(255, 162, 149);
+  private static final Color RED_SELECTED_COLOR = new Color(255, 69, 30);
 
   @Override
   public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
