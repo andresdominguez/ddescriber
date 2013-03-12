@@ -58,7 +58,7 @@ public class TreeViewDialog extends Dialog {
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
     tree.setCellRenderer(new CustomTreeCellRenderer());
 
-    // Add search.
+    // Add search, make it case insensitive.
     new TreeSpeedSearch(tree) {
       @Override
       protected boolean compare(String text, String pattern) {
@@ -66,9 +66,9 @@ public class TreeViewDialog extends Dialog {
       }
     }.setComparator(new SpeedSearchComparator(false));
 
-    selectClosestTest(root, closest);
 
     JBScrollPane scrollPane = new JBScrollPane(tree);
+    selectClosestTest(root, closest);
 
     return scrollPane;
   }
