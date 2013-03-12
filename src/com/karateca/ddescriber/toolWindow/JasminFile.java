@@ -35,5 +35,7 @@ public class JasminFile {
     return virtualFile.getName();
   }
 
-
+  public VirtualFile getVirtualFile() {
+    return virtualFile;
+  }
 }

@@ -11,6 +11,8 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
+import com.karateca.ddescriber.ActionUtil;
+import com.karateca.ddescriber.Hierarchy;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -58,20 +60,24 @@ public class JasmineToolWindow implements ToolWindowFactory {
     gridBagConstraintsScrollPane.weighty = 10;
     panel.add(createCenterPanel(jasminFiles), gridBagConstraintsScrollPane);
 
-
     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
     Content content = contentFactory.createContent(panel, "", false);
     toolWindow.getContentManager().addContent(content);
   }
 
   private JComponent createCenterPanel(List<JasminFile> jasminFiles) {
-
+    // The root node is hidden.
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("All tests");
-
     Tree tree = new Tree(root);
 
     for (JasminFile jasminFile : jasminFiles) {
-      root.add(new DefaultMutableTreeNode(jasminFile.toString()));
+      Hierarchy hierarchy = jasminFile.createHierarchy(project);
+      String fileName = jasminFile.getVirtualFile().getName();
+      DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(fileName);
+      DefaultMutableTreeNode node = ActionUtil.populateTree(hierarchy.getAllUnitTests());
+      fileNode.add(node);
+
+      root.add(fileNode);
     }
 
     //tree.setCellRenderer(new CustomTreeCellRenderer());
