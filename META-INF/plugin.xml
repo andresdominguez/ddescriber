@@ -31,5 +31,10 @@
       </action>
   </actions>
 
-  <extensions defaultExtensionNs="com.intellij"></extensions>
+  <extensions defaultExtensionNs="com.intellij">
+      <toolWindow id="Jasmine"
+                  icon="/icons/ddescriberIcon.png"
+                  factoryClass="com.karateca.ddescriber.toolWindow.JasmineToolWindow"
+                  anchor="left"/>
+  </extensions>
 </idea-plugin>
