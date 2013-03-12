@@ -7,7 +7,6 @@ import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.karateca.ddescriber.dialog.Dialog;
 import com.karateca.ddescriber.dialog.TreeViewDialog;
 
 import javax.swing.event.ChangeEvent;
@@ -17,7 +16,6 @@ import java.util.List;
 
 /**
  * @author Andres Dominguez.
- *         TODO: Persist show all / show current describe
  *         TODO: Add button to remove all dd, ii in the project
  *         TODO: Add tests for js files with double quotes
  */
@@ -46,18 +44,18 @@ public class JasmineDescribeReplaceAction extends AnAction {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         if (changeEvent.getSource().equals("LinesFound")) {
-          showDialog(false);
+          showDialog();
         }
       }
     });
     jasmineFinder.findText();
   }
 
-  private void showDialog(boolean showAllInFile) {
+  private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
     Hierarchy hierarchy = new Hierarchy(document, jasmineFinder.getFindResults(), editor.getCaretModel().getOffset());
 
-    Dialog dialog = new TreeViewDialog(project, hierarchy, showAllInFile);
+    TreeViewDialog dialog = new TreeViewDialog(project, hierarchy);
     dialog.show();
 
     int exitCode = dialog.getExitCode();
@@ -65,20 +63,16 @@ public class JasmineDescribeReplaceAction extends AnAction {
     List<TestFindResult> elements = null;
 
     switch (exitCode) {
-      case Dialog.CLEAN_CURRENT_EXIT_CODE:
+      case TreeViewDialog.CLEAN_CURRENT_EXIT_CODE:
         // Clean the current file.
         elements = hierarchy.getMarkedElements();
         break;
-      case Dialog.OK_EXIT_CODE:
+      case TreeViewDialog.OK_EXIT_CODE:
         // Flip the selected elements.
         elements = dialog.getSelectedValues();
         break;
-      case Dialog.SHOW_ALL_EXIT_CODE:
-        // Re-open the dialog. Now show all the elements in the file.
-        showDialog(true);
-        break;
-      case Dialog.SHOW_DESCRIBE_EXIT_CODE:
-        showDialog(false);
+      case TreeViewDialog.GO_TO_TEST_EXIT_CODE:
+        goToSelectedTest(dialog.getSelectedTest());
         break;
     }
 
@@ -87,6 +81,10 @@ public class JasmineDescribeReplaceAction extends AnAction {
       Collections.reverse(elements);
       changeSelectedLineRunningCommand(elements.toArray(new TestFindResult[elements.size()]));
     }
+  }
+
+  private void goToSelectedTest(TestFindResult selectedTest) {
+    editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
   }
 
   /**

@@ -1,6 +1,7 @@
 package com.karateca.ddescriber.dialog;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
@@ -12,8 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -22,12 +22,20 @@ import java.util.Stack;
 /**
  * @author Andres Dominguez.
  */
-public class TreeViewDialog extends Dialog {
+public class TreeViewDialog extends DialogWrapper {
+  public static final int CLEAN_CURRENT_EXIT_CODE = 100;
+  public static final int GO_TO_TEST_EXIT_CODE = 101;
 
+  protected final Hierarchy hierarchy;
+  protected static final int VISIBLE_ROW_COUNT = 13;
   private Tree tree;
+  private TestFindResult selectedTest;
 
-  public TreeViewDialog(@Nullable Project project, Hierarchy hierarchy, boolean showAll) {
-    super(project, hierarchy, showAll);
+  public TreeViewDialog(@Nullable Project project, Hierarchy hierarchy) {
+    super(project);
+    this.hierarchy = hierarchy;
+    init();
+    setTitle("Select the Test or Suite to Add / Remove");
   }
 
   @Nullable
@@ -40,21 +48,6 @@ public class TreeViewDialog extends Dialog {
 
     tree = new Tree(root);
 
-    // Perform the OK action on enter.
-    tree.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent keyEvent) {}
-
-      @Override
-      public void keyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-          doOKAction();
-        }
-      }
-
-      @Override
-      public void keyReleased(KeyEvent keyEvent) {}
-    });
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
     tree.setCellRenderer(new CustomTreeCellRenderer());
 
@@ -66,11 +59,41 @@ public class TreeViewDialog extends Dialog {
       }
     }.setComparator(new SpeedSearchComparator(false));
 
+    addKeyAndMouseEvents();
 
     JBScrollPane scrollPane = new JBScrollPane(tree);
     selectClosestTest(root, closest);
 
     return scrollPane;
+  }
+
+  private void addKeyAndMouseEvents() {
+    // Perform the OK action on enter.
+    tree.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+          doOKAction();
+        }
+      }
+    });
+
+    // Go to the test on double click.
+    tree.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        int selRow = tree.getRowForLocation(e.getX(), e.getY());
+        if (selRow != -1 && e.getClickCount() == 2) {
+          TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+          nodeWasDoubleClicked(selPath);
+        }
+      }
+    });
+  }
+
+  private void nodeWasDoubleClicked(TreePath selPath) {
+    DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+    selectedTest = (TestFindResult) lastPathComponent.getUserObject();
+    close(GO_TO_TEST_EXIT_CODE);
   }
 
   private void selectClosestTest(DefaultMutableTreeNode root, final TestFindResult closest) {
@@ -129,7 +152,6 @@ public class TreeViewDialog extends Dialog {
     return tree;
   }
 
-  @Override
   public List<TestFindResult> getSelectedValues() {
     List<TestFindResult> selected = new ArrayList<TestFindResult>();
 
@@ -145,5 +167,9 @@ public class TreeViewDialog extends Dialog {
     return new Action[]{
         new DialogWrapperExitAction("Clean file", CLEAN_CURRENT_EXIT_CODE)
     };
+  }
+
+  public TestFindResult getSelectedTest() {
+    return selectedTest;
   }
 }
