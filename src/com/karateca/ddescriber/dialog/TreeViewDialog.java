@@ -80,6 +80,7 @@ public class TreeViewDialog extends DialogWrapper {
 
     // Go to the test on double click.
     tree.addMouseListener(new MouseAdapter() {
+      @Override
       public void mousePressed(MouseEvent e) {
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
         if (selRow != -1 && e.getClickCount() == 2) {
