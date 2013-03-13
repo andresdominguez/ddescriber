@@ -37,7 +37,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
     VirtualFile virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
 
-    jasmineFinder = new JasmineFinder(project, document, virtualFile);
+    jasmineFinder = new JasmineFinder(project, document);
 
     // Async callback to get the search results for it( and describe(
     jasmineFinder.addResultsReadyListener(new ChangeListener() {

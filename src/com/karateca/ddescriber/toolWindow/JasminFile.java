@@ -23,7 +23,7 @@ public class JasminFile {
     FileDocumentManager instance = FileDocumentManager.getInstance();
     Document document = instance.getDocument(virtualFile);
 
-    JasmineFinder jasmineFinder = new JasmineFinder(project, document, virtualFile);
+    JasmineFinder jasmineFinder = new JasmineFinder(project, document);
     jasmineFinder.findAll();
     hierarchy = new Hierarchy(document, jasmineFinder.getFindResults(), 0);
 
