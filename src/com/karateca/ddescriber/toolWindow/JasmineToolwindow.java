@@ -13,6 +13,7 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
+import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -38,7 +39,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     ApplicationManager.getApplication().runReadAction(new Runnable() {
       @Override
       public void run() {
-        FileIterator fileIterator = new FileIterator();
+        FileIterator fileIterator = new FileIterator(project);
         ProjectRootManager.getInstance(project).getFileIndex().iterateContent(fileIterator);
         List<JasminFile> jasminFiles = fileIterator.getJasminFiles();
         showTestsInToolWindow(jasminFiles);
@@ -71,7 +72,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     Tree tree = new Tree(root);
 
     for (JasminFile jasminFile : jasminFiles) {
-      Hierarchy hierarchy = jasminFile.createHierarchy(project);
+      Hierarchy hierarchy = jasminFile.createHierarchy();
       String fileName = jasminFile.getVirtualFile().getName();
       DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(fileName);
       DefaultMutableTreeNode node = ActionUtil.populateTree(hierarchy.getAllUnitTests());
@@ -80,7 +81,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       root.add(fileNode);
     }
 
-    //tree.setCellRenderer(new CustomTreeCellRenderer());
+    tree.setCellRenderer(new CustomTreeCellRenderer());
 
     // Add search, make it case insensitive.
     new TreeSpeedSearch(tree) {

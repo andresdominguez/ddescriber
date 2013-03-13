@@ -23,6 +23,12 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     Component component = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
     DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+
+    // Ignore non test nodes.
+    if (!(node.getUserObject() instanceof TestFindResult)) {
+      return component;
+    }
+
     TestFindResult findResult = (TestFindResult) node.getUserObject();
 
     Color color = findResult.isMarkedForRun() ? GREEN_BG_COLOR : defaultColor;
