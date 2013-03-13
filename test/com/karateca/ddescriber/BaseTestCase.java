@@ -1,7 +1,7 @@
 package com.karateca.ddescriber;
 
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.editor.impl.DocumentImpl;
+import com.intellij.openapi.editor.Document;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import junit.framework.Assert;
@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class BaseTestCase extends LightCodeInsightFixtureTestCase {
 
-  DocumentImpl document;
+  Document document;
   JasmineFinder jasmineFinder;
 
   @Override
@@ -30,7 +30,7 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
 
   void prepareScenarioWithTestFile(String fileName) {
     PsiFile psiFile = myFixture.configureByFile(fileName);
-    document = new DocumentImpl(psiFile.getText());
+    document = ActionUtil.getDocument(psiFile.getVirtualFile());
     jasmineFinder = new JasmineFinder(getProject(), document);
   }
 }
