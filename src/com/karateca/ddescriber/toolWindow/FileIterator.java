@@ -1,5 +1,6 @@
 package com.karateca.ddescriber.toolWindow;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -16,8 +17,10 @@ import java.util.regex.Pattern;
 public class FileIterator implements ContentIterator {
 
   private final List<JasminFile> jasminFiles;
+  private final Project project;
 
-  public FileIterator() {
+  public FileIterator(Project project) {
+    this.project = project;
     this.jasminFiles = new ArrayList<JasminFile>();
   }
 
@@ -47,7 +50,7 @@ public class FileIterator implements ContentIterator {
       return;
     }
 
-    jasminFiles.add(new JasminFile(fileOrDir));
+    jasminFiles.add(new JasminFile(project, fileOrDir));
   }
 
   private String getFileContents(VirtualFile virtualFile) throws IOException {

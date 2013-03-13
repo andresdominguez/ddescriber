@@ -12,13 +12,15 @@ import com.karateca.ddescriber.JasmineFinder;
  */
 class JasminFile {
 
+  private final Project project;
   private final VirtualFile virtualFile;
 
-  public JasminFile(VirtualFile virtualFile) {
+  public JasminFile(Project project, VirtualFile virtualFile) {
+    this.project = project;
     this.virtualFile = virtualFile;
   }
 
-  public Hierarchy createHierarchy(Project project) {
+  public Hierarchy createHierarchy() {
     Document document = ActionUtil.getDocument(virtualFile);
 
     JasmineFinder jasmineFinder = new JasmineFinder(project, document);
