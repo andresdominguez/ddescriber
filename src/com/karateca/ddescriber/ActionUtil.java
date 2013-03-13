@@ -2,7 +2,10 @@ package com.karateca.ddescriber;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.lang.Runnable;
@@ -60,5 +63,10 @@ public class ActionUtil {
     }
 
     return root;
+  }
+
+  public static Document getDocument(VirtualFile virtualFile) {
+    FileDocumentManager instance = FileDocumentManager.getInstance();
+    return instance.getDocument(virtualFile);
   }
 }
