@@ -9,8 +9,8 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResult {
 
-  public static final String REMOVE_START_OF_LINE = "\\s*(d?describe\\(|i?it\\()[\"\'](\\S+)";
-  public static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
+  private static final String REMOVE_START_OF_LINE = "\\s*(d?describe\\(|i?it\\()[\"\'](\\S+)";
+  private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;

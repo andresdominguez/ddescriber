@@ -27,8 +27,8 @@ public class TreeViewDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
 
-  protected final Hierarchy hierarchy;
-  protected static final int VISIBLE_ROW_COUNT = 13;
+  private final Hierarchy hierarchy;
+  private static final int VISIBLE_ROW_COUNT = 13;
   private Tree tree;
   private TestFindResult selectedTest;
 

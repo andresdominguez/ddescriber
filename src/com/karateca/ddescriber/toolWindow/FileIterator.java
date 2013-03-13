@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class FileIterator implements ContentIterator {
 
-  List<JasminFile> jasminFiles;
+  private final List<JasminFile> jasminFiles;
 
   public FileIterator() {
     this.jasminFiles = new ArrayList<JasminFile>();
