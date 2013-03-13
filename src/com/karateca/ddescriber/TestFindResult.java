@@ -9,14 +9,15 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResult {
 
-  public static final String REMOVE_END_OF_LINE = "([\"\'])(\\s*[,+]\\s*.*$)";
+  public static final String REMOVE_START_OF_LINE = "\\s*(d?describe\\(|i?it\\()[\"\'](\\S+)";
+  public static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;
   private final int endOffset;
   private final int startOffset;
   private final int lineNumber;
-  private final String testText;
+  private String testText;
   private boolean excluded;
 
   public TestFindResult(Document document, FindResult findResult) {
@@ -26,15 +27,18 @@ public class TestFindResult {
     int lineNumber = document.getLineNumber(endOffset);
     int startOfLine = document.getLineStartOffset(lineNumber);
     int endOfLine = document.getLineEndOffset(lineNumber);
-
     this.lineNumber = lineNumber + 1;
+
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
-    testText = lineText.replaceAll(REMOVE_END_OF_LINE, "$1");
-
-    indentation = startOffset - startOfLine;
-
     isDescribe = lineText.contains("describe(");
     markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
+
+    // Leave the Test text.
+    // TODO: improve this regular expression.
+    testText = lineText.replaceAll(REMOVE_END_OF_LINE, "$1");
+    testText = testText.replaceAll(REMOVE_START_OF_LINE, "$2");
+
+    indentation = startOffset - startOfLine;
   }
 
   public int getIndentation() {
