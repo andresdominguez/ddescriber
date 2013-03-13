@@ -13,10 +13,10 @@ import java.awt.*;
  */
 public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 
-  static final Color GREEN_BG_COLOR = new Color(182, 232, 172);
+  private static final Color GREEN_BG_COLOR = new Color(182, 232, 172);
   private final Color defaultColor = getBackgroundNonSelectionColor();
-  private Icon itIcon = IconLoader.findIcon("/icons/it-icon.png");
-  private Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
+  private final Icon itIcon = IconLoader.findIcon("/icons/it-icon.png");
+  private final Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
 
   @Override
   public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
