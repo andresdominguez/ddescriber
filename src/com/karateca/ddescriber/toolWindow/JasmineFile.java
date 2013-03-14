@@ -32,18 +32,31 @@ public class JasmineFile {
       @Override
       public void run() {
         TreeNode newRoot = createRootNode();
-
-        // Replace contents of node.
-        treeNode.removeAllChildren();
-        treeNode.setUserObject(newRoot.getUserObject());
-
-        // Replace children.
-        Enumeration children = newRoot.children();
-        while (children.hasMoreElements()) {
-          treeNode.add((MutableTreeNode) children.nextElement());
-        }
+        copyTree(newRoot, treeNode);
       }
     });
+  }
+
+  public void copyTree(TreeNode source, TreeNode destination) {
+    // Replace contents of node.
+    destination.removeAllChildren();
+    destination.setUserObject(source.getUserObject());
+
+    doDeepCopy(source, destination);
+  }
+
+  private void doDeepCopy(TreeNode source, TreeNode destination) {
+    Enumeration sourceChildren = source.children();
+    while (sourceChildren.hasMoreElements()) {
+      TreeNode sourceChildNode = (TreeNode) sourceChildren.nextElement();
+
+      TreeNode destinationNode = new TreeNode(sourceChildNode.getUserObject());
+      destination.add(destinationNode);
+
+      if (sourceChildNode.getChildCount() > 0) {
+        doDeepCopy(sourceChildNode, destinationNode);
+      }
+    }
   }
 
   public TreeNode buildTreeNode() {

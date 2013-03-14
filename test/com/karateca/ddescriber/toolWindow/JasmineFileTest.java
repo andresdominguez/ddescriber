@@ -3,7 +3,6 @@ package com.karateca.ddescriber.toolWindow;
 import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
 import com.karateca.ddescriber.model.TreeNode;
-import com.karateca.ddescriber.toolWindow.JasmineFile;
 
 import java.io.IOException;
 
@@ -65,5 +64,35 @@ public class JasmineFileTest extends BaseTestCase {
         assertEquals(1, parent.getChildCount());
       }
     });
+  }
+
+  public void testTreeCopy() throws Exception {
+    givenThatYouBuildTreeNodeFromJasmineFile();
+
+    // Given that you have a tree to copy and a destination.
+    TreeNode destination = new TreeNode("destRoot");
+    TreeNode source = new TreeNode("source");
+    TreeNode parent1 = new TreeNode("parent 1");
+    parent1.add(new TreeNode("foo"));
+    parent1.add(new TreeNode("bar"));
+    source.add(parent1);
+    source.add(new TreeNode("Level 1, ch1"));
+
+    // When you do the deep copy.
+    jasmineFile.copyTree(source, destination);
+
+    // Then ensure the destination has the same structure.
+    assertEquals("source", destination.getUserObject());
+    assertEquals(2, destination.getChildCount());
+    TreeNode firstChild = (TreeNode) destination.getFirstChild();
+
+    // Test first level.
+    assertEquals("parent 1", firstChild.getUserObject());
+    assertEquals("Level 1, ch1", ((TreeNode)destination.getLastChild()).getUserObject());
+
+    // Test second level.
+    assertEquals(2, firstChild.getChildCount());
+    assertEquals("foo", ((TreeNode)firstChild.getFirstChild()).getUserObject());
+    assertEquals("bar", ((TreeNode)firstChild.getLastChild()).getUserObject());
   }
 }
