@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
  */
 public class FileIterator implements ContentIterator {
 
-  private final List<JasminFile> jasminFiles;
+  private final List<JasmineFile> jasmineFiles;
   private final Project project;
 
   public FileIterator(Project project) {
     this.project = project;
-    this.jasminFiles = new ArrayList<JasminFile>();
+    this.jasmineFiles = new ArrayList<JasmineFile>();
   }
 
   @Override
@@ -50,14 +50,14 @@ public class FileIterator implements ContentIterator {
       return;
     }
 
-    jasminFiles.add(new JasminFile(project, fileOrDir));
+    jasmineFiles.add(new JasmineFile(project, fileOrDir));
   }
 
   private String getFileContents(VirtualFile virtualFile) throws IOException {
     return new String(virtualFile.contentsToByteArray());
   }
 
-  public List<JasminFile> getJasminFiles() {
-    return jasminFiles;
+  public List<JasmineFile> getJasmineFiles() {
+    return jasmineFiles;
   }
 }

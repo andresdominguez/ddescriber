@@ -41,13 +41,13 @@ public class JasmineToolWindow implements ToolWindowFactory {
       public void run() {
         FileIterator fileIterator = new FileIterator(project);
         ProjectRootManager.getInstance(project).getFileIndex().iterateContent(fileIterator);
-        List<JasminFile> jasminFiles = fileIterator.getJasminFiles();
+        List<JasmineFile> jasminFiles = fileIterator.getJasmineFiles();
         showTestsInToolWindow(jasminFiles);
       }
     });
   }
 
-  private void showTestsInToolWindow(List<JasminFile> jasminFiles) {
+  private void showTestsInToolWindow(List<JasmineFile> jasminFiles) {
 
     JPanel panel = new JPanel(new GridBagLayout());
     GridBagConstraints gridBagConstraintsScrollPane = new GridBagConstraints();
@@ -66,19 +66,19 @@ public class JasmineToolWindow implements ToolWindowFactory {
     toolWindow.getContentManager().addContent(content);
   }
 
-  private JComponent createCenterPanel(List<JasminFile> jasminFiles) {
+  private JComponent createCenterPanel(List<JasmineFile> jasminFiles) {
     // The root node is hidden.
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("All tests");
     Tree tree = new Tree(root);
 
-    for (JasminFile jasminFile : jasminFiles) {
-      Hierarchy hierarchy = jasminFile.createHierarchy();
-      String fileName = jasminFile.getVirtualFile().getName();
-      DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(fileName);
-      DefaultMutableTreeNode node = ActionUtil.populateTree(hierarchy.getAllUnitTests());
-      fileNode.add(node);
-
-      root.add(fileNode);
+    for (JasmineFile jasminFile : jasminFiles) {
+//      Hierarchy hierarchy = jasminFile.createHierarchy();
+//      String fileName = jasminFile.getVirtualFile().getName();
+//      DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(fileName);
+//      DefaultMutableTreeNode node = ActionUtil.populateTree(hierarchy.getAllUnitTests());
+//      fileNode.add(node);
+//
+//      root.add(fileNode);
     }
 
     tree.setCellRenderer(new CustomTreeCellRenderer());
