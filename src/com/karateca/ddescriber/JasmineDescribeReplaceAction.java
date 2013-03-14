@@ -10,6 +10,7 @@ import com.karateca.ddescriber.dialog.TreeViewDialog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,7 +83,9 @@ public class JasmineDescribeReplaceAction extends AnAction {
   }
 
   private void goToSelectedTest(TestFindResult selectedTest) {
+    // TODO: scoll.
     editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
+//    editor.getScrollPane().scrollRectToVisible(new Rectangle());
   }
 
   /**
