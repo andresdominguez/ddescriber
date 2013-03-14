@@ -16,6 +16,7 @@ public class JasmineFileTest extends BaseTestCase {
     TreeNode node = jasmineFile.buildTreeNode();
 
     // Then ensure the tree node contains all the describe() and it() in the files.
-    assertNotNull(node.getNodeValue());
+    assertEquals("top describe", node.getNodeValue().getTestText());
+    assertEquals(3, node.getChildCount());
   }
 }
