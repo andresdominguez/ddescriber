@@ -38,9 +38,13 @@ public class JasmineFile {
   }
 
   private void updateTreeNode() {
-    treeNode.removeAllChildren();
     TreeNode newRoot = createRootNode();
+
+    // Replace contents of node.
+    treeNode.removeAllChildren();
     treeNode.setUserObject(newRoot.getUserObject());
+
+    // Replace children.
     Enumeration children = newRoot.children();
     while (children.hasMoreElements()) {
       treeNode.add((MutableTreeNode) children.nextElement());
@@ -54,10 +58,13 @@ public class JasmineFile {
 
   private TreeNode createRootNode() {
     Document document = ActionUtil.getDocument(virtualFile);
+
     JasmineFinder jasmineFinder = new JasmineFinder(project, document);
     jasmineFinder.findAll();
     List<FindResult> findResults = jasmineFinder.getFindResults();
+
     Hierarchy hierarchy = new Hierarchy(document, findResults);
+
     return ActionUtil.populateTree(hierarchy.getAllUnitTests());
   }
 }
