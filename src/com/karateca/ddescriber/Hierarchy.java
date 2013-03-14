@@ -25,6 +25,10 @@ public class Hierarchy {
     this.closest = getClosestTestFromCaret(caretOffset);
   }
 
+  public Hierarchy(Document document, List<FindResult> findResults) {
+    this(document, findResults, 0);
+  }
+
   /**
    * Get the closest unit test or suite from the current caret position.
    *

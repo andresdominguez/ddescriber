@@ -1,9 +1,15 @@
 package com.karateca.ddescriber.model;
 
+import com.intellij.find.FindResult;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.karateca.ddescriber.ActionUtil;
+import com.karateca.ddescriber.Hierarchy;
+import com.karateca.ddescriber.JasmineFinder;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.List;
 
 /**
  * @author Andres Dominguez.
@@ -19,6 +25,11 @@ public class JasmineFile {
 
 
   public DefaultMutableTreeNode buildTreeNode() {
-    return null;  //To change body of created methods use File | Settings | File Templates.
+    Document document = ActionUtil.getDocument(virtualFile);
+    JasmineFinder jasmineFinder = new JasmineFinder(project, document);
+    jasmineFinder.findAll();
+    List<FindResult> findResults = jasmineFinder.getFindResults();
+    Hierarchy hierarchy = new Hierarchy(document, findResults);
+    return ActionUtil.populateTree(hierarchy.getAllUnitTests());
   }
 }
