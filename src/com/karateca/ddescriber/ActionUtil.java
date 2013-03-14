@@ -8,7 +8,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.TreeNode;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.lang.Runnable;
 import java.util.List;
 import java.util.Stack;
@@ -40,16 +39,16 @@ public class ActionUtil {
       return root;
     }
 
-    Stack<DefaultMutableTreeNode> stack = new Stack<DefaultMutableTreeNode>();
+    Stack<TreeNode> stack = new Stack<TreeNode>();
     int currentIndentation = first.getIndentation();
 
-    DefaultMutableTreeNode parent = root;
-    DefaultMutableTreeNode last = root;
+    TreeNode parent = root;
+    TreeNode last = root;
 
     for (TestFindResult element : elements.subList(1, elements.size())) {
       int ind = element.getIndentation();
 
-      DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(element);
+      TreeNode newNode = new TreeNode(element);
 
       if (ind > currentIndentation) {
         stack.push(parent);
