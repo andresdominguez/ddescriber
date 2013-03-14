@@ -4,9 +4,8 @@ import com.intellij.find.FindManager;
 import com.intellij.find.FindModel;
 import com.intellij.find.FindResult;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.impl.DocumentImpl;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.EventDispatcher;
 
 import javax.swing.event.ChangeEvent;
@@ -17,20 +16,18 @@ import java.util.List;
 /**
  * Used to find suites and unit tests in a JsUnit JavaScript file.
  */
-class JasmineFinder {
+public class JasmineFinder {
 
   private static final String FIND_REGEXP = "iit\\(|ddescribe\\(|it\\(|describe\\(";
   private final Project project;
-  private final DocumentImpl document;
-  private final VirtualFile virtualFile;
+  private final Document document;
   List<FindResult> findResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
-  public JasmineFinder(Project project, DocumentImpl document, VirtualFile virtualFile) {
+  public JasmineFinder(Project project, Document document) {
     this.project = project;
     this.document = document;
-    this.virtualFile = virtualFile;
   }
 
   FindModel createFindModel(FindManager findManager) {
@@ -59,7 +56,7 @@ class JasmineFinder {
     });
   }
 
-  void findAll() {
+  public void findAll() {
     FindManager findManager = FindManager.getInstance(project);
     FindModel findModel = createFindModel(findManager);
 
@@ -70,7 +67,7 @@ class JasmineFinder {
     int offset = 0;
 
     while (true) {
-      FindResult result = findManager.findString(text, offset, findModel, virtualFile);
+      FindResult result = findManager.findString(text, offset, findModel);
 
       if (!result.isStringFound()) {
         return;

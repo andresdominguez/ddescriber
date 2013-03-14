@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.dialog.TreeViewDialog;
 
 import javax.swing.event.ChangeEvent;
@@ -34,10 +33,9 @@ public class JasmineDescribeReplaceAction extends AnAction {
   public void actionPerformed(AnActionEvent actionEvent) {
     project = actionEvent.getData(PlatformDataKeys.PROJECT);
     editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
-    VirtualFile virtualFile = actionEvent.getData(PlatformDataKeys.VIRTUAL_FILE);
     document = (DocumentImpl) editor.getDocument();
 
-    jasmineFinder = new JasmineFinder(project, document, virtualFile);
+    jasmineFinder = new JasmineFinder(project, document);
 
     // Async callback to get the search results for it( and describe(
     jasmineFinder.addResultsReadyListener(new ChangeListener() {

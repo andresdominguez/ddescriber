@@ -6,6 +6,7 @@ import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
+import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.TestFindResult;
 import org.jetbrains.annotations.Nullable;
@@ -26,8 +27,8 @@ public class TreeViewDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
 
-  protected final Hierarchy hierarchy;
-  protected static final int VISIBLE_ROW_COUNT = 13;
+  private final Hierarchy hierarchy;
+  private static final int VISIBLE_ROW_COUNT = 13;
   private Tree tree;
   private TestFindResult selectedTest;
 
@@ -44,7 +45,7 @@ public class TreeViewDialog extends DialogWrapper {
     List<TestFindResult> elements = hierarchy.getAllUnitTests();
     final TestFindResult closest = hierarchy.getClosest();
 
-    DefaultMutableTreeNode root = populateTree(elements);
+    DefaultMutableTreeNode root = ActionUtil.populateTree(elements);
 
     tree = new Tree(root);
 
@@ -111,40 +112,6 @@ public class TreeViewDialog extends DialogWrapper {
         return;
       }
     }
-  }
-
-  private DefaultMutableTreeNode populateTree(List<TestFindResult> elements) {
-    TestFindResult first = elements.get(0);
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode(first);
-
-    if (elements.size() < 2) {
-      return root;
-    }
-
-    Stack<DefaultMutableTreeNode> stack = new Stack<DefaultMutableTreeNode>();
-    int currentIndentation = first.getIndentation();
-
-    DefaultMutableTreeNode parent = root;
-    DefaultMutableTreeNode last = root;
-
-    for (TestFindResult element : elements.subList(1, elements.size())) {
-      int ind = element.getIndentation();
-
-      DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(element);
-
-      if (ind > currentIndentation) {
-        stack.push(parent);
-        parent = last;
-      } else if (ind < currentIndentation) {
-        parent = stack.pop();
-      }
-      last = newNode;
-      parent.add(last);
-
-      currentIndentation = ind;
-    }
-
-    return root;
   }
 
   @Nullable
