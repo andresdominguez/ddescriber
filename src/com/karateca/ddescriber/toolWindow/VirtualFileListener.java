@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class VirtualFileListener {
 
-  Map<VirtualFile, CallbackHolder> filesToListenFor = new HashMap<VirtualFile, CallbackHolder>();
+  private Map<VirtualFile, CallbackHolder> filesToListenFor = new HashMap<VirtualFile, CallbackHolder>();
 
   public VirtualFileListener() {
     VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {

@@ -1,6 +1,7 @@
 package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.find.FindResult;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -27,17 +28,22 @@ public class JasmineFile {
   }
 
   public void updateTreeNode() {
-    TreeNode newRoot = createRootNode();
+    ApplicationManager.getApplication().runReadAction(new Runnable() {
+      @Override
+      public void run() {
+        TreeNode newRoot = createRootNode();
 
-    // Replace contents of node.
-    treeNode.removeAllChildren();
-    treeNode.setUserObject(newRoot.getUserObject());
+        // Replace contents of node.
+        treeNode.removeAllChildren();
+        treeNode.setUserObject(newRoot.getUserObject());
 
-    // Replace children.
-    Enumeration children = newRoot.children();
-    while (children.hasMoreElements()) {
-      treeNode.add((MutableTreeNode) children.nextElement());
-    }
+        // Replace children.
+        Enumeration children = newRoot.children();
+        while (children.hasMoreElements()) {
+          treeNode.add((MutableTreeNode) children.nextElement());
+        }
+      }
+    });
   }
 
   public TreeNode buildTreeNode() {
@@ -59,5 +65,9 @@ public class JasmineFile {
 
   public VirtualFile getVirtualFile() {
     return virtualFile;
+  }
+
+  public TreeNode getTreeNode() {
+    return treeNode;
   }
 }
