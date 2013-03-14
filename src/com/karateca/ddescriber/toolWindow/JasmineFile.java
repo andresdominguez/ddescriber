@@ -1,4 +1,4 @@
-package com.karateca.ddescriber.model;
+package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.*;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.JasmineFinder;
+import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.tree.MutableTreeNode;
 import java.util.Enumeration;
