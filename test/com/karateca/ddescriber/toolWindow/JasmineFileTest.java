@@ -1,7 +1,8 @@
-package com.karateca.ddescriber.model;
+package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
+import com.karateca.ddescriber.model.TreeNode;
 import com.karateca.ddescriber.toolWindow.JasmineFile;
 
 import java.io.IOException;
