@@ -19,7 +19,6 @@ public class VirtualFileListener {
     VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {
       @Override
       public void contentsChanged(VirtualFileEvent event) {
-        System.out.println("contents changed " + event);
         VirtualFile virtualFile = event.getFile();
         if (filesToListenFor.containsKey(virtualFile)) {
           filesToListenFor.get(virtualFile).doCallback();
