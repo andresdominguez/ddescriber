@@ -1,5 +1,6 @@
 package com.karateca.ddescriber.model;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
 
 import java.io.IOException;
@@ -9,13 +10,14 @@ import java.io.IOException;
  */
 public class JasmineFileTest extends BaseTestCase {
 
-  public void testBuildTreeNode() {
-    // Given that you create a jasmine file.
+  private TreeNode givenThatYouBuildTreeNodeFromJasmineFile() {
     prepareScenarioWithTestFile("jasmineTestCaretTop.js");
     JasmineFile jasmineFile = new JasmineFile(getProject(), virtualFile);
+    return jasmineFile.buildTreeNode();
+  }
 
-    // When you build the tree node.
-    TreeNode node = jasmineFile.buildTreeNode();
+  public void testBuildTreeNode() {
+    TreeNode node = givenThatYouBuildTreeNodeFromJasmineFile();
 
     // Then ensure the tree node contains all the describe() and it() in the files.
     assertEquals("top describe", node.getNodeValue().getTestText());
@@ -23,10 +25,7 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testUpdateNodeOnFileChange() throws IOException {
-    // Given that you build a tree not from a file.
-    prepareScenarioWithTestFile("jasmineTestCaretTop.js");
-    JasmineFile jasmineFile = new JasmineFile(getProject(), virtualFile);
-    TreeNode treeNode = jasmineFile.buildTreeNode();
+    TreeNode treeNode = givenThatYouBuildTreeNodeFromJasmineFile();
 
     // When the file changes.
     virtualFile.setBinaryContent(("describe('file changed', function () {\n" +
@@ -39,5 +38,26 @@ public class JasmineFileTest extends BaseTestCase {
     // Then ensure the tree node was modified.
     assertEquals("file changed", treeNode.getNodeValue().getTestText());
     assertEquals(1, treeNode.getChildCount());
+  }
+
+  public void testRemoveNodeWhenFileIsDeleted() {
+    TreeNode treeNode = givenThatYouBuildTreeNodeFromJasmineFile();
+
+    // And give that you add the node to a parent.
+    final TreeNode parent = new TreeNode("parent");
+    parent.add(new TreeNode("First child"));
+    parent.add(treeNode);
+
+
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        // When you delete the file.
+        psiFile.delete();
+
+        // Then ensure the node was removed from the parent.
+        assertEquals(1, parent.getChildCount());
+      }
+    });
   }
 }

@@ -17,6 +17,7 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
   Document document;
   JasmineFinder jasmineFinder;
   protected VirtualFile virtualFile;
+  protected PsiFile psiFile;
 
   @Override
   protected String getTestDataPath() {
@@ -31,7 +32,7 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
   }
 
   protected void prepareScenarioWithTestFile(String fileName) {
-    PsiFile psiFile = myFixture.configureByFile(fileName);
+    psiFile = myFixture.configureByFile(fileName);
     virtualFile = psiFile.getVirtualFile();
     document = ActionUtil.getDocument(virtualFile);
     jasmineFinder = new JasmineFinder(getProject(), document);

@@ -14,11 +14,10 @@ import java.util.List;
 
 /**
  * @author Andres Dominguez.
- *         TODO: remove when file is deleted.
  */
 public class JasmineFile {
   private final Project project;
-  private final VirtualFile virtualFile;
+  private VirtualFile virtualFile;
   private TreeNode treeNode;
 
   public JasmineFile(Project project, VirtualFile virtualFile) {
@@ -26,12 +25,21 @@ public class JasmineFile {
     this.virtualFile = virtualFile;
 
     // Listen for changes in the file to update the tree node.
-    // TODO: listen for delete.
     VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {
       @Override
       public void contentsChanged(VirtualFileEvent event) {
         if (treeNode != null) {
           updateTreeNode();
+        }
+      }
+
+      @Override
+      public void fileDeleted(VirtualFileEvent event) {
+        // Remove this node from the parent.
+        if (treeNode != null && treeNode.getParent() != null) {
+          TreeNode parent = (TreeNode) treeNode.getParent();
+          parent.remove(treeNode);
+          treeNode = null;
         }
       }
     });
