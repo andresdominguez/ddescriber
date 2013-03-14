@@ -13,11 +13,13 @@ public class VirtualFileListenerTest extends BaseTestCase {
     prepareScenarioWithTestFile("jasmineTestCaretTop.js");
     final boolean[] fileWasChanged = {false};
 
+    JasmineFile jasmineFile = new JasmineFile(getProject(), virtualFile);
+
     VirtualFileListener virtualFileListener = new VirtualFileListener();
 
-    virtualFileListener.registerForChangeEvent(virtualFile, new ChangeCallback() {
+    virtualFileListener.registerForChangeEvent(jasmineFile, new ChangeCallback() {
       @Override
-      public void contentsChanged() {
+      public void contentsChanged(JasmineFile jasmineFile) {
         fileWasChanged[0] = true;
       }
     });

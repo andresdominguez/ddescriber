@@ -12,9 +12,11 @@ import java.io.IOException;
  */
 public class JasmineFileTest extends BaseTestCase {
 
+  private JasmineFile jasmineFile;
+
   private TreeNode givenThatYouBuildTreeNodeFromJasmineFile() {
     prepareScenarioWithTestFile("jasmineTestCaretTop.js");
-    JasmineFile jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile = new JasmineFile(getProject(), virtualFile);
     return jasmineFile.buildTreeNode();
   }
 
@@ -36,6 +38,8 @@ public class JasmineFileTest extends BaseTestCase {
         "    });" +
         "\n});" +
         "\n").getBytes());
+    jasmineFile.updateTreeNode();
+
 
     // Then ensure the tree node was modified.
     assertEquals("file changed", treeNode.getNodeValue().getTestText());

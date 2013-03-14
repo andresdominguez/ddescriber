@@ -3,7 +3,7 @@ package com.karateca.ddescriber.toolWindow;
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.JasmineFinder;
@@ -24,29 +24,9 @@ public class JasmineFile {
   public JasmineFile(Project project, VirtualFile virtualFile) {
     this.project = project;
     this.virtualFile = virtualFile;
-
-    // Listen for changes in the file to update the tree node.
-    VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {
-      @Override
-      public void contentsChanged(VirtualFileEvent event) {
-        if (treeNode != null) {
-          updateTreeNode();
-        }
-      }
-
-      @Override
-      public void fileDeleted(VirtualFileEvent event) {
-        // Remove this node from the parent.
-        if (treeNode != null && treeNode.getParent() != null) {
-          TreeNode parent = (TreeNode) treeNode.getParent();
-          parent.remove(treeNode);
-          treeNode = null;
-        }
-      }
-    });
   }
 
-  private void updateTreeNode() {
+  public void updateTreeNode() {
     TreeNode newRoot = createRootNode();
 
     // Replace contents of node.
@@ -75,5 +55,9 @@ public class JasmineFile {
     Hierarchy hierarchy = new Hierarchy(document, findResults);
 
     return ActionUtil.populateTree(hierarchy.getAllUnitTests());
+  }
+
+  public VirtualFile getVirtualFile() {
+    return virtualFile;
   }
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class VirtualFileListener {
 
-  Map<VirtualFile, ChangeCallback> filesToListenFor = new HashMap<VirtualFile, ChangeCallback>();
+  Map<VirtualFile, CallbackHolder> filesToListenFor = new HashMap<VirtualFile, CallbackHolder>();
 
   public VirtualFileListener() {
     VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {
@@ -22,13 +22,28 @@ public class VirtualFileListener {
         System.out.println("contents changed " + event);
         VirtualFile virtualFile = event.getFile();
         if (filesToListenFor.containsKey(virtualFile)) {
-          filesToListenFor.get(virtualFile).contentsChanged();
+          filesToListenFor.get(virtualFile).doCallback();
         }
       }
     });
   }
 
-  public void registerForChangeEvent(VirtualFile virtualFile, ChangeCallback callback) {
-    filesToListenFor.put(virtualFile, callback);
+  public void registerForChangeEvent(JasmineFile jasmineFile, ChangeCallback callback) {
+    CallbackHolder callbackHolder = new CallbackHolder(jasmineFile, callback);
+    filesToListenFor.put(jasmineFile.getVirtualFile(), callbackHolder);
+  }
+
+  class CallbackHolder {
+    final JasmineFile jasmineFile;
+    final ChangeCallback callback;
+
+    CallbackHolder(JasmineFile jasmineFile, ChangeCallback callback) {
+      this.jasmineFile = jasmineFile;
+      this.callback = callback;
+    }
+
+    void doCallback() {
+      callback.contentsChanged(jasmineFile);
+    }
   }
 }
