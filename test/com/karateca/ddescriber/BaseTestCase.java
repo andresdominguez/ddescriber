@@ -2,6 +2,7 @@ package com.karateca.ddescriber;
 
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import junit.framework.Assert;
@@ -15,6 +16,7 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
 
   Document document;
   JasmineFinder jasmineFinder;
+  protected VirtualFile virtualFile;
 
   @Override
   protected String getTestDataPath() {
@@ -28,9 +30,10 @@ public class BaseTestCase extends LightCodeInsightFixtureTestCase {
     Assert.assertEquals(1, 1);
   }
 
-  void prepareScenarioWithTestFile(String fileName) {
+  protected void prepareScenarioWithTestFile(String fileName) {
     PsiFile psiFile = myFixture.configureByFile(fileName);
-    document = ActionUtil.getDocument(psiFile.getVirtualFile());
+    virtualFile = psiFile.getVirtualFile();
+    document = ActionUtil.getDocument(virtualFile);
     jasmineFinder = new JasmineFinder(getProject(), document);
   }
 }
