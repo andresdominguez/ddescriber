@@ -8,7 +8,6 @@ import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.JasmineFinder;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.List;
 
 /**
@@ -23,8 +22,7 @@ public class JasmineFile {
     this.virtualFile = virtualFile;
   }
 
-
-  public DefaultMutableTreeNode buildTreeNode() {
+  public TreeNode buildTreeNode() {
     Document document = ActionUtil.getDocument(virtualFile);
     JasmineFinder jasmineFinder = new JasmineFinder(project, document);
     jasmineFinder.findAll();

@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.lang.Runnable;
@@ -31,9 +32,9 @@ public class ActionUtil {
     }, "Add / Remove tests", null);
   }
 
-  public static DefaultMutableTreeNode populateTree(List<TestFindResult> elements) {
+  public static TreeNode populateTree(List<TestFindResult> elements) {
     TestFindResult first = elements.get(0);
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode(first);
+    TreeNode root = new TreeNode(first);
 
     if (elements.size() < 2) {
       return root;
