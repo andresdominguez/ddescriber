@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.karateca.jasmineDescriber</id>
   <name>Jasmine D Describer</name>
-  <version>1.0</version>
+  <version>1.1</version>
   <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
@@ -14,6 +14,8 @@
 
   <change-notes><![CDATA[
       First version 1.0<br>
+      1.1 Added a tree view when you launch the dialog. Added a tool window that shows you all the test files and their
+      internal test structure.
       ]]>
   </change-notes>
 
