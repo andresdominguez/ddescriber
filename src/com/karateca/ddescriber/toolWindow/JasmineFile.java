@@ -5,12 +5,14 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.EventDispatcher;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.JasmineFinder;
 import com.karateca.ddescriber.model.TreeNode;
 
-import javax.swing.tree.MutableTreeNode;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -21,6 +23,8 @@ public class JasmineFile {
   private final Project project;
   private VirtualFile virtualFile;
   private TreeNode treeNode;
+
+  private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 
   public JasmineFile(Project project, VirtualFile virtualFile) {
     this.project = project;
@@ -59,6 +63,17 @@ public class JasmineFile {
     }
   }
 
+  public void buildTreeFromFile() {
+    ActionUtil.runReadAction(new Runnable() {
+      @Override
+      public void run() {
+        treeNode = createRootNode();
+        myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("LinesFound"));
+      }
+    });
+  }
+
+  @Deprecated
   public TreeNode buildTreeNode() {
     treeNode = createRootNode();
     return treeNode;
@@ -75,6 +90,16 @@ public class JasmineFile {
 
     return ActionUtil.populateTree(hierarchy.getAllUnitTests());
   }
+
+  /**
+   * Register for change events.
+   *
+   * @param changeListener The listener to be added.
+   */
+  public void addResultsReadyListener(ChangeListener changeListener) {
+    myEventDispatcher.addListener(changeListener);
+  }
+
 
   public VirtualFile getVirtualFile() {
     return virtualFile;

@@ -4,6 +4,8 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
 import com.karateca.ddescriber.model.TreeNode;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.io.IOException;
 
 /**
@@ -20,11 +22,11 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testBuildTreeNode() {
-    TreeNode node = buildRootNodeFromFile("jasmineTestCaretTop.js");
+    TreeNode node = buildRootNodeFromFile("testWihManyLevels.js");
 
     // Ensure the tree node contains all the describe() and it() in the file.
-    assertEquals("top describe", node.getNodeValue().getTestText());
-    assertEquals(3, node.getChildCount());
+    assertEquals("suite1", node.getNodeValue().getTestText());
+    assertEquals(4, node.getChildCount());
 
     TreeNode test1 = (TreeNode) node.getChildAt(0);
     TreeNode suite2 = (TreeNode) node.getChildAt(1);
@@ -50,7 +52,7 @@ public class JasmineFileTest extends BaseTestCase {
     assertEquals(2, suite4.getChildCount());
 
     // suite6
-    assertEquals(1, suite6);
+    assertEquals(1, suite6.getChildCount());
   }
 
   public void testBuildTreeDeepStructure() {
@@ -123,11 +125,33 @@ public class JasmineFileTest extends BaseTestCase {
 
     // Test first level.
     assertEquals("parent 1", firstChild.getUserObject());
-    assertEquals("Level 1, ch1", ((TreeNode)destination.getLastChild()).getUserObject());
+    assertEquals("Level 1, ch1", ((TreeNode) destination.getLastChild()).getUserObject());
 
     // Test second level.
     assertEquals(2, firstChild.getChildCount());
-    assertEquals("foo", ((TreeNode)firstChild.getFirstChild()).getUserObject());
-    assertEquals("bar", ((TreeNode)firstChild.getLastChild()).getUserObject());
+    assertEquals("foo", ((TreeNode) firstChild.getFirstChild()).getUserObject());
+    assertEquals("bar", ((TreeNode) firstChild.getLastChild()).getUserObject());
+  }
+
+  public void testSearchResultsListener() {
+    // Given a jasmine file.
+    prepareScenarioWithTestFile("jasmineTestCaretTop.js");
+    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    final boolean[] buildDone = new boolean[1];
+
+    // And given that you register for changes.
+    jasmineFile.addResultsReadyListener(new ChangeListener() {
+      @Override
+      public void stateChanged(ChangeEvent changeEvent) {
+        buildDone[0] = true;
+      }
+    });
+
+    // When you process the files.
+    jasmineFile.buildTreeFromFile();
+
+    // Then ensure the change event was broadcasted.
+    assertTrue(buildDone[0]);
+    assertEquals("top describe", jasmineFile.getTreeNode().getNodeValue().getTestText());
   }
 }
