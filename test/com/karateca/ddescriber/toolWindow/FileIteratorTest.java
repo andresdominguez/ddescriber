@@ -11,7 +11,7 @@ public class FileIteratorTest extends BaseTestCase {
 
   public void testProcessFile() throws Exception {
     prepareScenarioWithTestFile("jasmineTestCaretTop.js");
-    fileIterator = new FileIterator(getProject());
+    fileIterator = new FileIterator(getProject(), true);
 
     // When you process a file.
     fileIterator.processFile(virtualFile);

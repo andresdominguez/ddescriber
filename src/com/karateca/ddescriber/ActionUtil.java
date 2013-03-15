@@ -6,11 +6,6 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.karateca.ddescriber.model.TreeNode;
-
-import java.lang.Runnable;
-import java.util.List;
-import java.util.Stack;
 
 /**
  * @author Andres Dominguez.

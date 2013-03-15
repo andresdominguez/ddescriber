@@ -19,9 +19,11 @@ public class FileIterator implements ContentIterator {
 
   private final List<JasmineFile> jasmineFiles;
   private final Project project;
+  private final boolean skipCleanTestFiles;
 
-  public FileIterator(Project project) {
+  public FileIterator(Project project, boolean skipCleanTestFiles) {
     this.project = project;
+    this.skipCleanTestFiles = skipCleanTestFiles;
     this.jasmineFiles = new ArrayList<JasmineFile>();
   }
 
@@ -51,7 +53,14 @@ public class FileIterator implements ContentIterator {
       return;
     }
 
-    jasmineFiles.add(new JasmineFile(project, fileOrDir));
+    JasmineFile jasmineFile = new JasmineFile(project, fileOrDir);
+    jasmineFile.buildTreeNodeSync();
+
+    if (skipCleanTestFiles && jasmineFile.getElementsMarkedToRun().size() == 0) {
+      return;
+    }
+
+    jasmineFiles.add(jasmineFile);
   }
 
   private String getFileContents(VirtualFile virtualFile) throws IOException {
