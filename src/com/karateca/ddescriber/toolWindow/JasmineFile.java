@@ -63,7 +63,7 @@ public class JasmineFile {
     }
   }
 
-  public void buildTreeFromFile() {
+  public void buildTreeNodeAsync() {
     ActionUtil.runReadAction(new Runnable() {
       @Override
       public void run() {
@@ -74,7 +74,7 @@ public class JasmineFile {
   }
 
   @Deprecated
-  public TreeNode buildTreeNode() {
+  public TreeNode buildTreeNodeSync() {
     treeNode = createRootNode();
     return treeNode;
   }

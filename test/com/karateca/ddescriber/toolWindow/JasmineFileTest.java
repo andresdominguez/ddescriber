@@ -18,7 +18,7 @@ public class JasmineFileTest extends BaseTestCase {
   private TreeNode buildRootNodeFromFile(String fileName) {
     prepareScenarioWithTestFile(fileName);
     jasmineFile = new JasmineFile(getProject(), virtualFile);
-    return jasmineFile.buildTreeNode();
+    return jasmineFile.buildTreeNodeSync();
   }
 
   public void testBuildTreeNode() {
@@ -148,7 +148,7 @@ public class JasmineFileTest extends BaseTestCase {
     });
 
     // When you process the files.
-    jasmineFile.buildTreeFromFile();
+    jasmineFile.buildTreeNodeAsync();
 
     // Then ensure the change event was broadcasted.
     assertTrue(buildDone[0]);
