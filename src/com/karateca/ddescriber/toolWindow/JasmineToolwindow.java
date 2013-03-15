@@ -87,7 +87,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     tree = new Tree(root);
 
     for (JasmineFile jasmineFile : jasmineFiles) {
-      root.add(jasmineFile.buildTreeNode());
+      root.add(jasmineFile.buildTreeNodeSync());
     }
 
     tree.setCellRenderer(new CustomTreeCellRenderer());

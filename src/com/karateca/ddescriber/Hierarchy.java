@@ -22,6 +22,7 @@ public class Hierarchy {
       testFindResults.add(result);
     }
 
+    // TODO: no longer necessary
     this.closest = getClosestTestFromCaret(caretOffset);
   }
 
@@ -35,7 +36,7 @@ public class Hierarchy {
    * @param caretOffset The current caret position in the editor.
    * @return The closest test or suite.
    */
-  private TestFindResult getClosestTestFromCaret(int caretOffset) {
+  public TestFindResult getClosestTestFromCaret(int caretOffset) {
     int lineNumber = document.getLineNumber(caretOffset) + 1;
     TestFindResult closest = null;
     int minDistance = Integer.MAX_VALUE;
@@ -52,41 +53,6 @@ public class Hierarchy {
     }
 
     return closest;
-  }
-
-  public List<TestFindResult> getUnitTestsForCurrentDescribe() {
-    List<TestFindResult> matches = new ArrayList<TestFindResult>();
-
-    int index = testFindResults.indexOf(closest);
-
-    matches.add(closest);
-
-    if (!closest.isDescribe()) {
-      // The closest match is an 'it()'. Add all the elements before and after
-      // with the same indentation
-      addAllElementsWithSameIndentation(matches, index, closest.getIndentation());
-    } else if (testFindResults.size() > index + 1) {
-      // The closest match is a 'describe()'. Add all the elements inside this
-      // describe.
-      int indentation = testFindResults.get(index + 1).getIndentation();
-      addAllElementsWithSameIndentation(matches, index, indentation);
-    }
-
-    // Mark excluded.
-    int includedCount = 0;
-    for (TestFindResult findResult : matches) {
-      includedCount += findResult.isMarkedForRun() ? 1 : 0;
-    }
-
-    if (includedCount > 0) {
-      for (TestFindResult findResult : matches) {
-        findResult.setExcluded(!findResult.isMarkedForRun());
-      }
-    }
-
-    addParentElements(matches, index);
-
-    return matches;
   }
 
   /**
@@ -134,7 +100,7 @@ public class Hierarchy {
     }
   }
 
-  public TestFindResult getClosest() {
+  public TestFindResult getClosest(int caretOffset) {
     return closest;
   }
 

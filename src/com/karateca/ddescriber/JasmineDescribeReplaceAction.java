@@ -7,10 +7,10 @@ import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.karateca.ddescriber.dialog.TreeViewDialog;
+import com.karateca.ddescriber.toolWindow.JasmineFile;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,8 +23,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   private Project project;
   private DocumentImpl document;
-  private JasmineFinder jasmineFinder;
   private EditorImpl editor;
+  private JasmineFile jasmineFile;
 
   @Override
   public void update(AnActionEvent e) {
@@ -36,25 +36,21 @@ public class JasmineDescribeReplaceAction extends AnAction {
     editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
     document = (DocumentImpl) editor.getDocument();
 
-    jasmineFinder = new JasmineFinder(project, document);
+    jasmineFile = new JasmineFile(project, editor.getVirtualFile());
 
     // Async callback to get the search results for it( and describe(
-    jasmineFinder.addResultsReadyListener(new ChangeListener() {
+    jasmineFile.addResultsReadyListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
-        if (changeEvent.getSource().equals("LinesFound")) {
-          showDialog();
-        }
+        showDialog();
       }
     });
-    jasmineFinder.findText();
+    jasmineFile.buildTreeNodeAsync();
   }
 
   private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
-    Hierarchy hierarchy = new Hierarchy(document, jasmineFinder.getFindResults(), editor.getCaretModel().getOffset());
-
-    TreeViewDialog dialog = new TreeViewDialog(project, hierarchy);
+    TreeViewDialog dialog = new TreeViewDialog(project, jasmineFile, editor.getCaretModel().getOffset());
     dialog.show();
 
     int exitCode = dialog.getExitCode();
@@ -64,7 +60,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
     switch (exitCode) {
       case TreeViewDialog.CLEAN_CURRENT_EXIT_CODE:
         // Clean the current file.
-        elements = hierarchy.getMarkedElements();
+        elements = jasmineFile.getElementsMarkedToRun();
         break;
       case TreeViewDialog.OK_EXIT_CODE:
         // Flip the selected elements.

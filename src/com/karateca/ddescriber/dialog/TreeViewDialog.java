@@ -6,9 +6,9 @@ import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
-import com.karateca.ddescriber.ActionUtil;
-import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.TestFindResult;
+import com.karateca.ddescriber.model.TreeNode;
+import com.karateca.ddescriber.toolWindow.JasmineFile;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -18,7 +18,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * @author Andres Dominguez.
@@ -27,14 +26,16 @@ public class TreeViewDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
 
-  private final Hierarchy hierarchy;
   private static final int VISIBLE_ROW_COUNT = 13;
+  private final int caretOffset;
   private Tree tree;
   private TestFindResult selectedTest;
+  private JasmineFile jasmineFile;
 
-  public TreeViewDialog(@Nullable Project project, Hierarchy hierarchy) {
+  public TreeViewDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
-    this.hierarchy = hierarchy;
+    this.jasmineFile = jasmineFile;
+    this.caretOffset = caretOffset;
     init();
     setTitle("Select the Test or Suite to Add / Remove");
   }
@@ -42,13 +43,11 @@ public class TreeViewDialog extends DialogWrapper {
   @Nullable
   @Override
   protected JComponent createCenterPanel() {
-    List<TestFindResult> elements = hierarchy.getAllUnitTests();
-    final TestFindResult closest = hierarchy.getClosest();
+    final TestFindResult closest = jasmineFile.getClosestTestFromCaret(caretOffset);
 
-    DefaultMutableTreeNode root = ActionUtil.populateTree(elements);
-
+    // Build the tree.
+    TreeNode root = jasmineFile.getTreeNode();
     tree = new Tree(root);
-
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
     tree.setCellRenderer(new CustomTreeCellRenderer());
 

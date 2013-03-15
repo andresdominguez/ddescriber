@@ -1,7 +1,6 @@
 package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.find.FindResult;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -9,6 +8,7 @@ import com.intellij.util.EventDispatcher;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.JasmineFinder;
+import com.karateca.ddescriber.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.event.ChangeEvent;
@@ -21,18 +21,29 @@ import java.util.List;
  */
 public class JasmineFile {
   private final Project project;
-  private VirtualFile virtualFile;
+  private final VirtualFile virtualFile;
   private TreeNode treeNode;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
+  private Hierarchy hierarchy;
 
   public JasmineFile(Project project, VirtualFile virtualFile) {
     this.project = project;
     this.virtualFile = virtualFile;
   }
 
+  public void buildTreeNodeAsync() {
+    ActionUtil.runReadAction(new Runnable() {
+      @Override
+      public void run() {
+        treeNode = createRootNode();
+        myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("LinesFound"));
+      }
+    });
+  }
+
   public void updateTreeNode() {
-    ApplicationManager.getApplication().runReadAction(new Runnable() {
+    ActionUtil.runReadAction(new Runnable() {
       @Override
       public void run() {
         TreeNode newRoot = createRootNode();
@@ -41,7 +52,7 @@ public class JasmineFile {
     });
   }
 
-  public void copyTree(TreeNode source, TreeNode destination) {
+  void copyTree(TreeNode source, TreeNode destination) {
     // Replace contents of node.
     destination.removeAllChildren();
     destination.setUserObject(source.getUserObject());
@@ -63,16 +74,6 @@ public class JasmineFile {
     }
   }
 
-  public void buildTreeNodeAsync() {
-    ActionUtil.runReadAction(new Runnable() {
-      @Override
-      public void run() {
-        treeNode = createRootNode();
-        myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("LinesFound"));
-      }
-    });
-  }
-
   @Deprecated
   TreeNode buildTreeNodeSync() {
     treeNode = createRootNode();
@@ -86,7 +87,7 @@ public class JasmineFile {
     jasmineFinder.findAll();
     List<FindResult> findResults = jasmineFinder.getFindResults();
 
-    Hierarchy hierarchy = new Hierarchy(document, findResults);
+    hierarchy = new Hierarchy(document, findResults);
 
     return ActionUtil.populateTree(hierarchy.getAllUnitTests());
   }
@@ -107,5 +108,13 @@ public class JasmineFile {
 
   public TreeNode getTreeNode() {
     return treeNode;
+  }
+
+  public TestFindResult getClosestTestFromCaret(int caretOffset) {
+    return hierarchy.getClosestTestFromCaret(caretOffset);
+  }
+
+  public List<TestFindResult> getElementsMarkedToRun() {
+    return hierarchy.getMarkedElements();
   }
 }

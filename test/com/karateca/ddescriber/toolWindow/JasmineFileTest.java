@@ -2,11 +2,13 @@ package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
+import com.karateca.ddescriber.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Andres Dominguez.
@@ -53,6 +55,21 @@ public class JasmineFileTest extends BaseTestCase {
 
     // suite6
     assertEquals(1, suite6.getChildCount());
+  }
+
+  public void testGetClosestTest() {
+    buildRootNodeFromFile("testWihManyLevels.js");
+
+    assertEquals("suite1", jasmineFile.getClosestTestFromCaret(0).getTestText());
+  }
+
+  public void testElementsMarkedForRun() {
+    buildRootNodeFromFile("jasmineTestCaretTop.js");
+
+    List<TestFindResult> list = jasmineFile.getElementsMarkedToRun();
+    assertEquals(2, list.size());
+    assertEquals("inner describe", list.get(0).getTestText());
+    assertEquals("inner it 3", list.get(1).getTestText());
   }
 
   public void testBuildTreeDeepStructure() {
