@@ -31,6 +31,15 @@ public class ActionUtil {
     }, "Add / Remove tests", null);
   }
 
+  /**
+   * Run a read operation.
+   *
+   * @param action The action to run.
+   */
+  public static void runReadAction(Runnable action) {
+    ApplicationManager.getApplication().runReadAction(action);
+  }
+
   public static TreeNode populateTree(List<TestFindResult> elements) {
     TestFindResult first = elements.get(0);
     TreeNode root = new TreeNode(first);
