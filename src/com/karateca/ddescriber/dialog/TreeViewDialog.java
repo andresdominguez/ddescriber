@@ -6,7 +6,7 @@ import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
-import com.karateca.ddescriber.TestFindResult;
+import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 import com.karateca.ddescriber.model.JasmineFile;
 import org.jetbrains.annotations.Nullable;

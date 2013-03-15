@@ -14,8 +14,8 @@ import java.io.File;
  */
 public class BaseTestCase extends LightCodeInsightFixtureTestCase {
 
-  Document document;
-  JasmineFinder jasmineFinder;
+  protected Document document;
+  protected JasmineFinder jasmineFinder;
   protected VirtualFile virtualFile;
   protected PsiFile psiFile;
 

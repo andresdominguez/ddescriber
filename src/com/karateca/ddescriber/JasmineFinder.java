@@ -21,7 +21,7 @@ public class JasmineFinder {
   private static final String FIND_REGEXP = "iit\\(|ddescribe\\(|it\\(|describe\\(";
   private final Project project;
   private final Document document;
-  List<FindResult> findResults;
+  public List<FindResult> findResults;
 
   private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
 

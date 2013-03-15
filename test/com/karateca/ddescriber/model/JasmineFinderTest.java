@@ -1,6 +1,7 @@
-package com.karateca.ddescriber;
+package com.karateca.ddescriber.model;
 
 import com.intellij.find.FindResult;
+import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.List;
 

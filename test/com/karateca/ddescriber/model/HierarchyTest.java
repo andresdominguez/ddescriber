@@ -1,6 +1,6 @@
-package com.karateca.ddescriber;
+package com.karateca.ddescriber.model;
 
-import com.karateca.ddescriber.model.Hierarchy;
+import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.List;
 

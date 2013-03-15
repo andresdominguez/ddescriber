@@ -2,7 +2,6 @@ package com.karateca.ddescriber.model;
 
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
-import com.karateca.ddescriber.TestFindResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * @author Andres Dominguez.
  */
-public class Hierarchy {
+class Hierarchy {
   private final Document document;
   private final TestFindResult closest;
   private final List<TestFindResult> testFindResults;

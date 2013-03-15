@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.karateca.ddescriber.dialog.TreeViewDialog;
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.TestFindResult;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

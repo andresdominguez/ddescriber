@@ -1,4 +1,4 @@
-package com.karateca.ddescriber;
+package com.karateca.ddescriber.model;
 
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;

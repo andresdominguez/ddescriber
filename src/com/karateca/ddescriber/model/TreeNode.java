@@ -1,7 +1,5 @@
 package com.karateca.ddescriber.model;
 
-import com.karateca.ddescriber.TestFindResult;
-
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**

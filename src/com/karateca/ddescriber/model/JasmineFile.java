@@ -7,7 +7,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.EventDispatcher;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.JasmineFinder;
-import com.karateca.ddescriber.TestFindResult;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

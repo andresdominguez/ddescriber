@@ -1,7 +1,7 @@
 package com.karateca.ddescriber.dialog;
 
 import com.intellij.openapi.util.IconLoader;
-import com.karateca.ddescriber.TestFindResult;
+import com.karateca.ddescriber.model.TestFindResult;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
