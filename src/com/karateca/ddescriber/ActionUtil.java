@@ -40,43 +40,6 @@ public class ActionUtil {
     ApplicationManager.getApplication().runReadAction(action);
   }
 
-  public static TreeNode populateTree(List<TestFindResult> elements) {
-    TestFindResult first = elements.get(0);
-    TreeNode root = new TreeNode(first);
-
-    if (elements.size() == 1) {
-      return root;
-    }
-
-    Stack<TreeNode> stack = new Stack<TreeNode>();
-    int currentIndentation = first.getIndentation();
-
-    TreeNode parent = root;
-    TreeNode last = root;
-
-    for (TestFindResult element : elements.subList(1, elements.size())) {
-      int ind = element.getIndentation();
-
-      TreeNode newNode = new TreeNode(element);
-
-      if (ind > currentIndentation) {
-        stack.push(parent);
-        parent = last;
-      } else if (ind < currentIndentation) {
-        do {
-          // Find a parent that is not under the current level.
-          parent = stack.pop();
-        } while (parent.getNodeValue().getIndentation() >= ind);
-      }
-      last = newNode;
-      parent.add(last);
-
-      currentIndentation = ind;
-    }
-
-    return root;
-  }
-
   public static Document getDocument(VirtualFile virtualFile) {
     FileDocumentManager instance = FileDocumentManager.getInstance();
     return instance.getDocument(virtualFile);

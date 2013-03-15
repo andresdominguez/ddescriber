@@ -8,7 +8,7 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import com.karateca.ddescriber.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
-import com.karateca.ddescriber.toolWindow.JasmineFile;
+import com.karateca.ddescriber.model.JasmineFile;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

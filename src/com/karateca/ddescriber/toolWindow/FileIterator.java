@@ -3,6 +3,7 @@ package com.karateca.ddescriber.toolWindow;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.karateca.ddescriber.model.JasmineFile;
 
 import java.io.IOException;
 import java.lang.Override;

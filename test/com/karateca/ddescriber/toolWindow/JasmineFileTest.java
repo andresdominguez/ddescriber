@@ -3,6 +3,7 @@ package com.karateca.ddescriber.toolWindow;
 import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
 import com.karateca.ddescriber.TestFindResult;
+import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.event.ChangeEvent;

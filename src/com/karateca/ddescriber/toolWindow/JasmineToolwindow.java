@@ -12,6 +12,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
+import com.karateca.ddescriber.model.JasmineFile;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;

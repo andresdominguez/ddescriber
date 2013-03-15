@@ -1,5 +1,7 @@
 package com.karateca.ddescriber;
 
+import com.karateca.ddescriber.model.Hierarchy;
+
 import java.util.List;
 
 /**

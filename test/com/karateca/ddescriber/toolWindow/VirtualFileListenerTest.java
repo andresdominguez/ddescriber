@@ -2,6 +2,7 @@ package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
+import com.karateca.ddescriber.model.JasmineFile;
 
 import java.io.IOException;
 

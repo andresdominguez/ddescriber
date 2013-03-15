@@ -4,6 +4,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileAdapter;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.karateca.ddescriber.model.JasmineFile;
 
 import java.util.HashMap;
 import java.util.Map;
