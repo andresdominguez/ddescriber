@@ -74,7 +74,7 @@ public class JasmineFile {
   }
 
   @Deprecated
-  public TreeNode buildTreeNodeSync() {
+  TreeNode buildTreeNodeSync() {
     treeNode = createRootNode();
     return treeNode;
   }
