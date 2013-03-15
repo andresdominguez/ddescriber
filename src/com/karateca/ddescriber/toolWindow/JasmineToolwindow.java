@@ -11,12 +11,11 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
-import com.karateca.ddescriber.ActionUtil;
-import com.karateca.ddescriber.Hierarchy;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.util.List;
 
@@ -27,6 +26,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   private ToolWindow toolWindow;
   private Project project;
+  private Tree tree;
 
   @Override
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
@@ -41,13 +41,13 @@ public class JasmineToolWindow implements ToolWindowFactory {
       public void run() {
         FileIterator fileIterator = new FileIterator(project);
         ProjectRootManager.getInstance(project).getFileIndex().iterateContent(fileIterator);
-        List<JasmineFile> jasminFiles = fileIterator.getJasmineFiles();
-        showTestsInToolWindow(jasminFiles);
+        List<JasmineFile> jasmineFiles = fileIterator.getJasmineFiles();
+        showTestsInToolWindow(jasmineFiles);
       }
     });
   }
 
-  private void showTestsInToolWindow(List<JasmineFile> jasminFiles) {
+  private void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
 
     JPanel panel = new JPanel(new GridBagLayout());
     GridBagConstraints gridBagConstraintsScrollPane = new GridBagConstraints();
@@ -59,26 +59,35 @@ public class JasmineToolWindow implements ToolWindowFactory {
     gridBagConstraintsScrollPane.anchor = GridBagConstraints.CENTER;
     gridBagConstraintsScrollPane.weightx = 1;
     gridBagConstraintsScrollPane.weighty = 10;
-    panel.add(createCenterPanel(jasminFiles), gridBagConstraintsScrollPane);
+    panel.add(createCenterPanel(jasmineFiles), gridBagConstraintsScrollPane);
 
     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
     Content content = contentFactory.createContent(panel, "", false);
     toolWindow.getContentManager().addContent(content);
   }
 
-  private JComponent createCenterPanel(List<JasmineFile> jasminFiles) {
+  private JComponent createCenterPanel(List<JasmineFile> jasmineFiles) {
+    VirtualFileListener virtualFileListener = new VirtualFileListener();
+    for (JasmineFile jasmineFile : jasmineFiles) {
+      virtualFileListener.registerForChangeEvent(jasmineFile, new ChangeCallback() {
+        @Override
+        public void contentsChanged(final JasmineFile jasmineFile) {
+          System.out.println("This file changed " + jasmineFile.getVirtualFile().getName());
+          jasmineFile.updateTreeNode();
+
+          // Force an update.
+          DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+          model.reload(jasmineFile.getTreeNode());
+        }
+      });
+    }
+
     // The root node is hidden.
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("All tests");
-    Tree tree = new Tree(root);
+    tree = new Tree(root);
 
-    for (JasmineFile jasminFile : jasminFiles) {
-//      Hierarchy hierarchy = jasminFile.createHierarchy();
-//      String fileName = jasminFile.getVirtualFile().getName();
-//      DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(fileName);
-//      DefaultMutableTreeNode node = ActionUtil.populateTree(hierarchy.getAllUnitTests());
-//      fileNode.add(node);
-//
-//      root.add(fileNode);
+    for (JasmineFile jasmineFile : jasmineFiles) {
+      root.add(jasmineFile.buildTreeNode());
     }
 
     tree.setCellRenderer(new CustomTreeCellRenderer());
