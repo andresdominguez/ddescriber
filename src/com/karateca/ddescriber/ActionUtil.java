@@ -35,7 +35,7 @@ public class ActionUtil {
     TestFindResult first = elements.get(0);
     TreeNode root = new TreeNode(first);
 
-    if (elements.size() < 2) {
+    if (elements.size() == 1) {
       return root;
     }
 
@@ -54,7 +54,10 @@ public class ActionUtil {
         stack.push(parent);
         parent = last;
       } else if (ind < currentIndentation) {
-        parent = stack.pop();
+        do {
+          // Find a parent that is not under the current level.
+          parent = stack.pop();
+        } while (parent.getNodeValue().getIndentation() >= ind);
       }
       last = newNode;
       parent.add(last);

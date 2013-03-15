@@ -13,22 +13,57 @@ public class JasmineFileTest extends BaseTestCase {
 
   private JasmineFile jasmineFile;
 
-  private TreeNode givenThatYouBuildTreeNodeFromJasmineFile() {
-    prepareScenarioWithTestFile("jasmineTestCaretTop.js");
+  private TreeNode buildRootNodeFromFile(String fileName) {
+    prepareScenarioWithTestFile(fileName);
     jasmineFile = new JasmineFile(getProject(), virtualFile);
     return jasmineFile.buildTreeNode();
   }
 
   public void testBuildTreeNode() {
-    TreeNode node = givenThatYouBuildTreeNodeFromJasmineFile();
+    TreeNode node = buildRootNodeFromFile("jasmineTestCaretTop.js");
 
-    // Then ensure the tree node contains all the describe() and it() in the files.
+    // Ensure the tree node contains all the describe() and it() in the file.
     assertEquals("top describe", node.getNodeValue().getTestText());
     assertEquals(3, node.getChildCount());
+
+    TreeNode test1 = (TreeNode) node.getChildAt(0);
+    TreeNode suite2 = (TreeNode) node.getChildAt(1);
+    TreeNode suite3 = (TreeNode) node.getChildAt(2);
+    TreeNode suite6 = (TreeNode) node.getChildAt(3);
+
+    assertEquals("test1", test1.getNodeValue().getTestText());
+    assertEquals("suite2", suite2.getNodeValue().getTestText());
+    assertEquals("suite3", suite3.getNodeValue().getTestText());
+    assertEquals("suite6", suite6.getNodeValue().getTestText());
+
+    // suite2
+    assertEquals(2, suite2.getChildCount());
+
+    // suite3
+    assertEquals(2, suite3.getChildCount());
+    TreeNode test4 = (TreeNode) suite3.getChildAt(0);
+    TreeNode suite4 = (TreeNode) suite3.getChildAt(1);
+    assertEquals("test4", test4.getNodeValue().getTestText());
+    assertEquals("suite4", suite4.getNodeValue().getTestText());
+
+    // suite4
+    assertEquals(2, suite4.getChildCount());
+
+    // suite6
+    assertEquals(1, suite6);
+  }
+
+  public void testBuildTreeDeepStructure() {
+    // Test with file with many levels.
+    TreeNode root = buildRootNodeFromFile("testWihManyLevels.js");
+
+    // Ensure the hierarchy is correct.
+    assertEquals("suite1", root.getNodeValue().getTestText());
+    assertEquals(4, root.getChildCount());
   }
 
   public void testUpdateNodeOnFileChange() throws IOException {
-    TreeNode treeNode = givenThatYouBuildTreeNodeFromJasmineFile();
+    TreeNode treeNode = buildRootNodeFromFile("jasmineTestCaretTop.js");
 
     // When the file changes.
     virtualFile.setBinaryContent(("describe('file changed', function () {\n" +
@@ -46,7 +81,7 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testRemoveNodeWhenFileIsDeleted() {
-    TreeNode treeNode = givenThatYouBuildTreeNodeFromJasmineFile();
+    TreeNode treeNode = buildRootNodeFromFile("jasmineTestCaretTop.js");
 
     // And give that you add the node to a parent.
     final TreeNode parent = new TreeNode("parent");
@@ -67,7 +102,7 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testTreeCopy() throws Exception {
-    givenThatYouBuildTreeNodeFromJasmineFile();
+    buildRootNodeFromFile("jasmineTestCaretTop.js");
 
     // Given that you have a tree to copy and a destination.
     TreeNode destination = new TreeNode("destRoot");
