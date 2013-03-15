@@ -1,6 +1,5 @@
 package com.karateca.ddescriber.toolWindow;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.wm.ToolWindow;
@@ -11,6 +10,7 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
+import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 import com.karateca.ddescriber.model.JasmineFile;
 
@@ -37,10 +37,10 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private void findAllFilesContainingTests() {
-    ApplicationManager.getApplication().runReadAction(new Runnable() {
+    ActionUtil.runReadAction(new Runnable() {
       @Override
       public void run() {
-        FileIterator fileIterator = new FileIterator(project);
+        FileIterator fileIterator = new FileIterator(project, true);
         ProjectRootManager.getInstance(project).getFileIndex().iterateContent(fileIterator);
         List<JasmineFile> jasmineFiles = fileIterator.getJasmineFiles();
         showTestsInToolWindow(jasmineFiles);
@@ -68,20 +68,20 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private JComponent createCenterPanel(List<JasmineFile> jasmineFiles) {
-    VirtualFileListener virtualFileListener = new VirtualFileListener();
-    for (JasmineFile jasmineFile : jasmineFiles) {
-      virtualFileListener.registerForChangeEvent(jasmineFile, new ChangeCallback() {
-        @Override
-        public void contentsChanged(final JasmineFile jasmineFile) {
-          System.out.println("This file changed " + jasmineFile.getVirtualFile().getName());
-          jasmineFile.updateTreeNode();
-
-          // Force an update.
-          DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-          model.reload(jasmineFile.getTreeNode());
-        }
-      });
-    }
+//    VirtualFileListener virtualFileListener = new VirtualFileListener();
+//    for (JasmineFile jasmineFile : jasmineFiles) {
+//      virtualFileListener.registerForChangeEvent(jasmineFile, new ChangeCallback() {
+//        @Override
+//        public void contentsChanged(final JasmineFile jasmineFile) {
+//          System.out.println("This file changed " + jasmineFile.getVirtualFile().getName());
+//          jasmineFile.updateTreeNode();
+//
+//          // Force an update.
+//          DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+//          model.reload(jasmineFile.getTreeNode());
+//        }
+//      });
+//    }
 
     // The root node is hidden.
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("All tests");
