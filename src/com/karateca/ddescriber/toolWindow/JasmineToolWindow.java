@@ -150,9 +150,12 @@ public class JasmineToolWindow implements ToolWindowFactory {
     JPanel panel = new JPanel();
 
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     panel.add(createRefreshButton());
+    panel.add(Box.createVerticalStrut(8));
     panel.add(createExpandAllButton());
+    panel.add(Box.createVerticalStrut(8));
     panel.add(createCollapseAllButton());
 
     return panel;
