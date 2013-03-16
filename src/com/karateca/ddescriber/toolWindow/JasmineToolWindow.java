@@ -41,6 +41,8 @@ public class JasmineToolWindow implements ToolWindowFactory {
   private TreeNode root;
 
   private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
+  private final Icon expandIcon = IconLoader.findIcon("/icons/expandall.png");
+  private final Icon collapseIcon = IconLoader.findIcon("/icons/collapseall.png");
 
   @Override
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
@@ -148,10 +150,23 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    JButton refreshButton = new JButton(refreshIcon);
+    panel.add(createRefreshButton());
+    panel.add(createExpandAllButton());
+    panel.add(createCollapseAllButton());
+
+    return panel;
+  }
+
+  private JButton createButton(Icon icon, String tooltip) {
+    JButton refreshButton = new JButton(icon);
     refreshButton.setBorder(BorderFactory.createEmptyBorder());
     refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    refreshButton.setToolTipText("Refresh");
+    refreshButton.setToolTipText(tooltip);
+    return refreshButton;
+  }
+
+  private JButton createRefreshButton() {
+    JButton refreshButton = createButton(refreshIcon, "Refresh");
     refreshButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
@@ -170,10 +185,16 @@ public class JasmineToolWindow implements ToolWindowFactory {
         });
       }
     });
+    return refreshButton;
+  }
 
-    panel.add(refreshButton);
+  private JButton createExpandAllButton() {
+    JButton button = createButton(expandIcon, "Expand all");
+    return button;
+  }
 
-    return panel;
+  private JButton createCollapseAllButton() {
+    return createButton(collapseIcon, "Collapse all");
   }
 
   private JComponent createCenterPanel(List<JasmineFile> jasmineFiles) {
