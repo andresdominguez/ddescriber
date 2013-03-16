@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * @author Andres Dominguez.
  */
-public class JasmineToolWindow implements ToolWindowFactory {
+public class JasmineToolWindow2 implements ToolWindowFactory {
 
   private ToolWindow toolWindow;
   private Project project;
