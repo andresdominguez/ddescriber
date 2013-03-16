@@ -76,11 +76,12 @@ public class JasmineDescribeReplaceAction extends AnAction {
     // Reverse the order to do it from bottom to top.
     if (elements != null) {
       Collections.reverse(elements);
-      changeSelectedLineRunningCommand(elements.toArray(new TestFindResult[elements.size()]));
-
-      JasmineDescriberNotifier instance = JasmineDescriberNotifier.getInstance();
+      TestFindResult[] findResults = elements.toArray(new TestFindResult[elements.size()]);
+      
+      ActionUtil.changeSelectedLineRunningCommand(project, document, findResults);
 
       if (exitCode == TreeViewDialog.CLEAN_CURRENT_EXIT_CODE || exitCode == TreeViewDialog.OK_EXIT_CODE) {
+        JasmineDescriberNotifier instance = JasmineDescriberNotifier.getInstance();
         instance.testWasChanged(jasmineFile);
       }
     }
@@ -91,41 +92,4 @@ public class JasmineDescribeReplaceAction extends AnAction {
     editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
   }
 
-  /**
-   * Change the contents of the selected line. Wrap the call into command and
-   * write actions to support undo.
-   *
-   * @param testFindResults The lines that have to change.
-   */
-  private void changeSelectedLineRunningCommand(final TestFindResult... testFindResults) {
-    ActionUtil.runWriteActionInsideCommand(project, new Runnable() {
-      @Override
-      public void run() {
-        for (TestFindResult testFindResult : testFindResults) {
-          changeSelectedLine(testFindResult);
-        }
-      }
-    });
-  }
-
-  /**
-   * Perform the replace for the selected line. It will add or remove a
-   * "d" from describe() and an "i" form it().
-   *
-   * @param test The line that has to change.
-   */
-  private void changeSelectedLine(TestFindResult test) {
-    String newText;
-
-    if (test.isDescribe()) {
-      newText = test.isMarkedForRun() ? "describe(" : "ddescribe(";
-    } else {
-      newText = test.isMarkedForRun() ? "it(" : "iit(";
-    }
-
-    int start = test.getStartOffset();
-    int end = test.getEndOffset();
-
-    document.replaceString(start, end, newText);
-  }
 }
