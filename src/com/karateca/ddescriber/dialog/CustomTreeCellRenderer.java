@@ -44,7 +44,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 
     String name = findResult.toString();
     if (showFileName && findResult.isTopDescribe()) {
-      name = String.format("[%s] - %s", findResult.getVirtualFile().getName(), name);
+      name = String.format("%s - [%s]", name, findResult.getVirtualFile().getName());
     }
     setText(name);
 
