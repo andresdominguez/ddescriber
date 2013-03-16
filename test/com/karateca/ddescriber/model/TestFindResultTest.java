@@ -25,6 +25,6 @@ public class TestFindResultTest extends BaseTestCase {
   }
 
   public void testToString() throws Exception {
-    Assert.assertEquals("top describe (line: 5)", testFindResult.toString());
+    Assert.assertEquals("top describe", testFindResult.toString());
   }
 }
