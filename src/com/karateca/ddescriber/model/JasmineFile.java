@@ -93,11 +93,12 @@ public class JasmineFile {
     return populateTree(hierarchy.getAllUnitTests());
   }
 
-   private TreeNode populateTree(List<TestFindResult> elements) {
+  private TreeNode populateTree(List<TestFindResult> elements) {
     TestFindResult first = elements.get(0);
     TreeNode root = new TreeNode(first);
 
-     first.setVirtualFile(virtualFile);
+    first.setTopDescribe(true);
+    first.setVirtualFile(virtualFile);
 
     if (elements.size() == 1) {
       return root;
@@ -110,6 +111,9 @@ public class JasmineFile {
     TreeNode last = root;
 
     for (TestFindResult element : elements.subList(1, elements.size())) {
+      // TODO: move this to constructor.
+      element.setVirtualFile(virtualFile);
+
       int ind = element.getIndentation();
 
       TreeNode newNode = new TreeNode(element);

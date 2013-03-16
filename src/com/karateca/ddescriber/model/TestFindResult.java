@@ -19,7 +19,7 @@ public class TestFindResult {
   private final int startOffset;
   private final int lineNumber;
   private String testText;
-  private boolean excluded;
+  private boolean isTopDescribe;
 
   // TODO: find a better way to avoid passing both the virtual file and the doc.
   private VirtualFile virtualFile;
@@ -83,6 +83,15 @@ public class TestFindResult {
 
   @Override
   public String toString() {
-    return String.format("%s (line: %d)", testText.trim(), lineNumber);
+//    return String.format("%s (line: %d)", testText.trim(), lineNumber);
+    return testText.trim();
+  }
+
+  public boolean isTopDescribe() {
+    return isTopDescribe;
+  }
+
+  public void setTopDescribe(boolean topDescribe) {
+    isTopDescribe = topDescribe;
   }
 }

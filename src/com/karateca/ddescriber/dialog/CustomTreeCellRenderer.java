@@ -43,7 +43,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     setIcon(findResult.isDescribe() ? descIcon : itIcon);
 
     String name = findResult.toString();
-    if (showFileName && findResult.getVirtualFile() != null) {
+    if (showFileName && findResult.isTopDescribe()) {
       name = String.format("[%s] - %s", findResult.getVirtualFile().getName(), name);
     }
     setText(name);

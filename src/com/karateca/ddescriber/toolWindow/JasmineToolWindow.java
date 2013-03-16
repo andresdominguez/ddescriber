@@ -12,6 +12,7 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
@@ -34,6 +35,7 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -98,6 +100,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   /**
    * Update the tree starting from a specific node.
+   *
    * @param nodeForFile The node you want to refresh.
    */
   private void updateTree(TreeNode nodeForFile) {
@@ -107,6 +110,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   /**
    * Find the node matching a jasmine file.
+   *
    * @param jasmineFile The jasmine file to test the nodes.
    * @return The node in the tree matching the jasmine file; null if not found.
    */
@@ -125,6 +129,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   /**
    * Go through the project and find any files containing jasmine files with ddescribe() and iit().
+   *
    * @param doneCallback Called once all search is done.
    */
   private void findAllFilesContainingTests(final Function<List<JasmineFile>, Void> doneCallback) {
@@ -143,10 +148,12 @@ public class JasmineToolWindow implements ToolWindowFactory {
     JPanel panel = new JPanel(new BorderLayout());
     panelWithCurrentTests = createCenterPanel(jasmineFiles);
 
-    JPanel buttonPanel = createButtonPanel();
+    JPanel leftButtonPanel = createButtonPanel();
+    JPanel topButtonPanel = createTopPanel();
 
+    panel.add(BorderLayout.NORTH, topButtonPanel);
     panel.add(BorderLayout.CENTER, panelWithCurrentTests);
-    panel.add(BorderLayout.LINE_START, buttonPanel);
+    panel.add(BorderLayout.LINE_START, leftButtonPanel);
 
     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
     Content content = contentFactory.createContent(panel, "Active tests", false);
@@ -166,6 +173,49 @@ public class JasmineToolWindow implements ToolWindowFactory {
     panel.add(createCollapseAllButton());
 
     return panel;
+  }
+
+  private JPanel createTopPanel() {
+    JPanel pane = new JPanel();
+
+    pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+    pane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+    final JBCheckBox checkBox = new JBCheckBox("Show marked", false);
+    pane.add(checkBox);
+
+    checkBox.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        if (checkBox.isSelected()) {
+          ArrayList<TreeNode> markedTests = new ArrayList<TreeNode>();
+          collectSelectedNodes(root, markedTests);
+
+          root.removeAllChildren();
+          for (TreeNode node : markedTests) {
+            root.add(node);
+          }
+          updateTree(root);
+        } else {
+
+        }
+      }
+    });
+
+    return pane;
+  }
+
+  private void collectSelectedNodes(TreeNode node, List<TreeNode> markedTests) {
+    if (node != root && node.getNodeValue().isMarkedForRun()) {
+      markedTests.add(node);
+    }
+
+    if (node.getChildCount() > 0) {
+      Enumeration children = node.children();
+      while (children.hasMoreElements()) {
+        collectSelectedNodes((TreeNode) children.nextElement(), markedTests);
+      }
+    }
   }
 
   private JButton createButton(Icon icon, String tooltip) {
