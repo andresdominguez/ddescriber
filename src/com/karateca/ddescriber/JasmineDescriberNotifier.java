@@ -39,13 +39,7 @@ public class JasmineDescriberNotifier {
     myEventDispatcher.addListener(changeListener);
   }
 
-  public void testWasAdded(JasmineFile jasmineFile) {
-    ChangeEvent event = new ChangeEvent(TestChangeEvent.newAddEvent(jasmineFile));
-    myEventDispatcher.getMulticaster().stateChanged(event);
-  }
-
-  public void testWasCleaned(JasmineFile jasmineFile) {
-    ChangeEvent event = new ChangeEvent(TestChangeEvent.newCleanEvent(jasmineFile));
-    myEventDispatcher.getMulticaster().stateChanged(event);
+  public void testWasChanged(JasmineFile jasmineFile) {
+    myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent(jasmineFile));
   }
 }

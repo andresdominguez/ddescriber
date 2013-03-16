@@ -23,36 +23,18 @@ public class JasmineDescriberNotifierTest extends BaseTestCase {
   }
 
   @Test
-  public void testBroadcastWhenTestWasAdded() throws Exception {
-    final TestChangeEvent.ChangeType[] changeType = new TestChangeEvent.ChangeType[1];
+  public void testTestWasChanged() throws Exception {
+    final JasmineFile[] changedFile = {null};
 
     instance.addTestChangedLister(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
-        TestChangeEvent evt = (TestChangeEvent) changeEvent.getSource();
-        changeType[0] = evt.getChangeType();
+        changedFile[0] = (JasmineFile) changeEvent.getSource();
       }
     });
 
-    instance.testWasAdded(jasmineFile);
+    instance.testWasChanged(jasmineFile);
 
-    assertEquals(TestChangeEvent.ChangeType.testAdded, changeType[0]);
-  }
-
-  @Test
-  public void testBroadcastWhenTestWasCleaned() throws Exception {
-    final TestChangeEvent.ChangeType[] changeType = new TestChangeEvent.ChangeType[1];
-
-    instance.addTestChangedLister(new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent changeEvent) {
-        TestChangeEvent evt = (TestChangeEvent) changeEvent.getSource();
-        changeType[0] = evt.getChangeType();
-      }
-    });
-
-    instance.testWasCleaned(jasmineFile);
-
-    assertEquals(TestChangeEvent.ChangeType.testCleaned, changeType[0]);
+    assertNotNull(changedFile[0]);
   }
 }
