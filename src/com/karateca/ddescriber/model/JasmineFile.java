@@ -41,11 +41,15 @@ public class JasmineFile {
   }
 
   public void updateTreeNode() {
+    updateTreeNode(treeNode);
+  }
+
+  public void updateTreeNode(final TreeNode destination) {
     ActionUtil.runReadAction(new Runnable() {
       @Override
       public void run() {
         TreeNode newRoot = createRootNode();
-        copyTree(newRoot, treeNode);
+        copyTree(newRoot, destination);
       }
     });
   }
@@ -93,6 +97,8 @@ public class JasmineFile {
     TestFindResult first = elements.get(0);
     TreeNode root = new TreeNode(first);
 
+     first.setVirtualFile(virtualFile);
+
     if (elements.size() == 1) {
       return root;
     }
@@ -135,6 +141,9 @@ public class JasmineFile {
     myEventDispatcher.addListener(changeListener);
   }
 
+  public boolean hasTestsMarkedToRun() {
+    return this.hierarchy.getMarkedElements().size() > 0;
+  }
 
   public VirtualFile getVirtualFile() {
     return virtualFile;

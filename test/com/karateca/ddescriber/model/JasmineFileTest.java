@@ -1,6 +1,5 @@
 package com.karateca.ddescriber.model;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.karateca.ddescriber.BaseTestCase;
 
 import javax.swing.event.ChangeEvent;

@@ -21,7 +21,7 @@ public class HierarchyTest extends BaseTestCase {
     Hierarchy hierarchy = getHierarchyForTestFile("jasmineTestBefore.js");
 
     // When you find the closest test or fixture.
-    TestFindResult closest = hierarchy.getClosest(myFixture.getCaretOffset());
+    TestFindResult closest = hierarchy.getClosest();
 
     // Then ensure the closest test is "inner it 2".
     assertEquals(33, closest.getLineNumber());

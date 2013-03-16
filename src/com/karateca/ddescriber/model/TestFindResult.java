@@ -3,6 +3,7 @@ package com.karateca.ddescriber.model;
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * @author Andres Dominguez.
@@ -13,12 +14,15 @@ public class TestFindResult {
   private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
-  private boolean markedForRun;
+  private final boolean markedForRun;
   private final int endOffset;
   private final int startOffset;
   private final int lineNumber;
   private String testText;
   private boolean excluded;
+
+  // TODO: find a better way to avoid passing both the virtual file and the doc.
+  private VirtualFile virtualFile;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -53,10 +57,6 @@ public class TestFindResult {
     return markedForRun;
   }
 
-  public void setMarkedForRun(boolean markedForRun) {
-    this.markedForRun = markedForRun;
-  }
-
   public int getEndOffset() {
     return endOffset;
   }
@@ -73,12 +73,12 @@ public class TestFindResult {
     return testText;
   }
 
-  public boolean isExcluded() {
-    return excluded;
+  public VirtualFile getVirtualFile() {
+    return virtualFile;
   }
 
-  public void setExcluded(boolean excluded) {
-    this.excluded = excluded;
+  public void setVirtualFile(VirtualFile virtualFile) {
+    this.virtualFile = virtualFile;
   }
 
   @Override

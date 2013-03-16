@@ -76,6 +76,12 @@ public class JasmineDescribeReplaceAction extends AnAction {
     if (elements != null) {
       Collections.reverse(elements);
       changeSelectedLineRunningCommand(elements.toArray(new TestFindResult[elements.size()]));
+
+      JasmineDescriberNotifier instance = JasmineDescriberNotifier.getInstance();
+
+      if (exitCode == TreeViewDialog.CLEAN_CURRENT_EXIT_CODE || exitCode == TreeViewDialog.OK_EXIT_CODE) {
+        instance.testWasChanged(jasmineFile);
+      }
     }
   }
 
@@ -106,20 +112,19 @@ public class JasmineDescribeReplaceAction extends AnAction {
    * Perform the replace for the selected line. It will add or remove a
    * "d" from describe() and an "i" form it().
    *
-   * @param testFindResult The line that has to change.
+   * @param test The line that has to change.
    */
-  private void changeSelectedLine(TestFindResult testFindResult) {
+  private void changeSelectedLine(TestFindResult test) {
     String newText;
-    boolean markedForRun = testFindResult.isMarkedForRun();
 
-    if (testFindResult.isDescribe()) {
-      newText = markedForRun ? "describe(" : "ddescribe(";
+    if (test.isDescribe()) {
+      newText = test.isMarkedForRun() ? "describe(" : "ddescribe(";
     } else {
-      newText = markedForRun ? "it(" : "iit(";
+      newText = test.isMarkedForRun() ? "it(" : "iit(";
     }
 
-    int start = testFindResult.getStartOffset();
-    int end = testFindResult.getEndOffset();
+    int start = test.getStartOffset();
+    int end = test.getEndOffset();
 
     document.replaceString(start, end, newText);
   }
