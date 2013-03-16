@@ -13,6 +13,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.Function;
+import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
@@ -23,7 +24,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -197,7 +197,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        expandAll(tree, new TreePath(root), true);
+        TreeUtil.expandAll(tree);
       }
     });
     return button;
@@ -208,33 +208,10 @@ public class JasmineToolWindow implements ToolWindowFactory {
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        TreePath treePath = new TreePath(root);
-        expandAll(tree, treePath, false);
-        tree.expandPath(treePath);
+        TreeUtil.collapseAll(tree, 0);
       }
     });
     return button;
-  }
-
-  private void expandAll(JTree tree, TreePath parent, boolean expand) {
-    // Traverse children
-    TreeNode node = (TreeNode) parent.getLastPathComponent();
-    if (node.getChildCount() == 0) {
-      return;
-    }
-
-    Enumeration children = node.children();
-    while (children.hasMoreElements()) {
-      TreePath path = parent.pathByAddingChild(children.nextElement());
-      expandAll(tree, path, expand);
-    }
-
-    // Expansion or collapse must be done bottom-up
-    if (expand) {
-      tree.expandPath(parent);
-    } else {
-      tree.collapsePath(parent);
-    }
   }
 
   private JComponent createCenterPanel(List<JasmineFile> jasmineFiles) {

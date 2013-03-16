@@ -6,6 +6,8 @@ import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.Function;
+import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 import com.karateca.ddescriber.model.JasmineFile;
@@ -79,14 +81,11 @@ public class TreeViewDialog extends DialogWrapper {
     });
 
     // Go to the test on double click.
-    tree.addMouseListener(new MouseAdapter() {
+    JasmineTreeUtil.addDoubleClickListener(tree, new Function<TreePath, Void>() {
       @Override
-      public void mousePressed(MouseEvent e) {
-        int selRow = tree.getRowForLocation(e.getX(), e.getY());
-        if (selRow != -1 && e.getClickCount() == 2) {
-          TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-          nodeWasDoubleClicked(selPath);
-        }
+      public Void fun(TreePath treePath) {
+        nodeWasDoubleClicked(treePath);
+        return null;
       }
     });
   }
