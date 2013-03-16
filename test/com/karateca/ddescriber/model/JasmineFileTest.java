@@ -97,27 +97,6 @@ public class JasmineFileTest extends BaseTestCase {
     assertEquals(1, treeNode.getChildCount());
   }
 
-  public void testRemoveNodeWhenFileIsDeleted() {
-    TreeNode treeNode = buildRootNodeFromFile("jasmineTestCaretTop.js");
-
-    // And give that you add the node to a parent.
-    final TreeNode parent = new TreeNode("parent");
-    parent.add(new TreeNode("First child"));
-    parent.add(treeNode);
-
-
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        // When you delete the file.
-        psiFile.delete();
-
-        // Then ensure the node was removed from the parent.
-        assertEquals(1, parent.getChildCount());
-      }
-    });
-  }
-
   public void testTreeCopy() throws Exception {
     buildRootNodeFromFile("jasmineTestCaretTop.js");
 
