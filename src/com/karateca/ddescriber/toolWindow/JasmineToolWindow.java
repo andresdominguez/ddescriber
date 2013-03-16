@@ -111,11 +111,27 @@ public class JasmineToolWindow implements ToolWindowFactory {
     JPanel panel = new JPanel(new BorderLayout());
     panelWithCurrentTests = createCenterPanel(jasmineFiles);
 
+    JPanel buttonPanel = createButtonPanel();
+
     panel.add(BorderLayout.CENTER, panelWithCurrentTests);
+    panel.add(BorderLayout.LINE_START, buttonPanel);
 
     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
     Content content = contentFactory.createContent(panel, "Active tests", false);
     toolWindow.getContentManager().addContent(content);
+  }
+
+  private JPanel createButtonPanel() {
+    JPanel panel = new JPanel();
+
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+    JButton button = new JButton(refreshIcon);
+    button.setBorder(BorderFactory.createEmptyBorder());
+    button.setAlignmentX(Component.CENTER_ALIGNMENT);
+    panel.add(button);
+
+    return panel;
   }
 
   private JComponent createCenterPanel(List<JasmineFile> jasmineFiles) {
