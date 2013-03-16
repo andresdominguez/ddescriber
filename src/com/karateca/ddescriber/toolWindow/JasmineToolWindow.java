@@ -142,7 +142,18 @@ public class JasmineToolWindow implements ToolWindowFactory {
     refreshButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println();
+        findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+          @Override
+          public Void fun(List<JasmineFile> jasmineFiles) {
+            root.removeAllChildren();
+            updateTree(root);
+            // Broadcast every file;
+            for (JasmineFile jasmineFile : jasmineFiles) {
+              JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
+            }
+            return null;
+          }
+        });
       }
     });
 
