@@ -36,7 +36,7 @@
   <extensions defaultExtensionNs="com.intellij">
       <toolWindow id="Jasmine"
                   icon="/icons/desc-icon.png"
-                  factoryClass="com.karateca.ddescriber.toolWindow.JasmineToolWindow2"
+                  factoryClass="com.karateca.ddescriber.toolWindow.JasmineToolWindow"
                   anchor="left"/>
   </extensions>
 </idea-plugin>
