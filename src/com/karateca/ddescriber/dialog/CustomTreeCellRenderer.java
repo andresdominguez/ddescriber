@@ -17,6 +17,11 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   private final Color defaultColor = getBackgroundNonSelectionColor();
   private final Icon itIcon = IconLoader.findIcon("/icons/it-icon.png");
   private final Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
+  private final boolean showFileName;
+
+  public CustomTreeCellRenderer(boolean showFileName) {
+    this.showFileName = showFileName;
+  }
 
   @Override
   public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -36,6 +41,12 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 
     // Set the icon depending on the type.
     setIcon(findResult.isDescribe() ? descIcon : itIcon);
+
+    String name = findResult.toString();
+    if (showFileName && findResult.getVirtualFile() != null) {
+      name = String.format("[%s] - %s", findResult.getVirtualFile().getName(), name);
+    }
+    setText(name);
 
     return component;
   }

@@ -51,7 +51,7 @@ public class TreeViewDialog extends DialogWrapper {
     TreeNode root = jasmineFile.getTreeNode();
     tree = new Tree(root);
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
-    tree.setCellRenderer(new CustomTreeCellRenderer());
+    tree.setCellRenderer(new CustomTreeCellRenderer(false));
 
     // Add search, make it case insensitive.
     new TreeSpeedSearch(tree) {

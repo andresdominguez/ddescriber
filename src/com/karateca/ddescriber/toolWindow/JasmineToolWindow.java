@@ -230,7 +230,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       root.add(jasmineFile.buildTreeNodeSync());
     }
 
-    tree.setCellRenderer(new CustomTreeCellRenderer());
+    tree.setCellRenderer(new CustomTreeCellRenderer(true));
 
     // Add search, make it case insensitive.
     new TreeSpeedSearch(tree) {
