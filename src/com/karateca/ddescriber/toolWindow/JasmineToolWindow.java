@@ -2,6 +2,7 @@ package com.karateca.ddescriber.toolWindow;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -20,7 +21,6 @@ import com.karateca.ddescriber.model.TreeNode;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.util.Enumeration;
@@ -36,6 +36,8 @@ public class JasmineToolWindow implements ToolWindowFactory {
   private Tree tree;
   private JComponent panelWithCurrentTests;
   private TreeNode root;
+
+  private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
 
   @Override
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
