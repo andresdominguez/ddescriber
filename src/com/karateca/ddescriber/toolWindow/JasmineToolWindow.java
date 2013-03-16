@@ -35,6 +35,8 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -290,26 +292,27 @@ public class JasmineToolWindow implements ToolWindowFactory {
       }
     }.setComparator(new SpeedSearchComparator(false));
 
-    // Add double-click.
+    // Go to the selected test on double-click.
     JasmineTreeUtil.addDoubleClickListener(tree, new Function<TreePath, Void>() {
       @Override
       public Void fun(TreePath treePath) {
-        // Open the file containing the test for the node you just clicked.
-        TreeNode topNode = (TreeNode) treePath.getPath()[1];
-        VirtualFile virtualFile = topNode.getNodeValue().getVirtualFile();
-        PsiManager psiManager = PsiManager.getInstance(project);
-        psiManager.findFile(virtualFile).navigate(true);
-
         // Get the test for the selected node.
         TreeNode lastPathComponent = (TreeNode) treePath.getLastPathComponent();
-        TestFindResult selectedTest = (TestFindResult) lastPathComponent.getUserObject();
-
-        // Go to selected location.
-        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-        editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
-        editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
-
+        goToTest((TestFindResult) lastPathComponent.getUserObject());
         return null;
+      }
+    });
+
+    // Go to selected test on enter.
+    tree.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+          TreeNode[] selectedNodes = tree.getSelectedNodes(TreeNode.class, null);
+          if (selectedNodes.length != 0) {
+            goToTest(selectedNodes[0].getNodeValue());
+          }
+        }
       }
     });
 
@@ -318,5 +321,18 @@ public class JasmineToolWindow implements ToolWindowFactory {
     tree.setRootVisible(false);
 
     return scrollPane;
+  }
+
+  private void goToTest(TestFindResult selectedTest) {
+    VirtualFile virtualFile = selectedTest.getVirtualFile();
+
+    // Open the file containing the test for the node you just clicked.
+    PsiManager psiManager = PsiManager.getInstance(project);
+    psiManager.findFile(virtualFile).navigate(true);
+
+    // Go to selected location.
+    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+    editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
+    editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
   }
 }
