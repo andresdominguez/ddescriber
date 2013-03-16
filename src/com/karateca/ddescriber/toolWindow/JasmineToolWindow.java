@@ -95,6 +95,11 @@ public class JasmineToolWindow implements ToolWindowFactory {
     model.reload(nodeForFile);
   }
 
+  /**
+   * Find the node matching a jasmine file.
+   * @param jasmineFile The jasmine file to test the nodes.
+   * @return The node in the tree matching the jasmine file; null if not found.
+   */
   private TreeNode findTestInCurrentTree(JasmineFile jasmineFile) {
     VirtualFile virtualFile = jasmineFile.getVirtualFile();
 
@@ -108,6 +113,10 @@ public class JasmineToolWindow implements ToolWindowFactory {
     return null;
   }
 
+  /**
+   * Go through the project and find any files containing jasmine files with ddescribe() and iit().
+   * @param doneCallback Called once all search is done.
+   */
   private void findAllFilesContainingTests(final Function<List<JasmineFile>, Void> doneCallback) {
     ActionUtil.runReadAction(new Runnable() {
       @Override
