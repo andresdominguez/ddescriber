@@ -12,6 +12,7 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.Function;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
@@ -23,6 +24,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -43,7 +46,13 @@ public class JasmineToolWindow implements ToolWindowFactory {
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
     this.toolWindow = toolWindow;
     this.project = project;
-    findAllFilesContainingTests();
+    findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+      @Override
+      public Void fun(List<JasmineFile> jasmineFiles) {
+        showTestsInToolWindow(jasmineFiles);
+        return null;
+      }
+    });
 
     listenForFileChanges();
   }
@@ -95,14 +104,14 @@ public class JasmineToolWindow implements ToolWindowFactory {
     return null;
   }
 
-  private void findAllFilesContainingTests() {
+  private void findAllFilesContainingTests(final Function<List<JasmineFile>, Void> doneCallback) {
     ActionUtil.runReadAction(new Runnable() {
       @Override
       public void run() {
         FileIterator fileIterator = new FileIterator(project, true);
         ProjectRootManager.getInstance(project).getFileIndex().iterateContent(fileIterator);
         List<JasmineFile> jasmineFiles = fileIterator.getJasmineFiles();
-        showTestsInToolWindow(jasmineFiles);
+        doneCallback.fun(jasmineFiles);
       }
     });
   }
@@ -126,10 +135,18 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    JButton button = new JButton(refreshIcon);
-    button.setBorder(BorderFactory.createEmptyBorder());
-    button.setAlignmentX(Component.CENTER_ALIGNMENT);
-    panel.add(button);
+    JButton refreshButton = new JButton(refreshIcon);
+    refreshButton.setBorder(BorderFactory.createEmptyBorder());
+    refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+    refreshButton.setToolTipText("Refresh");
+    refreshButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        System.out.println();
+      }
+    });
+
+    panel.add(refreshButton);
 
     return panel;
   }
