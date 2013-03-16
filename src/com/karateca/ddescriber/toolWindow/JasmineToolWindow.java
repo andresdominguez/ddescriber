@@ -86,6 +86,10 @@ public class JasmineToolWindow implements ToolWindowFactory {
     });
   }
 
+  /**
+   * Update the tree starting from a specific node.
+   * @param nodeForFile The node you want to refresh.
+   */
   private void updateTree(TreeNode nodeForFile) {
     DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
     model.reload(nodeForFile);
@@ -145,6 +149,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
         findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
           @Override
           public Void fun(List<JasmineFile> jasmineFiles) {
+            // Update the whole tree.
             root.removeAllChildren();
             updateTree(root);
             // Broadcast every file;
