@@ -57,6 +57,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
   private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
   private final Icon expandIcon = IconLoader.findIcon("/icons/expandall.png");
   private final Icon collapseIcon = IconLoader.findIcon("/icons/collapseall.png");
+  private boolean filterCheckboxSelected;
 
   @Override
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
@@ -78,6 +79,11 @@ public class JasmineToolWindow implements ToolWindowFactory {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         JasmineFile jasmineFile = (JasmineFile) changeEvent.getSource();
+
+        if (filterCheckboxSelected) {
+          refreshTree();
+          return;
+        }
 
         // Find the test.
         TreeNode nodeForFile = findTestInCurrentTree(jasmineFile);
@@ -195,17 +201,11 @@ public class JasmineToolWindow implements ToolWindowFactory {
     checkBox.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        if (checkBox.isSelected()) {
-          ArrayList<TreeNode> markedTests = new ArrayList<TreeNode>();
-          collectSelectedNodes(root, markedTests);
-
-          root.removeAllChildren();
-          for (TreeNode node : markedTests) {
-            root.add(node);
-          }
-          updateTree(root);
+        filterCheckboxSelected = checkBox.isSelected();
+        if (filterCheckboxSelected) {
+          showSelectedNodesOnly();
         } else {
-
+          refreshTree();
         }
       }
     });
@@ -237,6 +237,17 @@ public class JasmineToolWindow implements ToolWindowFactory {
     return pane;
   }
 
+  private void showSelectedNodesOnly() {
+    ArrayList<TreeNode> markedTests = new ArrayList<TreeNode>();
+    collectSelectedNodes(root, markedTests);
+
+    root.removeAllChildren();
+    for (TreeNode node : markedTests) {
+      root.add(node);
+    }
+    updateTree(root);
+  }
+
   private void collectSelectedNodes(TreeNode node, List<TreeNode> markedTests) {
     if (node != root && node.getNodeValue().isMarkedForRun()) {
       markedTests.add(node);
@@ -263,22 +274,38 @@ public class JasmineToolWindow implements ToolWindowFactory {
     refreshButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
-          @Override
-          public Void fun(List<JasmineFile> jasmineFiles) {
-            // Update the whole tree.
-            root.removeAllChildren();
-            updateTree(root);
-            // Broadcast every file;
-            for (JasmineFile jasmineFile : jasmineFiles) {
-              JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
-            }
-            return null;
-          }
-        });
+        refreshTree();
       }
     });
     return refreshButton;
+  }
+
+  private void refreshTree() {
+    findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+      @Override
+      public Void fun(List<JasmineFile> jasmineFiles) {
+        if (filterCheckboxSelected) {
+          root.removeAllChildren();
+          for (JasmineFile file : jasmineFiles) {
+            for (TestFindResult element : file.getElementsMarkedToRun()) {
+              root.add(new TreeNode(element));
+            }
+          }
+          updateTree(root);
+          return null;
+        }
+
+        // Update the whole tree.
+        root.removeAllChildren();
+
+        updateTree(root);
+        // Broadcast every file;
+        for (JasmineFile jasmineFile : jasmineFiles) {
+          JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
+        }
+        return null;
+      }
+    });
   }
 
   private JButton createExpandAllButton() {
