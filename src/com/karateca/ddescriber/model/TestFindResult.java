@@ -13,7 +13,7 @@ public class TestFindResult {
   private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
-  private final boolean markedForRun;
+  private boolean markedForRun;
   private final int endOffset;
   private final int startOffset;
   private final int lineNumber;
@@ -51,6 +51,10 @@ public class TestFindResult {
 
   public boolean isMarkedForRun() {
     return markedForRun;
+  }
+
+  public void setMarkedForRun(boolean markedForRun) {
+    this.markedForRun = markedForRun;
   }
 
   public int getEndOffset() {
