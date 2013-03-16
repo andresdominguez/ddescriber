@@ -106,23 +106,13 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
-
-    JPanel panel = new JPanel(new GridBagLayout());
-    GridBagConstraints gridBagConstraintsScrollPane = new GridBagConstraints();
-    gridBagConstraintsScrollPane.gridx = 0;
-    gridBagConstraintsScrollPane.gridy = 1;
-    gridBagConstraintsScrollPane.gridwidth = 10;
-    gridBagConstraintsScrollPane.gridheight = 10;
-    gridBagConstraintsScrollPane.fill = GridBagConstraints.BOTH;
-    gridBagConstraintsScrollPane.anchor = GridBagConstraints.CENTER;
-    gridBagConstraintsScrollPane.weightx = 1;
-    gridBagConstraintsScrollPane.weighty = 10;
-
+    JPanel panel = new JPanel(new BorderLayout());
     panelWithCurrentTests = createCenterPanel(jasmineFiles);
-    panel.add(panelWithCurrentTests, gridBagConstraintsScrollPane);
+
+    panel.add(BorderLayout.CENTER, panelWithCurrentTests);
 
     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-    Content content = contentFactory.createContent(panel, "", false);
+    Content content = contentFactory.createContent(panel, "Active tests", false);
     toolWindow.getContentManager().addContent(content);
   }
 
@@ -151,5 +141,4 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
     return scrollPane;
   }
-
 }
