@@ -1,11 +1,16 @@
 package com.karateca.ddescriber.toolWindow;
 
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
+import com.intellij.psi.PsiManager;
 import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
@@ -16,14 +21,17 @@ import com.intellij.util.Function;
 import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.JasmineDescriberNotifier;
+import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -232,6 +240,27 @@ public class JasmineToolWindow implements ToolWindowFactory {
         return super.compare(text.toLowerCase(), pattern.toLowerCase());
       }
     }.setComparator(new SpeedSearchComparator(false));
+
+    // Add double-click.
+    JasmineTreeUtil.addDoubleClickListener(tree, new Function<TreePath, Void>() {
+      @Override
+      public Void fun(TreePath treePath) {
+        // Open the file containing the test for the node you just clicked.
+        TreeNode topNode = (TreeNode) treePath.getPath()[1];
+        VirtualFile virtualFile = topNode.getNodeValue().getVirtualFile();
+        PsiManager psiManager = PsiManager.getInstance(project);
+        psiManager.findFile(virtualFile).navigate(true);
+
+        // Get the test for the selected node.
+        TreeNode lastPathComponent = (TreeNode) treePath.getLastPathComponent();
+        TestFindResult selectedTest = (TestFindResult) lastPathComponent.getUserObject();
+
+        // Go to selected location.
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
+        return null;
+      }
+    });
 
     JBScrollPane scrollPane = new JBScrollPane(tree);
     tree.expandRow(0);
