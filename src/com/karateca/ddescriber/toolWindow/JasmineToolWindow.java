@@ -1,5 +1,6 @@
 package com.karateca.ddescriber.toolWindow;
 
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -38,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -183,8 +185,12 @@ public class JasmineToolWindow implements ToolWindowFactory {
     pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
     pane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-    final JBCheckBox checkBox = new JBCheckBox("Show marked", false);
+    final JBCheckBox checkBox = new JBCheckBox("Filter marked", false);
+    JButton cleanAllButton = new JButton("Clean all");
+
     pane.add(checkBox);
+    pane.add(Box.createHorizontalStrut(8));
+    pane.add(cleanAllButton);
 
     checkBox.addActionListener(new ActionListener() {
       @Override
@@ -201,6 +207,30 @@ public class JasmineToolWindow implements ToolWindowFactory {
         } else {
 
         }
+      }
+    });
+
+    cleanAllButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+          @Override
+          public Void fun(List<JasmineFile> jasmineFiles) {
+            Collections.reverse(jasmineFiles);
+            for (JasmineFile file : jasmineFiles) {
+              Document document = ActionUtil.getDocument(file.getVirtualFile());
+              List<TestFindResult> elements = file.getElementsMarkedToRun();
+              Collections.reverse(elements);
+              TestFindResult[] findResults = elements.toArray(new TestFindResult[elements.size()]);
+              ActionUtil.changeSelectedLineRunningCommand(project, document, findResults);
+            }
+
+            root.removeAllChildren();
+            updateTree(root);
+
+            return null;
+          }
+        });
       }
     });
 
