@@ -1,8 +1,7 @@
 package com.karateca.ddescriber.toolWindow;
 
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -258,6 +257,8 @@ public class JasmineToolWindow implements ToolWindowFactory {
         // Go to selected location.
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
+        editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
+
         return null;
       }
     });

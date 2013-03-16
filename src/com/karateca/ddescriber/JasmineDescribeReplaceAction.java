@@ -3,6 +3,7 @@ package com.karateca.ddescriber;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
@@ -86,9 +87,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
   }
 
   private void goToSelectedTest(TestFindResult selectedTest) {
-    // TODO: scoll.
     editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
-//    editor.getScrollPane().scrollRectToVisible(new Rectangle());
+    editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
   }
 
   /**
