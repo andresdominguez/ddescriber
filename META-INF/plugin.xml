@@ -9,13 +9,16 @@
       by switching between describe() / ddescribe() and it() / iit()<br><br>
       Just type shit+ctrl+D to launch a dialog the lets you choose which
       suite of unit test you want to flip.<br><br>
+      Use the tool window to see the files that have a ddescribe() of an iit(). You can filter and clean all the
+      tests and suites that have been marked.<br><br>
       I have tested it on Websotrm and Intellij.
       ]]></description>
 
   <change-notes><![CDATA[
       First version 1.0<br>
       1.1 Added a tree view when you launch the dialog. Added a tool window that shows you all the test files and their
-      internal test structure.
+      internal test structure.<br>
+      1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.
       ]]>
   </change-notes>
 
