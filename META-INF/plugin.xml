@@ -1,18 +1,28 @@
 <idea-plugin version="2">
   <id>com.karateca.jasmineDescriber</id>
-  <name>Jasmine D Describer</name>
-  <version>1.1</version>
+  <name>Jasmine DDescriber</name>
+  <version>1.2</version>
   <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
-      This is an idea plugin to quickly run jasmine unit tests and suites
-      by switching between describe() / ddescribe() and it() / iit()<br><br>
-      Just type shit+ctrl+D to launch a dialog the lets you choose which
-      suite of unit test you want to flip.<br><br>
-      Use the tool window to see the files that have a ddescribe() of an iit(). You can filter and clean all the
-      tests and suites that have been marked.<br><br>
+    <p>
+      This is an idea plugin to quickly run jasmine unit tests and suites by switching between describe() / ddescribe()
+      and it() / iit()
+    </p>
+    <p>
+      Just type shit+ctrl+D to launch a dialog the lets you choose which suite of unit test you want to flip.
+    </p>
+    <p>
+      Use the tool window to see the files that have a ddescribe() of an iit(). You can filter and clean all the tests
+      and suites that have been marked.
+    </p>
+    <p>
       I have tested it on Websotrm and Intellij.
-      ]]></description>
+    </p>
+    <p>
+      Download the code at: https://github.com/andresdominguez/ddescriber
+    </p>
+  ]]></description>
 
   <change-notes><![CDATA[
       First version 1.0<br>
