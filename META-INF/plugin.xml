@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.karateca.jasmineDescriber</id>
   <name>Jasmine DDescriber</name>
-  <version>1.2</version>
+  <version>1.2.1</version>
   <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
@@ -28,7 +28,8 @@
       First version 1.0<br>
       1.1 Added a tree view when you launch the dialog. Added a tool window that shows you all the test files and their
       internal test structure.<br>
-      1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.
+      1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.<br>
+      1.2.1 Add support for files with multiple top-level describe().
       ]]>
   </change-notes>
 
