@@ -17,11 +17,6 @@ public class JasmineDescriberNotifier {
   private JasmineDescriberNotifier() {
   }
 
-  public void a(){
-    ChangeEvent event = new ChangeEvent("LinesFound");
-    myEventDispatcher.getMulticaster().stateChanged(event);
-  }
-
   public static JasmineDescriberNotifier getInstance() {
     if (appInstance == null) {
       appInstance = new JasmineDescriberNotifier();
