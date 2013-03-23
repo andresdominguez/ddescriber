@@ -130,7 +130,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     Enumeration children = root.children();
     while (children.hasMoreElements()) {
       TreeNode child = (TreeNode) children.nextElement();
-      if (child.getNodeValue().getVirtualFile() == virtualFile) {
+      if (child.getVirtualFile() == virtualFile) {
         return child;
       }
     }
@@ -355,7 +355,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       public Void fun(TreePath treePath) {
         // Get the test for the selected node.
         TreeNode lastPathComponent = (TreeNode) treePath.getLastPathComponent();
-        goToTest((TestFindResult) lastPathComponent.getUserObject());
+        goToTest((TestFindResult) lastPathComponent.getUserObject(), lastPathComponent.getVirtualFile());
         return null;
       }
     });
@@ -367,7 +367,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
         if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
           TreeNode[] selectedNodes = tree.getSelectedNodes(TreeNode.class, null);
           if (selectedNodes.length != 0) {
-            goToTest(selectedNodes[0].getNodeValue());
+            goToTest(selectedNodes[0].getNodeValue(), selectedNodes[0].getVirtualFile());
           }
         }
       }
@@ -380,9 +380,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     return scrollPane;
   }
 
-  private void goToTest(TestFindResult selectedTest) {
-    VirtualFile virtualFile = selectedTest.getVirtualFile();
-
+  private void goToTest(TestFindResult selectedTest, VirtualFile virtualFile) {
     // Open the file containing the test for the node you just clicked.
     PsiManager psiManager = PsiManager.getInstance(project);
     psiManager.findFile(virtualFile).navigate(true);

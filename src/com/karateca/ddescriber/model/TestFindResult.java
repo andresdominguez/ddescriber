@@ -3,7 +3,6 @@ package com.karateca.ddescriber.model;
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * @author Andres Dominguez.
@@ -20,9 +19,6 @@ public class TestFindResult {
   private final int lineNumber;
   private String testText;
   private boolean isTopDescribe;
-
-  // TODO: find a better way to avoid passing both the virtual file and the doc.
-  private VirtualFile virtualFile;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -71,14 +67,6 @@ public class TestFindResult {
 
   public String getTestText() {
     return testText;
-  }
-
-  public VirtualFile getVirtualFile() {
-    return virtualFile;
-  }
-
-  public void setVirtualFile(VirtualFile virtualFile) {
-    this.virtualFile = virtualFile;
   }
 
   @Override

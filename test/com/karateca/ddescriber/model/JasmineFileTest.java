@@ -54,6 +54,13 @@ public class JasmineFileTest extends BaseTestCase {
     assertEquals(1, suite6.getChildCount());
   }
 
+  public void testShouldReadFileWithTwoDescribes() {
+    TreeNode root = buildRootNodeFromFile("doubleDescribe.js");
+
+    // Ensure the virtual file is set in the root.
+    //assertEquals(virtualFile, root.getVirtualFile());
+  }
+
   public void testGetClosestTest() {
     buildRootNodeFromFile("testWihManyLevels.js");
 

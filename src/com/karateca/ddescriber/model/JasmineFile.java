@@ -98,7 +98,7 @@ public class JasmineFile {
     TreeNode root = new TreeNode(first);
 
     first.setTopDescribe(true);
-    first.setVirtualFile(virtualFile);
+    root.setVirtualFile(virtualFile);
 
     if (elements.size() == 1) {
       return root;
@@ -111,12 +111,10 @@ public class JasmineFile {
     TreeNode last = root;
 
     for (TestFindResult element : elements.subList(1, elements.size())) {
-      // TODO: move this to constructor.
-      element.setVirtualFile(virtualFile);
-
       int ind = element.getIndentation();
 
       TreeNode newNode = new TreeNode(element);
+      newNode.setVirtualFile(virtualFile);
 
       if (ind > currentIndentation) {
         stack.push(parent);

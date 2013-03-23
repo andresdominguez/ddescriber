@@ -2,6 +2,7 @@ package com.karateca.ddescriber.dialog;
 
 import com.intellij.openapi.util.IconLoader;
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -35,6 +36,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     }
 
     TestFindResult findResult = (TestFindResult) node.getUserObject();
+    TreeNode treeNode = (TreeNode) node;
 
     Color color = findResult.isMarkedForRun() ? GREEN_BG_COLOR : defaultColor;
     setBackgroundNonSelectionColor(color);
@@ -44,7 +46,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 
     String name = findResult.toString();
     if (showFileName && findResult.isTopDescribe()) {
-      name = String.format("%s - [%s]", name, findResult.getVirtualFile().getName());
+      name = String.format("%s - [%s]", name, treeNode.getVirtualFile().getName());
     }
     setText(name);
 
