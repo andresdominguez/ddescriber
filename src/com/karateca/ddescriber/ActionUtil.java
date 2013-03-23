@@ -8,6 +8,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.TestFindResult;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,26 +53,15 @@ public class ActionUtil {
    * @param document        The document to modify.
    * @param testFindResults The lines that have to change.
    */
-  public static void changeSelectedLineRunningCommand(Project project, final Document document, final TestFindResult... testFindResults) {
-    runWriteActionInsideCommand(project, new Runnable() {
+  public static void changeSelectedLineRunningCommand(Project project, final Document document, final List<TestFindResult> testFindResults) {
+    // Replace the elements from the bottom up.
+    Collections.sort(testFindResults, new Comparator<TestFindResult>() {
       @Override
-      public void run() {
-        for (TestFindResult testFindResult : testFindResults) {
-          changeSelectedLine(document, testFindResult);
-        }
+      public int compare(TestFindResult left, TestFindResult right) {
+        return right.getEndOffset() - left.getStartOffset();
       }
     });
-  }
 
-  /**
-   * Change the contents of the selected line. Wrap the call into command and
-   * write actions to support undo.
-   *
-   * @param project         The current project.
-   * @param document        The document to modify.
-   * @param testFindResults The lines that have to change.
-   */
-  public static void changeSelectedLineRunningCommand(Project project, final Document document, final List<TestFindResult> testFindResults) {
     runWriteActionInsideCommand(project, new Runnable() {
       @Override
       public void run() {

@@ -175,23 +175,10 @@ public class JasmineFileTest extends BaseTestCase {
     jasmineFile = new JasmineFile(getProject(), virtualFile);
     jasmineFile.buildTreeNodeSync();
 
-    // And given that you listen for changes.
-    final JasmineFile[] changedFiles = {null};
-    JasmineDescriberNotifier notifier = JasmineDescriberNotifier.getInstance();
-    notifier.addTestChangedLister(new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent changeEvent) {
-        changedFiles[0] = (JasmineFile) changeEvent.getSource();
-      }
-    });
-
     // When you clean the file.
-    jasmineFile.cleanFile(document);
+    jasmineFile.cleanFile();
 
     // Then ensure the dd -> d and the iit > it.
     myFixture.checkResultByFile("jasmineTestAfter.js");
-
-    // And ensure the notification was sent.
-    assertEquals(jasmineFile, changedFiles[0]);
   }
 }

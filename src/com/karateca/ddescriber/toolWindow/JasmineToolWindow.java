@@ -217,12 +217,8 @@ public class JasmineToolWindow implements ToolWindowFactory {
           @Override
           public Void fun(List<JasmineFile> jasmineFiles) {
             Collections.reverse(jasmineFiles);
-            for (JasmineFile file : jasmineFiles) {
-              Document document = ActionUtil.getDocument(file.getVirtualFile());
-              List<TestFindResult> elements = file.getElementsMarkedToRun();
-              Collections.reverse(elements);
-              TestFindResult[] findResults = elements.toArray(new TestFindResult[elements.size()]);
-              ActionUtil.changeSelectedLineRunningCommand(project, document, findResults);
+            for (JasmineFile jasmineFile : jasmineFiles) {
+              jasmineFile.cleanFile();
             }
 
             root.removeAllChildren();

@@ -175,14 +175,8 @@ public class JasmineFile {
   /**
    * Clean the file and notify all the changes.
    */
-  public void cleanFile(Document document) {
-    List<TestFindResult> elements = hierarchy.getMarkedElements();
-
-    if (elements.size() > 0) {
-      // Change the elements from the bottom to avoid changing the offset of the elements.
-      Collections.reverse(elements);
-      ActionUtil.changeSelectedLineRunningCommand(project, document, elements);
-      JasmineDescriberNotifier.getInstance().testWasChanged(this);
-    }
+  public void cleanFile() {
+    Document document = ActionUtil.getDocument(getVirtualFile());
+    ActionUtil.changeSelectedLineRunningCommand(project, document, hierarchy.getMarkedElements());
   }
 }

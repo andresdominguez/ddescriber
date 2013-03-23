@@ -55,35 +55,20 @@ public class JasmineDescribeReplaceAction extends AnAction {
     TreeViewDialog dialog = new TreeViewDialog(project, jasmineFile, editor.getCaretModel().getOffset());
     dialog.show();
 
-    int exitCode = dialog.getExitCode();
-
-    List<TestFindResult> elements = null;
-
-    switch (exitCode) {
+    switch (dialog.getExitCode()) {
       case TreeViewDialog.CLEAN_CURRENT_EXIT_CODE:
         // Clean the current file.
-        elements = jasmineFile.getElementsMarkedToRun();
+        jasmineFile.cleanFile();
+        JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
         break;
       case TreeViewDialog.OK_EXIT_CODE:
         // Flip the selected elements.
-        elements = dialog.getSelectedValues();
+        ActionUtil.changeSelectedLineRunningCommand(project, document, dialog.getSelectedValues());
+        JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
         break;
       case TreeViewDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
         break;
-    }
-
-    // Reverse the order to do it from bottom to top.
-    if (elements != null) {
-      Collections.reverse(elements);
-      TestFindResult[] findResults = elements.toArray(new TestFindResult[elements.size()]);
-      
-      ActionUtil.changeSelectedLineRunningCommand(project, document, findResults);
-
-      if (exitCode == TreeViewDialog.CLEAN_CURRENT_EXIT_CODE || exitCode == TreeViewDialog.OK_EXIT_CODE) {
-        JasmineDescriberNotifier instance = JasmineDescriberNotifier.getInstance();
-        instance.testWasChanged(jasmineFile);
-      }
     }
   }
 
@@ -91,5 +76,4 @@ public class JasmineDescribeReplaceAction extends AnAction {
     editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
     editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
   }
-
 }
