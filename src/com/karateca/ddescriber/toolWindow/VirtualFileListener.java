@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class VirtualFileListener {
 
-  private Map<VirtualFile, CallbackHolder> filesToListenFor = new HashMap<VirtualFile, CallbackHolder>();
+  private final Map<VirtualFile, CallbackHolder> filesToListenFor = new HashMap<VirtualFile, CallbackHolder>();
 
   public VirtualFileListener() {
     VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {

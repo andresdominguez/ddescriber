@@ -1,6 +1,5 @@
 package com.karateca.ddescriber.toolWindow;
 
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -18,9 +17,9 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.Function;
 import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.ActionUtil;
+import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
@@ -39,7 +38,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -51,7 +49,6 @@ public class JasmineToolWindow implements ToolWindowFactory {
   private ToolWindow toolWindow;
   private Project project;
   private Tree tree;
-  private JComponent panelWithCurrentTests;
   private TreeNode root;
 
   private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
@@ -63,11 +60,10 @@ public class JasmineToolWindow implements ToolWindowFactory {
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
     this.toolWindow = toolWindow;
     this.project = project;
-    findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+    findAllFilesContainingTests(new VoidFunction<List<JasmineFile>>() {
       @Override
-      public Void fun(List<JasmineFile> jasmineFiles) {
+      public void fun(List<JasmineFile> jasmineFiles) {
         showTestsInToolWindow(jasmineFiles);
-        return null;
       }
     });
 
@@ -142,7 +138,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
    *
    * @param doneCallback Called once all search is done.
    */
-  private void findAllFilesContainingTests(final Function<List<JasmineFile>, Void> doneCallback) {
+  private void findAllFilesContainingTests(final VoidFunction<List<JasmineFile>> doneCallback) {
     ActionUtil.runReadAction(new Runnable() {
       @Override
       public void run() {
@@ -156,7 +152,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   private void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
     JPanel panel = new JPanel(new BorderLayout());
-    panelWithCurrentTests = createTreePanel(jasmineFiles);
+    JComponent panelWithCurrentTests = createTreePanel(jasmineFiles);
 
     JPanel leftButtonPanel = createButtonPanel();
     JPanel topButtonPanel = createTopPanel();
@@ -213,18 +209,15 @@ public class JasmineToolWindow implements ToolWindowFactory {
     cleanAllButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+        findAllFilesContainingTests(new VoidFunction<List<JasmineFile>>() {
           @Override
-          public Void fun(List<JasmineFile> jasmineFiles) {
-            Collections.reverse(jasmineFiles);
+          public void fun(List<JasmineFile> jasmineFiles) {
             for (JasmineFile jasmineFile : jasmineFiles) {
               jasmineFile.cleanFile();
             }
 
             root.removeAllChildren();
             updateTree(root);
-
-            return null;
           }
         });
       }
@@ -277,9 +270,9 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private void refreshTree() {
-    findAllFilesContainingTests(new Function<List<JasmineFile>, Void>() {
+    findAllFilesContainingTests(new VoidFunction<List<JasmineFile>>() {
       @Override
-      public Void fun(List<JasmineFile> jasmineFiles) {
+      public void fun(List<JasmineFile> jasmineFiles) {
         if (filterCheckboxSelected) {
           root.removeAllChildren();
           for (JasmineFile file : jasmineFiles) {
@@ -288,7 +281,6 @@ public class JasmineToolWindow implements ToolWindowFactory {
             }
           }
           updateTree(root);
-          return null;
         }
 
         // Update the whole tree.
@@ -299,7 +291,6 @@ public class JasmineToolWindow implements ToolWindowFactory {
         for (JasmineFile jasmineFile : jasmineFiles) {
           JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
         }
-        return null;
       }
     });
   }
@@ -346,12 +337,11 @@ public class JasmineToolWindow implements ToolWindowFactory {
     }.setComparator(new SpeedSearchComparator(false));
 
     // Go to the selected test on double-click.
-    JasmineTreeUtil.addDoubleClickListener(tree, new Function<TreePath, Void>() {
+    JasmineTreeUtil.addDoubleClickListener(tree, new VoidFunction<TreePath>() {
       @Override
-      public Void fun(TreePath treePath) {
+      public void fun(TreePath treePath) {
         // Get the test for the selected node.
         goToTest((TreeNode) treePath.getLastPathComponent());
-        return null;
       }
     });
 

@@ -1,7 +1,6 @@
 package com.karateca.ddescriber;
 
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.Function;
 
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
@@ -12,7 +11,7 @@ import java.awt.event.MouseEvent;
  */
 public class JasmineTreeUtil {
   // Add a double click handler to a JTree.
-  public static void addDoubleClickListener(final Tree tree, final Function<TreePath, Void> handler) {
+  public static void addDoubleClickListener(final Tree tree, final VoidFunction<TreePath> handler) {
     tree.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent e) {
