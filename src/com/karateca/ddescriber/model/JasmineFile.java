@@ -97,23 +97,19 @@ public class JasmineFile {
   }
 
   private TreeNode populateTree(List<TestFindResult> elements) {
-    TestFindResult first = elements.get(0);
-    TreeNode root = new TreeNode(first);
+    // TODO: what happens when the list is empty?
 
-    first.setTopDescribe(true);
+    // Used a dummy root when you have multiple describes at the top.
+    TreeNode root = new TreeNode(virtualFile.getName());
+    root.setTopNode(true);
     root.setVirtualFile(virtualFile);
-
-    if (elements.size() == 1) {
-      return root;
-    }
-
-    Stack<TreeNode> stack = new Stack<TreeNode>();
-    int currentIndentation = first.getIndentation();
-
     TreeNode parent = root;
     TreeNode last = root;
 
-    for (TestFindResult element : elements.subList(1, elements.size())) {
+    Stack<TreeNode> stack = new Stack<TreeNode>();
+    int currentIndentation = -1;
+
+    for (TestFindResult element : elements) {
       int ind = element.getIndentation();
 
       TreeNode newNode = new TreeNode(element);
@@ -126,7 +122,7 @@ public class JasmineFile {
         do {
           // Find a parent that is not under the current level.
           parent = stack.pop();
-        } while (parent.getNodeValue().getIndentation() >= ind);
+        } while (!(parent.getUserObject() instanceof String) && parent.getNodeValue().getIndentation() >= ind);
       }
       last = newNode;
       parent.add(last);
@@ -134,6 +130,14 @@ public class JasmineFile {
       currentIndentation = ind;
     }
 
+    // If there is only one describe in this file then make it the top node.
+    if (root.getChildCount() == 1) {
+      TreeNode firstChild = (TreeNode) root.getFirstChild();
+      firstChild.setTopNode(true);
+      return firstChild;
+    }
+
+    // There are multiple top-level describes in this file. Return the fake as the parent.
     return root;
   }
 

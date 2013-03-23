@@ -386,7 +386,15 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
     // Go to selected location.
     Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-    editor.getCaretModel().moveToOffset(treeNode.getNodeValue().getStartOffset());
+    editor.getCaretModel().moveToOffset(getCaretOffset(treeNode));
     editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
+  }
+
+  private int getCaretOffset(TreeNode treeNode) {
+    // Is this a file or a test?
+    if (treeNode.getUserObject() instanceof String) {
+      return 0;
+    }
+    return treeNode.getNodeValue().getStartOffset();
   }
 }

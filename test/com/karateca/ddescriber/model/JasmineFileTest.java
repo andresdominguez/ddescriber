@@ -23,6 +23,9 @@ public class JasmineFileTest extends BaseTestCase {
   public void testBuildTreeNode() {
     TreeNode node = buildRootNodeFromFile("testWihManyLevels.js");
 
+    // Ensure the root is the top node.
+    assertTrue(node.isTopNode());
+
     // Ensure the tree node contains all the describe() and it() in the file.
     assertEquals("suite1", node.getNodeValue().getTestText());
     assertEquals(4, node.getChildCount());
@@ -58,7 +61,13 @@ public class JasmineFileTest extends BaseTestCase {
     TreeNode root = buildRootNodeFromFile("doubleDescribe.js");
 
     // Ensure the virtual file is set in the root.
-    //assertEquals(virtualFile, root.getVirtualFile());
+    assertEquals(virtualFile, root.getVirtualFile());
+
+    // Ensure the root is marked as top.
+    assertTrue(root.isTopNode());
+
+    // Ensure it has two children.
+    assertEquals(2, root.getChildCount());
   }
 
   public void testGetClosestTest() {

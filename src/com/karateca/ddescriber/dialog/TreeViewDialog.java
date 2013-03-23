@@ -53,6 +53,12 @@ public class TreeViewDialog extends DialogWrapper {
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
     tree.setCellRenderer(new CustomTreeCellRenderer(false));
 
+    // Check if there are multiple describes in the file.
+    if (root.getUserObject() instanceof String) {
+      tree.expandRow(0);
+      tree.setRootVisible(false);
+    }
+
     // Add search, make it case insensitive.
     new TreeSpeedSearch(tree) {
       @Override

@@ -18,7 +18,6 @@ public class TestFindResult {
   private final int startOffset;
   private final int lineNumber;
   private String testText;
-  private boolean isTopDescribe;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -73,13 +72,5 @@ public class TestFindResult {
   public String toString() {
 //    return String.format("%s (line: %d)", testText.trim(), lineNumber);
     return testText.trim();
-  }
-
-  public boolean isTopDescribe() {
-    return isTopDescribe;
-  }
-
-  public void setTopDescribe(boolean topDescribe) {
-    isTopDescribe = topDescribe;
   }
 }

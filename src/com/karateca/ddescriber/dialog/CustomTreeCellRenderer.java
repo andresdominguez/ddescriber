@@ -35,8 +35,8 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
       return component;
     }
 
-    TestFindResult findResult = (TestFindResult) node.getUserObject();
     TreeNode treeNode = (TreeNode) node;
+    TestFindResult findResult = treeNode.getNodeValue();
 
     Color color = findResult.isMarkedForRun() ? GREEN_BG_COLOR : defaultColor;
     setBackgroundNonSelectionColor(color);
@@ -45,7 +45,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     setIcon(findResult.isDescribe() ? descIcon : itIcon);
 
     String name = findResult.toString();
-    if (showFileName && findResult.isTopDescribe()) {
+    if (showFileName && treeNode.isTopNode()) {
       name = String.format("%s - [%s]", name, treeNode.getVirtualFile().getName());
     }
     setText(name);

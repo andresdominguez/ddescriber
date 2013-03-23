@@ -10,6 +10,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class TreeNode extends DefaultMutableTreeNode {
 
   private VirtualFile virtualFile;
+  private boolean topNode;
 
   public TreeNode(Object object) {
     super(object);
@@ -25,5 +26,13 @@ public class TreeNode extends DefaultMutableTreeNode {
 
   public void setVirtualFile(VirtualFile virtualFile) {
     this.virtualFile = virtualFile;
+  }
+
+  public boolean isTopNode() {
+    return topNode;
+  }
+
+  public void setTopNode(boolean topNode) {
+    this.topNode = topNode;
   }
 }
