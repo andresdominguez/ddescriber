@@ -156,7 +156,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   private void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
     JPanel panel = new JPanel(new BorderLayout());
-    panelWithCurrentTests = createCenterPanel(jasmineFiles);
+    panelWithCurrentTests = createTreePanel(jasmineFiles);
 
     JPanel leftButtonPanel = createButtonPanel();
     JPanel topButtonPanel = createTopPanel();
@@ -330,7 +330,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     return button;
   }
 
-  private JComponent createCenterPanel(List<JasmineFile> jasmineFiles) {
+  private JComponent createTreePanel(List<JasmineFile> jasmineFiles) {
     // The root node is hidden.
     root = new TreeNode("All tests");
     tree = new Tree(root);
@@ -354,8 +354,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       @Override
       public Void fun(TreePath treePath) {
         // Get the test for the selected node.
-        TreeNode lastPathComponent = (TreeNode) treePath.getLastPathComponent();
-        goToTest((TestFindResult) lastPathComponent.getUserObject(), lastPathComponent.getVirtualFile());
+        goToTest((TreeNode) treePath.getLastPathComponent());
         return null;
       }
     });
@@ -367,7 +366,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
         if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
           TreeNode[] selectedNodes = tree.getSelectedNodes(TreeNode.class, null);
           if (selectedNodes.length != 0) {
-            goToTest(selectedNodes[0].getNodeValue(), selectedNodes[0].getVirtualFile());
+            goToTest(selectedNodes[0]);
           }
         }
       }
@@ -380,14 +379,14 @@ public class JasmineToolWindow implements ToolWindowFactory {
     return scrollPane;
   }
 
-  private void goToTest(TestFindResult selectedTest, VirtualFile virtualFile) {
+  private void goToTest(TreeNode treeNode) {
     // Open the file containing the test for the node you just clicked.
     PsiManager psiManager = PsiManager.getInstance(project);
-    psiManager.findFile(virtualFile).navigate(true);
+    psiManager.findFile(treeNode.getVirtualFile()).navigate(true);
 
     // Go to selected location.
     Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-    editor.getCaretModel().moveToOffset(selectedTest.getStartOffset());
+    editor.getCaretModel().moveToOffset(treeNode.getNodeValue().getStartOffset());
     editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
   }
 }

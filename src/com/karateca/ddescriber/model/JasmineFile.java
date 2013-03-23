@@ -58,6 +58,7 @@ public class JasmineFile {
     // Replace contents of node.
     destination.removeAllChildren();
     destination.setUserObject(source.getUserObject());
+    destination.setVirtualFile(source.getVirtualFile());
 
     doDeepCopy(source, destination);
   }
@@ -68,6 +69,8 @@ public class JasmineFile {
       TreeNode sourceChildNode = (TreeNode) sourceChildren.nextElement();
 
       TreeNode destinationNode = new TreeNode(sourceChildNode.getUserObject());
+      destinationNode.setVirtualFile(sourceChildNode.getVirtualFile());
+
       destination.add(destinationNode);
 
       if (sourceChildNode.getChildCount() > 0) {
