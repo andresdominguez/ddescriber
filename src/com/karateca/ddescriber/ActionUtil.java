@@ -8,6 +8,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.TestFindResult;
 
+import java.util.List;
+
 /**
  * @author Andres Dominguez.
  */
@@ -50,6 +52,25 @@ public class ActionUtil {
    * @param testFindResults The lines that have to change.
    */
   public static void changeSelectedLineRunningCommand(Project project, final Document document, final TestFindResult... testFindResults) {
+    runWriteActionInsideCommand(project, new Runnable() {
+      @Override
+      public void run() {
+        for (TestFindResult testFindResult : testFindResults) {
+          changeSelectedLine(document, testFindResult);
+        }
+      }
+    });
+  }
+
+  /**
+   * Change the contents of the selected line. Wrap the call into command and
+   * write actions to support undo.
+   *
+   * @param project         The current project.
+   * @param document        The document to modify.
+   * @param testFindResults The lines that have to change.
+   */
+  public static void changeSelectedLineRunningCommand(Project project, final Document document, final List<TestFindResult> testFindResults) {
     runWriteActionInsideCommand(project, new Runnable() {
       @Override
       public void run() {

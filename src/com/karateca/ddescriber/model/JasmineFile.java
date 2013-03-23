@@ -6,10 +6,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.EventDispatcher;
 import com.karateca.ddescriber.ActionUtil;
+import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.JasmineFinder;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Stack;
@@ -168,5 +170,19 @@ public class JasmineFile {
 
   public List<TestFindResult> getElementsMarkedToRun() {
     return hierarchy.getMarkedElements();
+  }
+
+  /**
+   * Clean the file and notify all the changes.
+   */
+  public void cleanFile(Document document) {
+    List<TestFindResult> elements = hierarchy.getMarkedElements();
+
+    if (elements.size() > 0) {
+      // Change the elements from the bottom to avoid changing the offset of the elements.
+      Collections.reverse(elements);
+      ActionUtil.changeSelectedLineRunningCommand(project, document, elements);
+      JasmineDescriberNotifier.getInstance().testWasChanged(this);
+    }
   }
 }

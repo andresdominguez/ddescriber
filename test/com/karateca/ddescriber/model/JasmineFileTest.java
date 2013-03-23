@@ -1,6 +1,7 @@
 package com.karateca.ddescriber.model;
 
 import com.karateca.ddescriber.BaseTestCase;
+import com.karateca.ddescriber.JasmineDescriberNotifier;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -166,5 +167,31 @@ public class JasmineFileTest extends BaseTestCase {
     // Then ensure the change event was broadcasted.
     assertTrue(buildDone[0]);
     assertEquals("top describe", jasmineFile.getTreeNode().getNodeValue().getTestText());
+  }
+
+  public void testCleanFile() {
+    // Given a jasmine file with a ddescribe() and an iit().
+    prepareScenarioWithTestFile("jasmineTestBefore.js");
+    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile.buildTreeNodeSync();
+
+    // And given that you listen for changes.
+    final JasmineFile[] changedFiles = {null};
+    JasmineDescriberNotifier notifier = JasmineDescriberNotifier.getInstance();
+    notifier.addTestChangedLister(new ChangeListener() {
+      @Override
+      public void stateChanged(ChangeEvent changeEvent) {
+        changedFiles[0] = (JasmineFile) changeEvent.getSource();
+      }
+    });
+
+    // When you clean the file.
+    jasmineFile.cleanFile(document);
+
+    // Then ensure the dd -> d and the iit > it.
+    myFixture.checkResultByFile("jasmineTestAfter.js");
+
+    // And ensure the notification was sent.
+    assertEquals(jasmineFile, changedFiles[0]);
   }
 }
