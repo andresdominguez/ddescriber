@@ -23,8 +23,6 @@ public class JasmineFinder {
   private final Document document;
   public List<FindResult> findResults;
 
-  private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
-
   public JasmineFinder(Project project, Document document) {
     this.project = project;
     this.document = document;
@@ -44,22 +42,9 @@ public class JasmineFinder {
     return clone;
   }
 
-  public void findText() {
-    ApplicationManager.getApplication().runReadAction(new Runnable() {
-      @Override
-      public void run() {
-        findAll();
-        if (findResults.size() > 0) {
-          myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent("LinesFound"));
-        }
-      }
-    });
-  }
-
   public void findAll() {
     FindManager findManager = FindManager.getInstance(project);
     FindModel findModel = createFindModel(findManager);
-
 
     findResults = new ArrayList<FindResult>();
 
@@ -77,15 +62,6 @@ public class JasmineFinder {
 
       findResults.add(result);
     }
-  }
-
-  /**
-   * Register for change events.
-   *
-   * @param changeListener The listener to be added.
-   */
-  public void addResultsReadyListener(ChangeListener changeListener) {
-    myEventDispatcher.addListener(changeListener);
   }
 
   public List<FindResult> getFindResults() {
