@@ -79,6 +79,10 @@ public class JasmineFileTest extends BaseTestCase {
   public void testElementsMarkedForRun() {
     buildRootNodeFromFile("jasmineTestCaretTop.js");
 
+    // Ensure there are tests marked to run.
+    assertTrue(jasmineFile.hasTestsMarkedToRun());
+
+    // Ensure the marked tests can be found.
     List<TestFindResult> list = jasmineFile.getElementsMarkedToRun();
     assertEquals(2, list.size());
     assertEquals("inner describe", list.get(0).getTestText());
