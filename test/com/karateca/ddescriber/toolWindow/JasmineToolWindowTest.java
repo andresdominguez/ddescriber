@@ -1,5 +1,6 @@
 package com.karateca.ddescriber.toolWindow;
 
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import com.karateca.ddescriber.model.JasmineFile;
 
@@ -15,15 +16,18 @@ public class JasmineToolWindowTest extends LightCodeInsightFixtureTestCase {
     return "testData/";
   }
 
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
+
+  }
+
   public void testShouldFindTestFilesMarkedToRun() {
-    // Given that you have three files in the project.
-    myFixture.copyFileToProject("doubleDescribe.js");
-    myFixture.copyFileToProject("jasmineTestBefore.js");
-    myFixture.configureByFiles("doubleDescribe.js", "jasmineTestBefore.js");
+    givenThatYouHaveTestFiles();
 
     // Override the method that shows the panel.
     final List<JasmineFile> testsFound = new ArrayList<JasmineFile>();
-    JasmineToolWindow toolWindow = new JasmineToolWindow() {
+    JasmineToolWindow jasmineToolWindow = new JasmineToolWindow() {
       @Override
       protected void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
         for (JasmineFile jasmineFile : jasmineFiles) {
@@ -33,10 +37,28 @@ public class JasmineToolWindowTest extends LightCodeInsightFixtureTestCase {
     };
 
     // When you create the tool window content.
-    toolWindow.createToolWindowContent(getProject(), null);
+    jasmineToolWindow.createToolWindowContent(getProject(), new FakeToolWindow());
 
     // Then ensure one file was found.
     assertEquals(1, testsFound.size());
     assertEquals("jasmineTestBefore.js", testsFound.get(0).getVirtualFile().getName());
+  }
+
+  private void givenThatYouHaveTestFiles() {
+    myFixture.copyFileToProject("doubleDescribe.js");
+    myFixture.copyFileToProject("jasmineTestBefore.js");
+    myFixture.configureByFiles("doubleDescribe.js", "jasmineTestBefore.js");
+  }
+
+  public void testShouldAddContent() {
+    givenThatYouHaveTestFiles();
+
+    // When you create the toll window content.
+    JasmineToolWindow jasmineToolWindow = new JasmineToolWindow();
+    FakeToolWindow fakeToolWindow = new FakeToolWindow();
+    jasmineToolWindow.createToolWindowContent(getProject(), fakeToolWindow);
+
+    // Then ensure the panel was created.
+    assertNotNull(fakeToolWindow.getContent());
   }
 }
