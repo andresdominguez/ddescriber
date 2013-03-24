@@ -84,7 +84,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
         // Find the test.
         TreeNode nodeForFile = findTestInCurrentTree(jasmineFile);
         if (nodeForFile == null) {
-          // This is a new test. Add it to the end.
+          // This is a new test. Add it at the end of the tree.
           TreeNode newTestNode = new TreeNode("");
           jasmineFile.updateTreeNode(newTestNode);
           root.add(newTestNode);
