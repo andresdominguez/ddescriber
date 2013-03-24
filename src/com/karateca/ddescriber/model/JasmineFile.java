@@ -136,6 +136,7 @@ public class JasmineFile {
     if (root.getChildCount() == 1) {
       TreeNode firstChild = (TreeNode) root.getFirstChild();
       firstChild.setTopNode(true);
+      firstChild.removeFromParent();
       return firstChild;
     }
 
