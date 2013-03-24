@@ -13,8 +13,6 @@ import com.karateca.ddescriber.model.TestFindResult;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Andres Dominguez.

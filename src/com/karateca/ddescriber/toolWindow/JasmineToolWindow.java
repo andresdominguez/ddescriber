@@ -238,7 +238,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private void collectSelectedNodes(TreeNode node, List<TreeNode> markedTests) {
-    if (node != root && node.getNodeValue().isMarkedForRun()) {
+    if (node != root && node.isTestNode() && node.getNodeValue().isMarkedForRun()) {
       markedTests.add(node);
     }
 
@@ -274,6 +274,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       @Override
       public void fun(List<JasmineFile> jasmineFiles) {
         if (filterCheckboxSelected) {
+          // TODO: fix this.
           root.removeAllChildren();
           for (JasmineFile file : jasmineFiles) {
             for (TestFindResult element : file.getElementsMarkedToRun()) {
@@ -281,6 +282,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
             }
           }
           updateTree(root);
+          return;
         }
 
         // Update the whole tree.
