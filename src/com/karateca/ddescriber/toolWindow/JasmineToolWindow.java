@@ -150,7 +150,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     });
   }
 
-  private void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
+  protected void showTestsInToolWindow(List<JasmineFile> jasmineFiles) {
     JPanel panel = new JPanel(new BorderLayout());
     JComponent panelWithCurrentTests = createTreePanel(jasmineFiles);
 
