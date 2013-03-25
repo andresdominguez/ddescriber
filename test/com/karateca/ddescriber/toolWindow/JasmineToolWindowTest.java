@@ -1,8 +1,13 @@
 package com.karateca.ddescriber.toolWindow;
 
-import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.karateca.ddescriber.ActionUtil;
+import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TreeNode;
+import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +21,15 @@ public class JasmineToolWindowTest extends LightCodeInsightFixtureTestCase {
     return "testData/";
   }
 
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
+  private PsiFile[] givenThatYouHaveTestFiles() {
+    return configureFiles("doubleDescribe.js", "jasmineTestBefore.js");
+  }
 
+  private PsiFile[] configureFiles(String... files) {
+    for (String file : files) {
+      myFixture.copyFileToProject(file);
+    }
+    return myFixture.configureByFiles(files);
   }
 
   public void testShouldFindTestFilesMarkedToRun() {
@@ -44,21 +54,39 @@ public class JasmineToolWindowTest extends LightCodeInsightFixtureTestCase {
     assertEquals("jasmineTestBefore.js", testsFound.get(0).getVirtualFile().getName());
   }
 
-  private void givenThatYouHaveTestFiles() {
-    myFixture.copyFileToProject("doubleDescribe.js");
-    myFixture.copyFileToProject("jasmineTestBefore.js");
-    myFixture.configureByFiles("doubleDescribe.js", "jasmineTestBefore.js");
-  }
-
   public void testShouldAddContent() {
     givenThatYouHaveTestFiles();
 
-    // When you create the toll window content.
+    JasmineToolWindow jasmineToolWindow = whenYouCreateTheToolWindowContent();
+
+    // Then ensure the tree was created.
+    TreeNode root = (TreeNode) jasmineToolWindow.tree.getModel().getRoot();
+
+    assertEquals("All tests", root.getUserObject());
+    assertEquals(1, root.getChildCount());
+  }
+
+  private JasmineToolWindow whenYouCreateTheToolWindowContent() {
     JasmineToolWindow jasmineToolWindow = new JasmineToolWindow();
     FakeToolWindow fakeToolWindow = new FakeToolWindow();
     jasmineToolWindow.createToolWindowContent(getProject(), fakeToolWindow);
 
-    // Then ensure the panel was created.
-    assertNotNull(fakeToolWindow.getContent());
+    return jasmineToolWindow;
   }
+
+//  public void testShouldAddNewTestNode() {
+//    PsiFile[] psiFiles = givenThatYouHaveTestFiles();
+//
+//    whenYouCreateTheToolWindowContent();
+//
+//    JasmineFile jasmineFile = new JasmineFile(getProject(), psiFiles[0].getVirtualFile());
+//    jasmineFile.buildTreeNodeSync();
+//    TreeNode firstChild = (TreeNode) jasmineFile.getTreeNode().getFirstChild();
+//    TestFindResult findResult = firstChild.getNodeValue();
+//    ArrayList<TestFindResult> list = new ArrayList<TestFindResult>();
+//    list.add(findResult);
+//    ActionUtil.changeSelectedLineRunningCommand(getProject(), ActionUtil.getDocument(firstChild.getVirtualFile()), list);
+//
+//    JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
+//  }
 }

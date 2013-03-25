@@ -48,7 +48,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   private ToolWindow toolWindow;
   private Project project;
-  private Tree tree;
+  protected Tree tree;
   private TreeNode root;
 
   private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
