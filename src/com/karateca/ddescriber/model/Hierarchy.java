@@ -18,7 +18,7 @@ class Hierarchy {
     this.document = document;
     testFindResults = new ArrayList<TestFindResult>();
     for (FindResult findResult : findResults) {
-      TestFindResult result = new TestFindResult(document, findResult);
+      TestFindResult result = new TestFindResultImpl(document, findResult);
       testFindResults.add(result);
     }
 
