@@ -24,6 +24,7 @@ import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.JasmineFileImpl;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 

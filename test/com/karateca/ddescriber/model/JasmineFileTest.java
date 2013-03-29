@@ -1,7 +1,6 @@
 package com.karateca.ddescriber.model;
 
 import com.karateca.ddescriber.BaseTestCase;
-import com.karateca.ddescriber.JasmineDescriberNotifier;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -17,7 +16,7 @@ public class JasmineFileTest extends BaseTestCase {
 
   private TreeNode buildRootNodeFromFile(String fileName) {
     prepareScenarioWithTestFile(fileName);
-    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
     return jasmineFile.buildTreeNodeSync();
   }
 
@@ -150,7 +149,7 @@ public class JasmineFileTest extends BaseTestCase {
   public void testSearchResultsListener() {
     // Given a jasmine file.
     prepareScenarioWithTestFile("jasmineTestCaretTop.js");
-    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
     final boolean[] buildDone = new boolean[1];
 
     // And given that you register for changes.
@@ -172,7 +171,7 @@ public class JasmineFileTest extends BaseTestCase {
   public void testCleanFile() {
     // Given a jasmine file with a ddescribe() and an iit().
     prepareScenarioWithTestFile("jasmineTestBefore.js");
-    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
     jasmineFile.buildTreeNodeSync();
 
     // When you clean the file.

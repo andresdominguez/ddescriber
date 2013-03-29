@@ -1,6 +1,8 @@
 package com.karateca.ddescriber;
 
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.JasmineFileImpl;
+
 import org.junit.Test;
 
 import javax.swing.event.ChangeEvent;
@@ -19,7 +21,7 @@ public class JasmineDescriberNotifierTest extends BaseTestCase {
 
     instance = JasmineDescriberNotifier.getInstance();
     prepareScenarioWithTestFile("jasmineTestCaretTop.js");
-    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
   }
 
   @Test

@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.JasmineFileImpl;
 
 import java.io.IOException;
 import java.lang.Override;
@@ -53,7 +54,7 @@ public class FileIterator implements ContentIterator {
       return;
     }
 
-    JasmineFile jasmineFile = new JasmineFile(project, fileOrDir);
+    JasmineFile jasmineFile = new JasmineFileImpl(project, fileOrDir);
     jasmineFile.buildTreeNodeSync();
 
     if (skipCleanTestFiles && jasmineFile.getElementsMarkedToRun().size() == 0) {
