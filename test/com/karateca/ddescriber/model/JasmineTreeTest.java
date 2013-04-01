@@ -1,25 +1,22 @@
 package com.karateca.ddescriber.model;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.intellij.mock.Mock;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.karateca.ddescriber.BaseTestCase;
 
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author andresdom@google.com (Andres Dominguez)
  */
-public class JasmineTreeTest {
+public class JasmineTreeTest extends BaseTestCase {
 
   private JasmineTree jasmineTree;
 
-  @Before
   public void setUp() throws Exception {
+    super.setUp();
     jasmineTree = new JasmineTree();
   }
 
@@ -55,14 +52,12 @@ public class JasmineTreeTest {
     return new TreeNode(MockFindResult.buildIt(testText));
   }
 
-  @Test
-  public void shouldDeclareEmptyRoot() {
+  public void testShouldDeclareEmptyRoot() {
     assertEquals("Root node", jasmineTree.getRootNode().getUserObject());
     assertFalse(jasmineTree.isRootVisible());
   }
 
-  @Test
-  public void shouldAddTestsToEmptyTree() {
+  public void testShouldAddTestsToEmptyTree() {
     // Given a describe with two its.
     JasmineFile jasmineFile = createJasmineFile(false);
 
@@ -81,8 +76,7 @@ public class JasmineTreeTest {
     assertEquals(2, describeNode.getChildCount());
   }
 
-  @Test
-  public void shouldAddJasmineFileWhenItHasResultsMarkedToRun() {
+  public void testShouldAddJasmineFileWhenItHasResultsMarkedToRun() {
     // Given a describe with tests marked to run.
     JasmineFile jasmineFile = createJasmineFile(true);
 
@@ -93,8 +87,7 @@ public class JasmineTreeTest {
     expectRootNodeContainsDescribeWithName("d1");
   }
 
-  @Test
-  public void shouldNotAddJasmineFileWhenItHasNoTestsMarkedToRun() {
+  public void testShouldNotAddJasmineFileWhenItHasNoTestsMarkedToRun() {
     // Given a test file without marked tests.
     JasmineFile jasmineFile = createJasmineFile(false);
 
@@ -105,8 +98,7 @@ public class JasmineTreeTest {
     assertEquals(0, jasmineTree.getRootNode().getChildCount());
   }
 
-  @Test
-  public void shouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
+  public void testShouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
     VirtualFile virtualFile = new Mock.MyVirtualFile();
 
     // Given that you are showing a jasmine file.
@@ -120,8 +112,7 @@ public class JasmineTreeTest {
     assertEquals(0, jasmineTree.getRootNode().getChildCount());
   }
 
-  @Test
-  public void shouldUpdateExistingTest() {
+  public void testShouldUpdateExistingTest() {
     VirtualFile virtualFile = new Mock.MyVirtualFile();
 
     // Given that you are showing a jasmine file.
