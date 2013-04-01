@@ -105,25 +105,6 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   /**
-   * Find the node matching a jasmine file.
-   *
-   * @param jasmineFile The jasmine file to test the nodes.
-   * @return The node in the tree matching the jasmine file; null if not found.
-   */
-  private TreeNode findTestInCurrentTree(JasmineFile jasmineFile) {
-    VirtualFile virtualFile = jasmineFile.getVirtualFile();
-
-    Enumeration children = root.children();
-    while (children.hasMoreElements()) {
-      TreeNode child = (TreeNode) children.nextElement();
-      if (child.getVirtualFile() == virtualFile) {
-        return child;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Go through the project and find any files containing jasmine files with ddescribe() and iit().
    *
    * @param doneCallback Called once all search is done.
