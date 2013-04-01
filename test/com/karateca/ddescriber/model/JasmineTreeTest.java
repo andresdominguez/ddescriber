@@ -5,6 +5,9 @@ import static junit.framework.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.intellij.mock.Mock;
+import com.intellij.openapi.vfs.VirtualFile;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,10 +24,20 @@ public class JasmineTreeTest {
   }
 
   private JasmineFile createJasmineFile(boolean hasTestsMarkedToRun) {
+    return createJasmineFile(hasTestsMarkedToRun, null);
+  }
+
+  private JasmineFile createJasmineFile(boolean hasTestsMarkedToRun, VirtualFile virtualFile) {
     TreeNode describe = createDescribe();
+
+    describe.setVirtualFile(virtualFile);
+
     JasmineFile jasmineFile = mock(JasmineFile.class);
+
     when(jasmineFile.hasTestsMarkedToRun()).thenReturn(hasTestsMarkedToRun);
     when(jasmineFile.getTreeNode()).thenReturn(describe);
+    when(jasmineFile.getVirtualFile()).thenReturn(virtualFile);
+
     return jasmineFile;
   }
 
@@ -93,6 +106,21 @@ public class JasmineTreeTest {
     jasmineTree.updateFile(jasmineFile);
 
     // Then ensure the file was not added.
+    assertEquals(0, jasmineTree.getRootNode().getChildCount());
+  }
+
+  @Test
+  public void shouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
+    VirtualFile virtualFile = new Mock.MyVirtualFile();
+
+    // Given that you are showing
+    jasmineTree.updateFile(createJasmineFile(true, virtualFile));
+    assertEquals(1, jasmineTree.getRootNode().getChildCount());
+
+    // When you update the same file
+    jasmineTree.updateFile(createJasmineFile(false, virtualFile));
+
+    // Then ensure the node was removed.
     assertEquals(0, jasmineTree.getRootNode().getChildCount());
   }
 }
