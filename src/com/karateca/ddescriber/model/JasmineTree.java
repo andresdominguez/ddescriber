@@ -28,13 +28,22 @@ public class JasmineTree extends Tree {
   }
 
   public void updateFile(JasmineFile jasmineFile) {
+
+    TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
+
     if (jasmineFile.hasTestsMarkedToRun()) {
-      rootNode.add(jasmineFile.getTreeNode());
+
+      // Check if the jasmine file is in the tree already.
+      if (found == null) {
+        rootNode.add(jasmineFile.getTreeNode());
+      } else {
+        jasmineFile.updateTreeNode(found);
+      }
+
       return;
     }
 
     // Check if there is a node for this jasmine file.
-    TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
     if (found != null) {
       rootNode.remove(found);
       found.removeFromParent();

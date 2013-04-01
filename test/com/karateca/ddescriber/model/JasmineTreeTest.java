@@ -113,22 +113,19 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldUpdateExistingTest() {
-    VirtualFile virtualFile = new Mock.MyVirtualFile();
+    prepareScenarioWithTestFile("jasmineTestBefore.js");
 
     // Given that you are showing a jasmine file.
     jasmineTree.updateFile(createJasmineFile(true, virtualFile));
     assertEquals(1, jasmineTree.getRootNode().getChildCount());
 
     // When you update the file.
-    TestFindResult descFindResult = MockFindResult.buildDescribe("new name");
-
-    JasmineFile jasmineFile = mock(JasmineFile.class);
-    when(jasmineFile.getTreeNode()).thenReturn(new TreeNode(descFindResult));
-    when(jasmineFile.getVirtualFile()).thenReturn(virtualFile);
-    when(jasmineFile.hasTestsMarkedToRun()).thenReturn(true);
+    JasmineFile updatedFile = new JasmineFileImpl(getProject(), virtualFile);
+    updatedFile.buildTreeNodeSync();
+    jasmineTree.updateFile(updatedFile);
 
     // Then ensure the node was updated.
-    expectRootNodeContainsDescribeWithName("new name");
+    expectRootNodeContainsDescribeWithName("top describe");
   }
 
   private void expectRootNodeContainsDescribeWithName(String expectedName) {
