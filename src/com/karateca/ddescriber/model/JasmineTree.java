@@ -55,11 +55,13 @@ public class JasmineTree extends Tree {
   }
 
   private void updateOrRemove(JasmineFile jasmineFile, TreeNode found) {
+    jasmineFile.updateTreeNode(found);
+
     if (jasmineFile.hasTestsMarkedToRun()) {
-      jasmineFile.updateTreeNode(found);
+      updateTree(found);
     } else {
       rootNode.remove(found);
-      found.removeFromParent();
+      updateTree(rootNode);
     }
   }
 

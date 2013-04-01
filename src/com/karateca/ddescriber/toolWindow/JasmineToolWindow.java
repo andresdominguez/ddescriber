@@ -57,7 +57,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
   private ToolWindow toolWindow;
   private Project project;
-  protected Tree tree;
+  protected JasmineTree tree;
   private TreeNode root;
 
   private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
@@ -90,25 +90,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
           return;
         }
 
-        // Find the test.
-        TreeNode nodeForFile = findTestInCurrentTree(jasmineFile);
-        if (nodeForFile == null) {
-          // This is a new test. Add it at the end of the tree.
-          TreeNode newTestNode = new TreeNode("");
-          jasmineFile.updateTreeNode(newTestNode);
-          root.add(newTestNode);
-          updateTree(root);
-          return;
-        }
-
-        // The test file is in the tree. Update or remove if there are no marked tests.
-        jasmineFile.updateTreeNode(nodeForFile);
-        if (jasmineFile.hasTestsMarkedToRun()) {
-          updateTree(nodeForFile);
-        } else {
-          root.remove(nodeForFile);
-          updateTree(root);
-        }
+        tree.updateFile(jasmineFile);
       }
     });
   }
@@ -369,6 +351,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
 
     // TODO: fix
     this.tree = tree;
+    this.root = tree.getRootNode();
 
     return scrollPane;
   }
