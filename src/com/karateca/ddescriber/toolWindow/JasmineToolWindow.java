@@ -16,7 +16,6 @@ import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.JasmineDescriberNotifier;
@@ -207,8 +206,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
               jasmineFile.cleanFile();
             }
 
-            root.removeAllChildren();
-            updateTree(root);
+            tree.clear();
           }
         });
       }
