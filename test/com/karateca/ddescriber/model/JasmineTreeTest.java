@@ -7,6 +7,9 @@ import com.intellij.mock.Mock;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.BaseTestCase;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 /**
  * @author andresdom@google.com (Andres Dominguez)
@@ -54,6 +57,13 @@ public class JasmineTreeTest extends BaseTestCase {
 
   public void testShouldDeclareEmptyRoot() {
     assertEquals("Root node", jasmineTree.getRootNode().getUserObject());
+  }
+
+  public void testShouldHideRootNodeAfterAddingFiles() {
+    // When you add files.
+    jasmineTree.addFiles(new ArrayList<JasmineFile>());
+
+    // Then ensure the root is not visible.
     assertFalse(jasmineTree.isRootVisible());
   }
 
@@ -62,7 +72,7 @@ public class JasmineTreeTest extends BaseTestCase {
     JasmineFile jasmineFile = createJasmineFile(false);
 
     // When you add the jasmine file.
-    jasmineTree.addFile(jasmineFile);
+    jasmineTree.addFiles(Arrays.asList(jasmineFile));
 
     // Then ensure the tree has the new nodes.
     TreeNode rootNode = jasmineTree.getRootNode();

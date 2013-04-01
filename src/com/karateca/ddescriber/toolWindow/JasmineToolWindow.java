@@ -19,21 +19,17 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.ActionUtil;
-import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.JasmineDescriberNotifier;
 import com.karateca.ddescriber.JasmineTreeUtil;
+import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 import com.karateca.ddescriber.model.JasmineFile;
-import com.karateca.ddescriber.model.JasmineFileImpl;
+import com.karateca.ddescriber.model.JasmineTree;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -41,6 +37,18 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  * @author Andres Dominguez.
@@ -258,7 +266,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     refreshButton.setToolTipText(tooltip);
     return refreshButton;
   }
-
+                                simplify
   private JButton createRefreshButton() {
     JButton refreshButton = createButton(refreshIcon, "Refresh");
     refreshButton.addActionListener(new ActionListener() {
@@ -321,13 +329,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private JComponent createTreePanel(List<JasmineFile> jasmineFiles) {
-    // The root node is hidden.
-    root = new TreeNode("All tests");
-    tree = new Tree(root);
-
-    for (JasmineFile jasmineFile : jasmineFiles) {
-      root.add(jasmineFile.buildTreeNodeSync());
-    }
+    final JasmineTree tree = new JasmineTree();
 
     tree.setCellRenderer(new CustomTreeCellRenderer(true));
 
@@ -362,8 +364,11 @@ public class JasmineToolWindow implements ToolWindowFactory {
     });
 
     JBScrollPane scrollPane = new JBScrollPane(tree);
-    tree.expandRow(0);
-    tree.setRootVisible(false);
+
+    tree.addFiles(jasmineFiles);
+
+    // TODO: fix
+    this.tree = tree;
 
     return scrollPane;
   }

@@ -4,6 +4,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.treeStructure.Tree;
 
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * @author andresdom@google.com (Andres Dominguez)
@@ -15,12 +16,16 @@ public class JasmineTree extends Tree {
   public JasmineTree() {
     super(new TreeNode("Root node"));
     rootNode = (TreeNode) this.getModel().getRoot();
-    expandRow(0);
-    setRootVisible(false);
   }
 
-  public void addFile(JasmineFile jasmineFile) {
-    rootNode.add(jasmineFile.getTreeNode());
+  public void addFiles(List<JasmineFile> jasmineFiles) {
+    for (JasmineFile jasmineFile : jasmineFiles) {
+      rootNode.add(jasmineFile.getTreeNode());
+    }
+
+    // TODO: add a test for this
+    expandRow(0);
+    setRootVisible(false);
   }
 
   public TreeNode getRootNode() {
