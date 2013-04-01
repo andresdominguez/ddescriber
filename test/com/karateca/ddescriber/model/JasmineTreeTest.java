@@ -56,7 +56,9 @@ public class JasmineTreeTest extends BaseTestCase {
 
   private JasmineFile getJasmineFile() {
     prepareScenarioWithTestFile("jasmineTestBefore.js");
-    return new JasmineFileImpl(getProject(), virtualFile);
+    JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
+    jasmineFile.buildTreeNodeSync();
+    return jasmineFile;
   }
 
   public void testShouldDeclareEmptyRoot() {
@@ -72,8 +74,8 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldAddTestsToEmptyTree() {
-    // Given a describe with two its.
-    JasmineFile jasmineFile = createJasmineFile(false);
+    // Given a test file.
+    JasmineFile jasmineFile = getJasmineFile();
 
     // When you add the jasmine file.
     jasmineTree.addFiles(Arrays.asList(jasmineFile));
@@ -84,10 +86,10 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Ensure the describe node was added.
     TreeNode describeNode = (TreeNode) rootNode.getFirstChild();
-    assertEquals("d1", describeNode.getNodeValue().getTestText());
+    assertEquals("top describe", describeNode.getNodeValue().getTestText());
 
-    // Ensure the describe has two children.
-    assertEquals(2, describeNode.getChildCount());
+    // Ensure the describe has children.
+    assertEquals(3, describeNode.getChildCount());
   }
 
   public void testShouldAddJasmineFileWhenItHasResultsMarkedToRun() {
@@ -111,7 +113,7 @@ public class JasmineTreeTest extends BaseTestCase {
     // When you clean the file and update.
     jasmineFile.cleanFile();
     jasmineFile.buildTreeNodeSync();
-    jasmineTree.updateFile(createJasmineFile(false, virtualFile));
+    jasmineTree.updateFile(jasmineFile);
 
     // Then ensure the node was removed.
     assertEquals(0, jasmineTree.getRootNode().getChildCount());
