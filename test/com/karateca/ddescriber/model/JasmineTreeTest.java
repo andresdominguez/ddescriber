@@ -3,7 +3,6 @@ package com.karateca.ddescriber.model;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.intellij.mock.Mock;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.BaseTestCase;
 
@@ -87,35 +86,29 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldAddJasmineFileWhenItHasResultsMarkedToRun() {
+    prepareScenarioWithTestFile("jasmineTestBefore.js");
+
     // Given a describe with tests marked to run.
-    JasmineFile jasmineFile = createJasmineFile(true);
+    JasmineFile jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
 
     // When you update the jasmine file.
     jasmineTree.updateFile(jasmineFile);
 
     // Then ensure the file was added.
-    expectRootNodeContainsDescribeWithName("d1");
-  }
-
-  public void testShouldNotAddJasmineFileWhenItHasNoTestsMarkedToRun() {
-    // Given a test file without marked tests.
-    JasmineFile jasmineFile = createJasmineFile(false);
-
-    // When you update the file.
-    jasmineTree.updateFile(jasmineFile);
-
-    // Then ensure the file was not added.
-    assertEquals(0, jasmineTree.getRootNode().getChildCount());
+    expectRootNodeContainsDescribeWithName("top describe");
   }
 
   public void testShouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
-    VirtualFile virtualFile = new Mock.MyVirtualFile();
+    prepareScenarioWithTestFile("jasmineTestBefore.js");
+    JasmineFile jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
 
     // Given that you are showing a jasmine file.
-    jasmineTree.updateFile(createJasmineFile(true, virtualFile));
+    jasmineTree.updateFile(jasmineFile);
     assertEquals(1, jasmineTree.getRootNode().getChildCount());
 
-    // When you update the same file
+    // When you clean the file and update.
+    jasmineFile.cleanFile();
+    jasmineFile.buildTreeNodeSync();
     jasmineTree.updateFile(createJasmineFile(false, virtualFile));
 
     // Then ensure the node was removed.
@@ -124,9 +117,10 @@ public class JasmineTreeTest extends BaseTestCase {
 
   public void testShouldUpdateExistingTest() {
     prepareScenarioWithTestFile("jasmineTestBefore.js");
+    JasmineFile jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
 
     // Given that you are showing a jasmine file.
-    jasmineTree.updateFile(createJasmineFile(true, virtualFile));
+    jasmineTree.updateFile(jasmineFile);
     assertEquals(1, jasmineTree.getRootNode().getChildCount());
 
     // When you update the file.
