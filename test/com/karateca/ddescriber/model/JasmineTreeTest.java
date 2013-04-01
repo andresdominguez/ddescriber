@@ -1,9 +1,5 @@
 package com.karateca.ddescriber.model;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.ArrayList;
