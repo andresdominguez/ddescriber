@@ -28,11 +28,9 @@ public class JasmineTree extends Tree {
   }
 
   public void updateFile(JasmineFile jasmineFile) {
-
     TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
 
     if (jasmineFile.hasTestsMarkedToRun()) {
-
       // Check if the jasmine file is in the tree already.
       if (found == null) {
         rootNode.add(jasmineFile.getTreeNode());
