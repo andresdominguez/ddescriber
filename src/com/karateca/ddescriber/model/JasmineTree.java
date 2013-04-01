@@ -25,6 +25,8 @@ public class JasmineTree extends Tree {
   }
 
   public void updateFile(JasmineFile jasmineFile) {
-    rootNode.add(jasmineFile.getTreeNode());
+    if (jasmineFile.hasTestsMarkedToRun()) {
+      rootNode.add(jasmineFile.getTreeNode());
+    }
   }
 }

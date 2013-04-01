@@ -49,6 +49,7 @@ public class JasmineTreeTest {
   private JasmineFile createJasmineFile(boolean hasTestsMarkedToRun) {
     TreeNode describe = createDescribe();
     JasmineFile jasmineFile = mock(JasmineFile.class);
+    when(jasmineFile.hasTestsMarkedToRun()).thenReturn(hasTestsMarkedToRun);
     when(jasmineFile.getTreeNode()).thenReturn(describe);
     return jasmineFile;
   }
@@ -77,6 +78,18 @@ public class JasmineTreeTest {
 
     assertEquals(1, rootNode.getChildCount());
     assertEquals("d1", firstChild.getNodeValue().getTestText());
+  }
+
+  @Test
+  public void shouldNotAddJasmineFileWhenItHasNoTestsMarkedToRun() {
+    // Given a test file without marked tests.
+    JasmineFile jasmineFile = createJasmineFile(false);
+
+    // When you update the file.
+    jasmineTree.updateFile(jasmineFile);
+
+    // Then ensure the file was not added.
+    assertEquals(0, jasmineTree.getRootNode().getChildCount());
   }
 
   private TreeNode buildIt(String testText) {
