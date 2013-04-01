@@ -22,38 +22,6 @@ public class JasmineTreeTest extends BaseTestCase {
     jasmineTree = new JasmineTree();
   }
 
-  private JasmineFile createJasmineFile(boolean hasTestsMarkedToRun) {
-    return createJasmineFile(hasTestsMarkedToRun, null);
-  }
-
-  private JasmineFile createJasmineFile(boolean hasTestsMarkedToRun, VirtualFile virtualFile) {
-    TreeNode describe = createDescribe();
-
-    describe.setVirtualFile(virtualFile);
-
-    JasmineFile jasmineFile = mock(JasmineFile.class);
-
-    when(jasmineFile.hasTestsMarkedToRun()).thenReturn(hasTestsMarkedToRun);
-    when(jasmineFile.getTreeNode()).thenReturn(describe);
-    when(jasmineFile.getVirtualFile()).thenReturn(virtualFile);
-
-    return jasmineFile;
-  }
-
-  private TreeNode createDescribe() {
-    TestFindResult descFindResult = MockFindResult.buildDescribe("d1");
-
-    TreeNode describeNode = new TreeNode(descFindResult);
-    describeNode.add(buildIt("it1"));
-    describeNode.add(buildIt("it2"));
-
-    return describeNode;
-  }
-
-  private TreeNode buildIt(String testText) {
-    return new TreeNode(MockFindResult.buildIt(testText));
-  }
-
   private JasmineFile getJasmineFile() {
     prepareScenarioWithTestFile("jasmineTestBefore.js");
     JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
