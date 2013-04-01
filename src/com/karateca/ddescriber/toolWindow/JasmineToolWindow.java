@@ -266,7 +266,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     refreshButton.setToolTipText(tooltip);
     return refreshButton;
   }
-                                simplify
+
   private JButton createRefreshButton() {
     JButton refreshButton = createButton(refreshIcon, "Refresh");
     refreshButton.addActionListener(new ActionListener() {
