@@ -23,4 +23,8 @@ public class JasmineTree extends Tree {
   public TreeNode getRootNode() {
     return rootNode;
   }
+
+  public void updateFile(JasmineFile jasmineFile) {
+    rootNode.add(jasmineFile.getTreeNode());
+  }
 }

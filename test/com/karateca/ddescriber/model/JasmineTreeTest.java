@@ -29,12 +29,7 @@ public class JasmineTreeTest {
   @Test
   public void shouldAddTestsToEmptyTree() {
     // Given a describe with two its.
-    TreeNode describe = buildDescribe("d1");
-    describe.add(buildIt("it1"));
-    describe.add(buildIt("it2"));
-
-    JasmineFile jasmineFile = mock(JasmineFile.class);
-    when(jasmineFile.getTreeNode()).thenReturn(describe);
+    JasmineFile jasmineFile = createJasmineFile(false);
 
     // When you add the jasmine file.
     jasmineTree.addFile(jasmineFile);
@@ -51,8 +46,37 @@ public class JasmineTreeTest {
     assertEquals(2, describeNode.getChildCount());
   }
 
-  private TreeNode buildDescribe(String testText) {
-    return new TreeNode(MockFindResult.buildDescribe(testText));
+  private JasmineFile createJasmineFile(boolean hasTestsMarkedToRun) {
+    TreeNode describe = createDescribe();
+    JasmineFile jasmineFile = mock(JasmineFile.class);
+    when(jasmineFile.getTreeNode()).thenReturn(describe);
+    return jasmineFile;
+  }
+
+  private TreeNode createDescribe() {
+    TestFindResult descFindResult = MockFindResult.buildDescribe("d1");
+
+    TreeNode describeNode = new TreeNode(descFindResult);
+    describeNode.add(buildIt("it1"));
+    describeNode.add(buildIt("it2"));
+
+    return describeNode;
+  }
+
+  @Test
+  public void shouldAddJasmineFileWhenItHasResultsMarkedToRun() {
+    // Given a describe with tests marked to run.
+    JasmineFile jasmineFile = createJasmineFile(true);
+
+    // When you update the jasmine file.
+    jasmineTree.updateFile(jasmineFile);
+
+    // Then ensure the file was added.
+    TreeNode rootNode = jasmineTree.getRootNode();
+    TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
+
+    assertEquals(1, rootNode.getChildCount());
+    assertEquals("d1", firstChild.getNodeValue().getTestText());
   }
 
   private TreeNode buildIt(String testText) {
