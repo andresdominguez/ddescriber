@@ -30,23 +30,21 @@ public class JasmineTree extends Tree {
   public void updateFile(JasmineFile jasmineFile) {
     TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
 
-    if (jasmineFile.hasTestsMarkedToRun()) {
-      // Check if the jasmine file is in the tree already.
-      if (found == null) {
-        rootNode.add(jasmineFile.getTreeNode());
-      } else {
-        jasmineFile.updateTreeNode(found);
-      }
-
-      return;
-    }
-
-    // Check if there is a node for this jasmine file.
     if (found != null) {
+      // The jasmine file is in the tree already. Update it or remove it.
+      updateOrRemove(jasmineFile, found);
+    } else if (jasmineFile.hasTestsMarkedToRun()) {
+      rootNode.add(jasmineFile.getTreeNode());
+    }
+  }
+
+  private void updateOrRemove(JasmineFile jasmineFile, TreeNode found) {
+    if (jasmineFile.hasTestsMarkedToRun()) {
+      jasmineFile.updateTreeNode(found);
+    } else {
       rootNode.remove(found);
       found.removeFromParent();
     }
-
   }
 
   private TreeNode findNodeForJasmineFile(VirtualFile virtualFile) {
