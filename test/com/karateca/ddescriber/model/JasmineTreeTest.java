@@ -54,6 +54,11 @@ public class JasmineTreeTest extends BaseTestCase {
     return new TreeNode(MockFindResult.buildIt(testText));
   }
 
+  private JasmineFile getJasmineFile() {
+    prepareScenarioWithTestFile("jasmineTestBefore.js");
+    return new JasmineFileImpl(getProject(), virtualFile);
+  }
+
   public void testShouldDeclareEmptyRoot() {
     assertEquals("Root node", jasmineTree.getRootNode().getUserObject());
   }
@@ -86,10 +91,8 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldAddJasmineFileWhenItHasResultsMarkedToRun() {
-    prepareScenarioWithTestFile("jasmineTestBefore.js");
-
     // Given a describe with tests marked to run.
-    JasmineFile jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
+    JasmineFile jasmineFile = getJasmineFile();
 
     // When you update the jasmine file.
     jasmineTree.updateFile(jasmineFile);
@@ -99,8 +102,7 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
-    prepareScenarioWithTestFile("jasmineTestBefore.js");
-    JasmineFile jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
+    JasmineFile jasmineFile = getJasmineFile();
 
     // Given that you are showing a jasmine file.
     jasmineTree.updateFile(jasmineFile);
@@ -116,8 +118,7 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldUpdateExistingTest() {
-    prepareScenarioWithTestFile("jasmineTestBefore.js");
-    JasmineFile jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
+    JasmineFile jasmineFile = getJasmineFile();
 
     // Given that you are showing a jasmine file.
     jasmineTree.updateFile(jasmineFile);
