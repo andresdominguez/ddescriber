@@ -15,26 +15,14 @@ public class MockFindResult implements TestFindResult {
     return describe;
   }
 
-  public void setDescribe(boolean describe) {
-    this.describe = describe;
-  }
-
   @Override
   public int getIndentation() {
     return indentation;
   }
 
-  public void setIndentation(int indentation) {
-    this.indentation = indentation;
-  }
-
   @Override
   public boolean isMarkedForRun() {
     return markedForRun;
-  }
-
-  public void setMarkedForRun(boolean markedForRun) {
-    this.markedForRun = markedForRun;
   }
 
   @Override
@@ -57,19 +45,17 @@ public class MockFindResult implements TestFindResult {
     return testText;
   }
 
-  public void setTestText(String testText) {
-    this.testText = testText;
-  }
-
   public static TestFindResult buildDescribe(String testText) {
     MockFindResult findResult = new MockFindResult();
-    findResult.setDescribe(true);
+    findResult.describe = true;
+    findResult.testText = testText;
     return findResult;
   }
 
   public static TestFindResult buildIt(String testText) {
     MockFindResult findResult = new MockFindResult();
-    findResult.setDescribe(false);
+    findResult.describe = false;
+    findResult.testText = testText;
     return findResult;
   }
 }

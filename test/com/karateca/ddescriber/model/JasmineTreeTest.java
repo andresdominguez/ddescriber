@@ -52,19 +52,10 @@ public class JasmineTreeTest {
   }
 
   private TreeNode buildDescribe(String testText) {
-    return new TreeNode(createFindResult(true, testText));
+    return new TreeNode(MockFindResult.buildDescribe(testText));
   }
 
   private TreeNode buildIt(String testText) {
-    return new TreeNode(createFindResult(false, testText));
-  }
-
-  private TestFindResult createFindResult(boolean isDescribe, String testText) {
-    TestFindResult findResult = mock(TestFindResult.class);
-
-    when(findResult.isDescribe()).thenReturn(isDescribe);
-    when(findResult.getTestText()).thenReturn(testText);
-
-    return findResult;
+    return new TreeNode(MockFindResult.buildIt(testText));
   }
 }
