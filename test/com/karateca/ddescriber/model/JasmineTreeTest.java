@@ -25,6 +25,14 @@ public class JasmineTreeTest extends BaseTestCase {
     return jasmineFile;
   }
 
+  private void expectRootNodeContainsDescribeWithName(String expectedName) {
+    TreeNode rootNode = jasmineTree.getRootNode();
+    TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
+
+    assertEquals(1, rootNode.getChildCount());
+    assertEquals(expectedName, firstChild.getNodeValue().getTestText());
+  }
+
   public void testShouldDeclareEmptyRoot() {
     assertEquals("Root node", jasmineTree.getRootNode().getUserObject());
   }
@@ -99,11 +107,14 @@ public class JasmineTreeTest extends BaseTestCase {
     expectRootNodeContainsDescribeWithName("top describe");
   }
 
-  private void expectRootNodeContainsDescribeWithName(String expectedName) {
-    TreeNode rootNode = jasmineTree.getRootNode();
-    TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
+  public void testShouldClearTree() {
+    // Given a tree with a test.
+    jasmineTree.addFiles(Arrays.asList(getJasmineFile()));
 
-    assertEquals(1, rootNode.getChildCount());
-    assertEquals(expectedName, firstChild.getNodeValue().getTestText());
+    // When you clear the tree.
+    jasmineTree.clear();
+
+    // Then ensure there are no nodes left.
+    assertEquals(0, jasmineTree.getRootNode().getChildCount());
   }
 }

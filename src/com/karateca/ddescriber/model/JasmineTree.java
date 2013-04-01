@@ -75,4 +75,9 @@ public class JasmineTree extends Tree {
     }
     return null;
   }
+
+  public void clear() {
+    rootNode.removeAllChildren();
+    updateTree(rootNode);
+  }
 }
