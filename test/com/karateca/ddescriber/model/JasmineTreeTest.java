@@ -90,11 +90,7 @@ public class JasmineTreeTest {
     jasmineTree.updateFile(jasmineFile);
 
     // Then ensure the file was added.
-    TreeNode rootNode = jasmineTree.getRootNode();
-    TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
-
-    assertEquals(1, rootNode.getChildCount());
-    assertEquals("d1", firstChild.getNodeValue().getTestText());
+    expectRootNodeContainsDescribeWithName("d1");
   }
 
   @Test
@@ -113,7 +109,7 @@ public class JasmineTreeTest {
   public void shouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
     VirtualFile virtualFile = new Mock.MyVirtualFile();
 
-    // Given that you are showing
+    // Given that you are showing a jasmine file.
     jasmineTree.updateFile(createJasmineFile(true, virtualFile));
     assertEquals(1, jasmineTree.getRootNode().getChildCount());
 
@@ -122,5 +118,33 @@ public class JasmineTreeTest {
 
     // Then ensure the node was removed.
     assertEquals(0, jasmineTree.getRootNode().getChildCount());
+  }
+
+  @Test
+  public void shouldUpdateExistingTest() {
+    VirtualFile virtualFile = new Mock.MyVirtualFile();
+
+    // Given that you are showing a jasmine file.
+    jasmineTree.updateFile(createJasmineFile(true, virtualFile));
+    assertEquals(1, jasmineTree.getRootNode().getChildCount());
+
+    // When you update the file.
+    TestFindResult descFindResult = MockFindResult.buildDescribe("new name");
+
+    JasmineFile jasmineFile = mock(JasmineFile.class);
+    when(jasmineFile.getTreeNode()).thenReturn(new TreeNode(descFindResult));
+    when(jasmineFile.getVirtualFile()).thenReturn(virtualFile);
+    when(jasmineFile.hasTestsMarkedToRun()).thenReturn(true);
+
+    // Then ensure the node was updated.
+    expectRootNodeContainsDescribeWithName("new name");
+  }
+
+  private void expectRootNodeContainsDescribeWithName(String expectedName) {
+    TreeNode rootNode = jasmineTree.getRootNode();
+    TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
+
+    assertEquals(1, rootNode.getChildCount());
+    assertEquals(expectedName, firstChild.getNodeValue().getTestText());
   }
 }
