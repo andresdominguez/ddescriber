@@ -78,7 +78,8 @@ public class JasmineTree extends Tree {
   }
 
   private void updateFileShowingAllTests(JasmineFile jasmineFile) {
-    TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
+    List<TreeNode> list = getTreeNodesForFile(jasmineFile);
+    TreeNode found = list.size() == 0 ? null : list.get(0);
 
     if (found != null) {
       // The jasmine file is in the tree already. Update it or remove it.
@@ -106,17 +107,6 @@ public class JasmineTree extends Tree {
       rootNode.remove(found);
       updateTree(rootNode);
     }
-  }
-
-  private TreeNode findNodeForJasmineFile(VirtualFile virtualFile) {
-    Enumeration children = rootNode.children();
-    while (children.hasMoreElements()) {
-      TreeNode treeNode = (TreeNode) children.nextElement();
-      if (treeNode.getVirtualFile() == virtualFile) {
-        return treeNode;
-      }
-    }
-    return null;
   }
 
   /**
