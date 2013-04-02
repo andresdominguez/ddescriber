@@ -3,6 +3,7 @@ package com.karateca.ddescriber.model;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.treeStructure.Tree;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -86,4 +87,36 @@ public class JasmineTree extends Tree {
     addFiles(files);
     updateTree(rootNode);
   }
+
+  public void showMarkedOnly(boolean enabled) {
+    if (enabled) {
+      showSelectedNodesOnly();
+    }
+  }
+
+  private void showSelectedNodesOnly() {
+    List<TreeNode> markedTests = new ArrayList<TreeNode>();
+    collectSelectedNodes(rootNode, markedTests);
+
+    rootNode.removeAllChildren();
+    for (TreeNode node : markedTests) {
+      rootNode.add(node);
+    }
+    updateTree(rootNode);
+  }
+
+  private void collectSelectedNodes(TreeNode node, List<TreeNode> markedTests) {
+    if (node != rootNode && node.isTestNode() && node.getNodeValue().isMarkedForRun()) {
+      markedTests.add(node);
+    }
+
+    if (node.getChildCount() > 0) {
+      Enumeration children = node.children();
+      while (children.hasMoreElements()) {
+        collectSelectedNodes((TreeNode) children.nextElement(), markedTests);
+      }
+    }
+  }
+
+
 }
