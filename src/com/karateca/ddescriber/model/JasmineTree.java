@@ -35,36 +35,31 @@ public class JasmineTree extends Tree {
     return rootNode;
   }
 
+  /**
+   * Update a jasmine file after it has changed.
+   * @param jasmineFile A jasmine file.
+   */
   public void updateFile(JasmineFile jasmineFile) {
     if (showingMarkedTests) {
-
-      // Remove all the tests for the file.
-      for (TreeNode treeNode : getTreeNodesForFile(jasmineFile)) {
-        treeNode.removeFromParent();
-      }
-
-      // Add them.
-      jasmineFile.buildTreeNodeSync();
-      for (TestFindResult item : jasmineFile.getElementsMarkedToRun()) {
-        rootNode.add(new TreeNode(item, jasmineFile.getVirtualFile()));
-      }
-
-      updateTree(rootNode);
-      return;
-    }
-
-    TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
-
-    if (found != null) {
-      // The jasmine file is in the tree already. Update it or remove it.
-      updateOrRemove(jasmineFile, found);
+      updateFileShowingMarkedTestsOnly(jasmineFile);
     } else {
-      // This is a new test. Add it at the end of the tree.
-      TreeNode newTestNode = new TreeNode("");
-      jasmineFile.updateTreeNode(newTestNode);
-      rootNode.add(newTestNode);
-      updateTree(rootNode);
+      updateFileShowingAllTests(jasmineFile);
     }
+  }
+
+  private void updateFileShowingMarkedTestsOnly(JasmineFile jasmineFile) {
+    // Remove all the tests for the file.
+    for (TreeNode treeNode : getTreeNodesForFile(jasmineFile)) {
+      treeNode.removeFromParent();
+    }
+
+    // Add them.
+    jasmineFile.buildTreeNodeSync();
+    for (TestFindResult item : jasmineFile.getElementsMarkedToRun()) {
+      rootNode.add(new TreeNode(item, jasmineFile.getVirtualFile()));
+    }
+
+    updateTree(rootNode);
   }
 
   private List<TreeNode> getTreeNodesForFile(JasmineFile jasmineFile) {
@@ -80,6 +75,21 @@ public class JasmineTree extends Tree {
     }
 
     return result;
+  }
+
+  private void updateFileShowingAllTests(JasmineFile jasmineFile) {
+    TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
+
+    if (found != null) {
+      // The jasmine file is in the tree already. Update it or remove it.
+      updateOrRemove(jasmineFile, found);
+    } else {
+      // This is a new test. Add it at the end of the tree.
+      TreeNode newTestNode = new TreeNode("");
+      jasmineFile.updateTreeNode(newTestNode);
+      rootNode.add(newTestNode);
+      updateTree(rootNode);
+    }
   }
 
   private void updateTree(TreeNode nodeForFile) {
@@ -109,6 +119,9 @@ public class JasmineTree extends Tree {
     return null;
   }
 
+  /**
+   * Remove all the nodes from the tree.
+   */
   public void clear() {
     rootNode.removeAllChildren();
     updateTree(rootNode);
@@ -120,6 +133,9 @@ public class JasmineTree extends Tree {
     updateTree(rootNode);
   }
 
+  /**
+   * Show the tests that have been marked to run only.
+   */
   public void showSelectedNodesOnly() {
     showingMarkedTests = true;
 
@@ -145,5 +161,9 @@ public class JasmineTree extends Tree {
         collectSelectedNodes((TreeNode) children.nextElement(), markedTests);
       }
     }
+  }
+
+  public void showAllTests(List<JasmineFile> jasmineFiles) {
+
   }
 }

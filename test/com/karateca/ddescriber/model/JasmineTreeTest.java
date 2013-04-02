@@ -189,12 +189,13 @@ public class JasmineTreeTest extends BaseTestCase {
     // Given that you are showing selected only.
     List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
     tree.addFiles(files);
-    assertEquals(2, rootNode.getChildCount());
     tree.showSelectedNodesOnly();
+    assertEquals(4, rootNode.getChildCount());
 
     // When you exit selected only.
+    tree.showAllTests(files);
 
     // Then ensure the tree gets populated.
-
+    assertEquals(2, rootNode.getChildCount());
   }
 }
