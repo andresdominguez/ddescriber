@@ -92,11 +92,6 @@ public class JasmineTree extends Tree {
     return result;
   }
 
-  private void updateTree(TreeNode nodeForFile) {
-    DefaultTreeModel model = (DefaultTreeModel) getModel();
-    model.reload(nodeForFile);
-  }
-
   private void updateOrRemove(JasmineFile jasmineFile, TreeNode found) {
     jasmineFile.updateTreeNode(found);
 
@@ -106,14 +101,6 @@ public class JasmineTree extends Tree {
       rootNode.remove(found);
       updateTree(rootNode);
     }
-  }
-
-  /**
-   * Remove all the nodes from the tree.
-   */
-  public void clear() {
-    rootNode.removeAllChildren();
-    updateTree(rootNode);
   }
 
   public void updateFiles(List<JasmineFile> files) {
@@ -154,5 +141,18 @@ public class JasmineTree extends Tree {
 
   public void showAllTests(List<JasmineFile> jasmineFiles) {
 
+  }
+
+  /**
+   * Remove all the nodes from the tree.
+   */
+  public void clear() {
+    rootNode.removeAllChildren();
+    updateTree(rootNode);
+  }
+
+  private void updateTree(TreeNode nodeForFile) {
+    DefaultTreeModel model = (DefaultTreeModel) getModel();
+    model.reload(nodeForFile);
   }
 }
