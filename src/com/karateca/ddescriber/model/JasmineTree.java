@@ -78,12 +78,11 @@ public class JasmineTree extends Tree {
   }
 
   private void updateFileShowingAllTests(JasmineFile jasmineFile) {
-    List<TreeNode> list = getTreeNodesForFile(jasmineFile);
-    TreeNode found = list.size() == 0 ? null : list.get(0);
+    List<TreeNode> nodesForFile = getTreeNodesForFile(jasmineFile);
 
-    if (found != null) {
+    if (nodesForFile.size() > 0) {
       // The jasmine file is in the tree already. Update it or remove it.
-      updateOrRemove(jasmineFile, found);
+      updateOrRemove(jasmineFile, nodesForFile.get(0));
     } else {
       // This is a new test. Add it at the end of the tree.
       TreeNode newTestNode = new TreeNode("");
