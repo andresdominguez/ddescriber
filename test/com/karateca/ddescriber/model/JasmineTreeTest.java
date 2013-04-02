@@ -1,6 +1,8 @@
 package com.karateca.ddescriber.model;
 
+import com.intellij.openapi.editor.Document;
 import com.intellij.psi.PsiFile;
+import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.ArrayList;
@@ -21,10 +23,24 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   private JasmineFile getJasmineFile() {
-    prepareScenarioWithTestFile("jasmineTestBefore.js");
-    JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
-    jasmineFile.buildTreeNodeSync();
-    return jasmineFile;
+    return getJasmineFiles("jasmineTestBefore.js").get(0);
+  }
+
+  private List<JasmineFile> getJasmineFiles(String... fileNames) {
+    for (String fileName : fileNames) {
+      myFixture.copyFileToProject(fileName);
+    }
+
+    List<JasmineFile> jasmineFiles = new ArrayList<JasmineFile>();
+
+    for (PsiFile file : myFixture.configureByFiles(fileNames)) {
+      JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), file.getVirtualFile());
+      jasmineFile.buildTreeNodeSync();
+
+      jasmineFiles.add(jasmineFile);
+    }
+
+    return jasmineFiles;
   }
 
   private void expectRootNodeContainsDescribeWithName(String expectedName) {
@@ -101,12 +117,18 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(1, jasmineTree.getRootNode().getChildCount());
 
     // When you update the file.
-    JasmineFile updatedFile = new JasmineFileImpl(getProject(), virtualFile);
-    updatedFile.buildTreeNodeSync();
-    jasmineTree.updateFile(updatedFile);
+    final Document doc = ActionUtil.getDocument(jasmineFile.getVirtualFile());
+    ActionUtil.runWriteActionInsideCommand(getProject(), new Runnable() {
+      @Override
+      public void run() {
+        doc.setText("ddescribe('changed', function(){})");
+      }
+    });
+    jasmineFile.buildTreeNodeSync();
+    jasmineTree.updateFile(jasmineFile);
 
     // Then ensure the node was updated.
-    expectRootNodeContainsDescribeWithName("top describe");
+    expectRootNodeContainsDescribeWithName("changed");
   }
 
   public void testShouldClearTree() {
@@ -133,20 +155,5 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(2, jasmineTree.getRootNode().getChildCount());
   }
 
-  private List<JasmineFile> getJasmineFiles(String... fileNames) {
-    for (String fileName : fileNames) {
-      myFixture.copyFileToProject(fileName);
-    }
 
-    List<JasmineFile> jasmineFiles = new ArrayList<JasmineFile>();
-
-    for (PsiFile file : myFixture.configureByFiles(fileNames)) {
-      JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), file.getVirtualFile());
-      jasmineFile.buildTreeNodeSync();
-
-      jasmineFiles.add(jasmineFile);
-    }
-
-    return jasmineFiles;
-  }
 }
