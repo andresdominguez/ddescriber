@@ -169,4 +169,21 @@ public class JasmineTreeTest extends BaseTestCase {
     // Then ensure only the marked tests are shown.
     assertEquals(4, rootNode.getChildCount());
   }
+
+  public void testShouldUpdateExistingFileWhenMarkedOnlyIsSelected() {
+    // Given that you are showing a file and you show only running.
+    JasmineFile jasmineFile = getJasmineFile();
+    tree.addFiles(Arrays.asList(jasmineFile));
+    tree.showMarkedOnly(true);
+
+    // When you update the file.
+    TestFindResult findResult = jasmineFile.getElementsMarkedToRun().get(0);
+    Document doc = ActionUtil.getDocument(jasmineFile.getVirtualFile());
+    ActionUtil.changeSelectedLineRunningCommand(getProject(), doc, Arrays.asList(findResult));
+    jasmineFile.updateTreeNode();
+    tree.updateFile(jasmineFile);
+
+    // Then ensure there is only one node in the tree.
+    assertEquals(1, tree.getRootNode().getChildCount());
+  }
 }
