@@ -254,14 +254,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
           return;
         }
 
-        // Update the whole tree.
-        root.removeAllChildren();
-
-        updateTree(root);
-        // Broadcast every file;
-        for (JasmineFile jasmineFile : jasmineFiles) {
-          JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
-        }
+        tree.updateFiles(jasmineFiles);
       }
     });
   }

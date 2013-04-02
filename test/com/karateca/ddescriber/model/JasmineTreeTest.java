@@ -1,9 +1,11 @@
 package com.karateca.ddescriber.model;
 
+import com.intellij.psi.PsiFile;
 import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -116,5 +118,35 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Then ensure there are no nodes left.
     assertEquals(0, jasmineTree.getRootNode().getChildCount());
+  }
+
+  public void testShouldRefreshTree() {
+    List<JasmineFile> files = getJasmineFiles("testWihManyLevels.js", "jasmineTestBefore.js");
+
+    // Given that you are showing a file.
+    jasmineTree.addFiles(Arrays.asList(files.get(0)));
+
+    // When you update the tree.
+    jasmineTree.updateFiles(files);
+
+    // Then ensure the tree got updated.
+    assertEquals(2, jasmineTree.getRootNode().getChildCount());
+  }
+
+  private List<JasmineFile> getJasmineFiles(String... fileNames) {
+    for (String fileName : fileNames) {
+      myFixture.copyFileToProject(fileName);
+    }
+
+    List<JasmineFile> jasmineFiles = new ArrayList<JasmineFile>();
+
+    for (PsiFile file : myFixture.configureByFiles(fileNames)) {
+      JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), file.getVirtualFile());
+      jasmineFile.buildTreeNodeSync();
+
+      jasmineFiles.add(jasmineFile);
+    }
+
+    return jasmineFiles;
   }
 }

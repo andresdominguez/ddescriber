@@ -80,4 +80,10 @@ public class JasmineTree extends Tree {
     rootNode.removeAllChildren();
     updateTree(rootNode);
   }
+
+  public void updateFiles(List<JasmineFile> files) {
+    clear();
+    addFiles(files);
+    updateTree(rootNode);
+  }
 }
