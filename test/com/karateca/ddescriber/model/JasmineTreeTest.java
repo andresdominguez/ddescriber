@@ -16,10 +16,12 @@ import java.util.List;
 public class JasmineTreeTest extends BaseTestCase {
 
   private JasmineTree tree;
+  private TreeNode rootNode;
 
   public void setUp() throws Exception {
     super.setUp();
     tree = new JasmineTree();
+    rootNode = tree.getRootNode();
   }
 
   private JasmineFile getJasmineFile() {
@@ -44,7 +46,6 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   private void expectRootNodeContainsDescribeWithName(String expectedName) {
-    TreeNode rootNode = tree.getRootNode();
     TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
 
     assertEquals(1, rootNode.getChildCount());
@@ -52,7 +53,7 @@ public class JasmineTreeTest extends BaseTestCase {
   }
 
   public void testShouldDeclareEmptyRoot() {
-    assertEquals("Root node", tree.getRootNode().getUserObject());
+    assertEquals("Root node", rootNode.getUserObject());
   }
 
   public void testShouldHideRootNodeAfterAddingFiles() {
@@ -71,7 +72,6 @@ public class JasmineTreeTest extends BaseTestCase {
     tree.addFiles(Arrays.asList(jasmineFile));
 
     // Then ensure the tree has the new nodes.
-    TreeNode rootNode = tree.getRootNode();
     assertEquals(1, rootNode.getChildCount());
 
     // Ensure the describe node was added.
@@ -98,7 +98,7 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Given that you are showing a jasmine file.
     tree.updateFile(jasmineFile);
-    assertEquals(1, tree.getRootNode().getChildCount());
+    assertEquals(1, rootNode.getChildCount());
 
     // When you clean the file and update.
     jasmineFile.cleanFile();
@@ -106,7 +106,7 @@ public class JasmineTreeTest extends BaseTestCase {
     tree.updateFile(jasmineFile);
 
     // Then ensure the node was removed.
-    assertEquals(0, tree.getRootNode().getChildCount());
+    assertEquals(0, rootNode.getChildCount());
   }
 
   public void testShouldUpdateExistingTest() {
@@ -114,7 +114,7 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Given that you are showing a jasmine file.
     tree.updateFile(jasmineFile);
-    assertEquals(1, tree.getRootNode().getChildCount());
+    assertEquals(1, rootNode.getChildCount());
 
     // When you update the file.
     final Document doc = ActionUtil.getDocument(jasmineFile.getVirtualFile());
@@ -139,7 +139,7 @@ public class JasmineTreeTest extends BaseTestCase {
     tree.clear();
 
     // Then ensure there are no nodes left.
-    assertEquals(0, tree.getRootNode().getChildCount());
+    assertEquals(0, rootNode.getChildCount());
   }
 
   public void testShouldRefreshTree() {
@@ -152,12 +152,10 @@ public class JasmineTreeTest extends BaseTestCase {
     tree.updateFiles(files);
 
     // Then ensure the tree got updated.
-    assertEquals(2, tree.getRootNode().getChildCount());
+    assertEquals(2, rootNode.getChildCount());
   }
 
-  public void testShouldShowMarkedOnly() {
-    TreeNode rootNode = tree.getRootNode();
-
+  public void testShouldShowSelectedNodesOnly() {
     // Given that you are showing files.
     List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
     tree.addFiles(files);
@@ -170,7 +168,7 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(4, rootNode.getChildCount());
   }
 
-  public void testShouldUpdateExistingFileWhenMarkedOnlyIsSelected() {
+  public void testShouldUpdateExistingFileWhenSelectedOnlyIsTrue() {
     // Given that you are showing a file and you show only running.
     JasmineFile jasmineFile = getJasmineFile();
     tree.addFiles(Arrays.asList(jasmineFile));
@@ -184,6 +182,19 @@ public class JasmineTreeTest extends BaseTestCase {
     tree.updateFile(jasmineFile);
 
     // Then ensure there is only one node in the tree.
-    assertEquals(1, tree.getRootNode().getChildCount());
+    assertEquals(1, rootNode.getChildCount());
+  }
+
+  public void testShouldExitSelectedOnlyMode() {
+    // Given that you are showing selected only.
+    List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
+    tree.addFiles(files);
+    assertEquals(2, rootNode.getChildCount());
+    tree.showSelectedNodesOnly();
+
+    // When you exit selected only.
+
+    // Then ensure the tree gets populated.
+
   }
 }
