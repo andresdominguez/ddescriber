@@ -105,8 +105,23 @@ public class JasmineTree extends Tree {
 
   public void updateFiles(List<JasmineFile> files) {
     clear();
-    addFiles(files);
+
+    if (showingMarkedTests) {
+      addMarkedTestsToRootNode(files);
+    } else {
+      addFiles(files);
+    }
+
     updateTree(rootNode);
+  }
+
+  private void addMarkedTestsToRootNode(List<JasmineFile> files) {
+    for (JasmineFile jasmineFile : files) {
+      jasmineFile.buildTreeNodeSync();
+      for (TestFindResult findResult : jasmineFile.getElementsMarkedToRun()) {
+        rootNode.add(new TreeNode(findResult, jasmineFile.getVirtualFile()));
+      }
+    }
   }
 
   /**
