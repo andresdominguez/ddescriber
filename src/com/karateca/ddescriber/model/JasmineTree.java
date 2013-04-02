@@ -140,7 +140,8 @@ public class JasmineTree extends Tree {
   }
 
   public void showAllTests(List<JasmineFile> jasmineFiles) {
-
+    showingMarkedTests = false;
+    updateFiles(jasmineFiles);
   }
 
   /**
