@@ -120,20 +120,16 @@ public class JasmineTree extends Tree {
     updateTree(rootNode);
   }
 
-  public void showMarkedOnly(boolean showingMarkedTests) {
-    if (showingMarkedTests) {
-      this.showingMarkedTests = showingMarkedTests;
-      showSelectedNodesOnly();
-    }
-  }
+  public void showSelectedNodesOnly() {
+    showingMarkedTests = true;
 
-  private void showSelectedNodesOnly() {
     List<TreeNode> markedTests = new ArrayList<TreeNode>();
     collectSelectedNodes(rootNode, markedTests);
 
     rootNode.removeAllChildren();
     for (TreeNode node : markedTests) {
-      rootNode.add(node);
+      // Make a copy.
+      rootNode.add(new TreeNode(node));
     }
     updateTree(rootNode);
   }

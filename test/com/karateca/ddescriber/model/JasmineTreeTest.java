@@ -164,7 +164,7 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(2, rootNode.getChildCount());
 
     // When you show the marked only.
-    tree.showMarkedOnly(true);
+    tree.showSelectedNodesOnly();
 
     // Then ensure only the marked tests are shown.
     assertEquals(4, rootNode.getChildCount());
@@ -174,7 +174,7 @@ public class JasmineTreeTest extends BaseTestCase {
     // Given that you are showing a file and you show only running.
     JasmineFile jasmineFile = getJasmineFile();
     tree.addFiles(Arrays.asList(jasmineFile));
-    tree.showMarkedOnly(true);
+    tree.showSelectedNodesOnly();
 
     // When you update the file.
     TestFindResult findResult = jasmineFile.getElementsMarkedToRun().get(0);

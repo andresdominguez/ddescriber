@@ -100,7 +100,7 @@ public class JasmineFileImpl implements JasmineFile {
   private TreeNode populateTree(List<TestFindResult> elements) {
     // TODO: what happens when the list is empty?
 
-    // Used a dummy root when you have multiple describes at the top.
+    // Use a dummy root when you have multiple describes at the top.
     TreeNode root = new TreeNode(virtualFile.getName(), virtualFile);
     root.setTopNode(true);
     TreeNode parent = root;
