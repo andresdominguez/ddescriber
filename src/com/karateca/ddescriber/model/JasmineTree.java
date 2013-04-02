@@ -62,21 +62,6 @@ public class JasmineTree extends Tree {
     updateTree(rootNode);
   }
 
-  private List<TreeNode> getTreeNodesForFile(JasmineFile jasmineFile) {
-    VirtualFile virtualFile = jasmineFile.getVirtualFile();
-    List<TreeNode> result = new ArrayList<TreeNode>();
-
-    Enumeration children = rootNode.children();
-    while (children.hasMoreElements()) {
-      TreeNode node = (TreeNode) children.nextElement();
-      if (node.getVirtualFile() == virtualFile) {
-        result.add(node);
-      }
-    }
-
-    return result;
-  }
-
   private void updateFileShowingAllTests(JasmineFile jasmineFile) {
     List<TreeNode> nodesForFile = getTreeNodesForFile(jasmineFile);
 
@@ -90,6 +75,21 @@ public class JasmineTree extends Tree {
       rootNode.add(newTestNode);
       updateTree(rootNode);
     }
+  }
+
+  private List<TreeNode> getTreeNodesForFile(JasmineFile jasmineFile) {
+    VirtualFile virtualFile = jasmineFile.getVirtualFile();
+    List<TreeNode> result = new ArrayList<TreeNode>();
+
+    Enumeration children = rootNode.children();
+    while (children.hasMoreElements()) {
+      TreeNode node = (TreeNode) children.nextElement();
+      if (node.getVirtualFile() == virtualFile) {
+        result.add(node);
+      }
+    }
+
+    return result;
   }
 
   private void updateTree(TreeNode nodeForFile) {
