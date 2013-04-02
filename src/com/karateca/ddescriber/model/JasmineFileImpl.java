@@ -101,9 +101,8 @@ public class JasmineFileImpl implements JasmineFile {
     // TODO: what happens when the list is empty?
 
     // Used a dummy root when you have multiple describes at the top.
-    TreeNode root = new TreeNode(virtualFile.getName());
+    TreeNode root = new TreeNode(virtualFile.getName(), virtualFile);
     root.setTopNode(true);
-    root.setVirtualFile(virtualFile);
     TreeNode parent = root;
     TreeNode last = root;
 
@@ -113,8 +112,7 @@ public class JasmineFileImpl implements JasmineFile {
     for (TestFindResult element : elements) {
       int ind = element.getIndentation();
 
-      TreeNode newNode = new TreeNode(element);
-      newNode.setVirtualFile(virtualFile);
+      TreeNode newNode = new TreeNode(element, virtualFile);
 
       if (ind > currentIndentation) {
         stack.push(parent);

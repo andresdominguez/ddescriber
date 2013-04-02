@@ -82,12 +82,6 @@ public class JasmineToolWindow implements ToolWindowFactory {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
         JasmineFile jasmineFile = (JasmineFile) changeEvent.getSource();
-
-        if (filterCheckboxSelected) {
-          refreshTree();
-          return;
-        }
-
         tree.updateFile(jasmineFile);
       }
     });
@@ -169,7 +163,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       public void actionPerformed(ActionEvent actionEvent) {
         filterCheckboxSelected = checkBox.isSelected();
         if (filterCheckboxSelected) {
-          showSelectedNodesOnly();
+          tree.showMarkedOnly(true);
         } else {
           refreshTree();
         }
@@ -193,30 +187,6 @@ public class JasmineToolWindow implements ToolWindowFactory {
     });
 
     return pane;
-  }
-
-  private void showSelectedNodesOnly() {
-    ArrayList<TreeNode> markedTests = new ArrayList<TreeNode>();
-    collectSelectedNodes(root, markedTests);
-
-    root.removeAllChildren();
-    for (TreeNode node : markedTests) {
-      root.add(node);
-    }
-    updateTree(root);
-  }
-
-  private void collectSelectedNodes(TreeNode node, List<TreeNode> markedTests) {
-    if (node != root && node.isTestNode() && node.getNodeValue().isMarkedForRun()) {
-      markedTests.add(node);
-    }
-
-    if (node.getChildCount() > 0) {
-      Enumeration children = node.children();
-      while (children.hasMoreElements()) {
-        collectSelectedNodes((TreeNode) children.nextElement(), markedTests);
-      }
-    }
   }
 
   private JButton createButton(Icon icon, String tooltip) {

@@ -13,9 +13,14 @@ public class TreeNode extends DefaultMutableTreeNode {
   private boolean topNode;
   private final boolean testNode;
 
-  public TreeNode(Object object) {
-    super(object);
-    testNode = object instanceof TestFindResult;
+  public TreeNode(Object userObject) {
+    super(userObject);
+    testNode = userObject instanceof TestFindResult;
+  }
+
+  public TreeNode(Object userObject, VirtualFile virtualFile) {
+    this(userObject);
+    this.virtualFile = virtualFile;
   }
 
   public TestFindResult getNodeValue() {

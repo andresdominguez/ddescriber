@@ -15,6 +15,7 @@ import javax.swing.tree.DefaultTreeModel;
 public class JasmineTree extends Tree {
 
   private final TreeNode rootNode;
+  private boolean showingMarkedTests;
 
   public JasmineTree() {
     super(new TreeNode("Root node"));
@@ -26,7 +27,6 @@ public class JasmineTree extends Tree {
       rootNode.add(jasmineFile.getTreeNode());
     }
 
-    // TODO: add a test for this
     expandRow(0);
     setRootVisible(false);
   }
@@ -36,6 +36,23 @@ public class JasmineTree extends Tree {
   }
 
   public void updateFile(JasmineFile jasmineFile) {
+    if (showingMarkedTests) {
+
+      // Remove all the tests for the file.
+      for (TreeNode treeNode : getTreeNodesForFile(jasmineFile)) {
+        treeNode.removeFromParent();
+      }
+
+      // Add them.
+      jasmineFile.buildTreeNodeSync();
+      for (TestFindResult item : jasmineFile.getElementsMarkedToRun()) {
+        rootNode.add(new TreeNode(item, jasmineFile.getVirtualFile()));
+      }
+
+      updateTree(rootNode);
+      return;
+    }
+
     TreeNode found = findNodeForJasmineFile(jasmineFile.getVirtualFile());
 
     if (found != null) {
@@ -48,6 +65,21 @@ public class JasmineTree extends Tree {
       rootNode.add(newTestNode);
       updateTree(rootNode);
     }
+  }
+
+  private List<TreeNode> getTreeNodesForFile(JasmineFile jasmineFile) {
+    VirtualFile virtualFile = jasmineFile.getVirtualFile();
+    List<TreeNode> result = new ArrayList<TreeNode>();
+
+    Enumeration children = rootNode.children();
+    while (children.hasMoreElements()) {
+      TreeNode node = (TreeNode) children.nextElement();
+      if (node.getVirtualFile() == virtualFile) {
+        result.add(node);
+      }
+    }
+
+    return result;
   }
 
   private void updateTree(TreeNode nodeForFile) {
@@ -88,8 +120,9 @@ public class JasmineTree extends Tree {
     updateTree(rootNode);
   }
 
-  public void showMarkedOnly(boolean enabled) {
-    if (enabled) {
+  public void showMarkedOnly(boolean showingMarkedTests) {
+    if (showingMarkedTests) {
+      this.showingMarkedTests = showingMarkedTests;
       showSelectedNodesOnly();
     }
   }
