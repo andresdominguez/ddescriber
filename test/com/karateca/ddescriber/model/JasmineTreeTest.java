@@ -168,7 +168,7 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(4, rootNode.getChildCount());
   }
 
-  public void testShouldUpdateExistingFileWhenSelectedOnlyIsTrue() {
+  public void testShouldUpdateExistingFileOnSelectedOnlyMode() {
     // Given that you are showing a file and you show only running.
     JasmineFile jasmineFile = getJasmineFile();
     tree.addFiles(Arrays.asList(jasmineFile));
@@ -183,6 +183,18 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Then ensure there is only one node in the tree.
     assertEquals(1, rootNode.getChildCount());
+  }
+
+  public void testShouldUpdateFileOnSelectedOnlyMode() {
+    // Given that you are in selected only mode.
+    tree.showSelectedNodesOnly();
+
+    // When you update files.
+    List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
+    tree.updateFiles(files);
+
+    // Then ensure only the marked test are added.
+    assertEquals(4, rootNode.getChildCount());
   }
 
   public void testShouldExitSelectedOnlyMode() {
