@@ -15,7 +15,9 @@ import java.awt.*;
 public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 
   private static final Color GREEN_BG_COLOR = new Color(182, 232, 172);
-  private final Color defaultColor = getBackgroundNonSelectionColor();
+  private static final Color GREEN_FG_COLOR = new Color(57, 194, 70);
+  private final Color defaultNonSelColor = getBackgroundNonSelectionColor();
+  private final Color defaultBgSelColor = getBackgroundSelectionColor();
   private final Icon itIcon = IconLoader.findIcon("/icons/it-icon.png");
   private final Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
   private final boolean showFileName;
@@ -38,8 +40,13 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     TreeNode treeNode = (TreeNode) node;
     TestFindResult findResult = treeNode.getNodeValue();
 
-    Color color = findResult.isMarkedForRun() ? GREEN_BG_COLOR : defaultColor;
-    setBackgroundNonSelectionColor(color);
+    if (findResult.isMarkedForRun()) {
+      setBackgroundNonSelectionColor(GREEN_BG_COLOR);
+      setBackgroundSelectionColor(GREEN_FG_COLOR);
+    } else {
+      setBackgroundNonSelectionColor(defaultNonSelColor);
+      setBackgroundSelectionColor(defaultBgSelColor);
+    }
 
     // Set the icon depending on the type.
     setIcon(findResult.isDescribe() ? descIcon : itIcon);
