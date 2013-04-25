@@ -27,6 +27,7 @@ import com.karateca.ddescriber.model.TreeNode;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -40,6 +41,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -187,11 +189,11 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private JButton createButton(Icon icon, String tooltip) {
-    JButton refreshButton = new JButton(icon);
-    refreshButton.setBorder(BorderFactory.createEmptyBorder());
-    refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    refreshButton.setToolTipText(tooltip);
-    return refreshButton;
+    JButton button = new JButton(icon);
+    button.setMargin(new Insets(2, 2, 2, 2));
+    button.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button.setToolTipText(tooltip);
+    return button;
   }
 
   private JButton createRefreshButton() {
