@@ -6,6 +6,7 @@ import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.model.TestFindResult;
@@ -55,7 +56,7 @@ public class TreeViewDialog extends DialogWrapper {
 
     // Check if there are multiple describes in the file.
     if (root.getUserObject() instanceof String) {
-      tree.expandRow(0);
+      TreeUtil.expandAll(tree);
       tree.setRootVisible(false);
     }
 
