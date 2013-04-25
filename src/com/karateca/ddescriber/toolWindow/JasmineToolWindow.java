@@ -23,7 +23,6 @@ import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.dialog.CustomTreeCellRenderer;
 import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.JasmineTree;
-import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 
 import java.awt.BorderLayout;
@@ -54,12 +53,12 @@ public class JasmineToolWindow implements ToolWindowFactory {
   private ToolWindow toolWindow;
   private Project project;
   protected JasmineTree tree;
-  private TreeNode root;
 
   private final Icon refreshIcon = IconLoader.findIcon("/icons/refresh.png");
   private final Icon expandIcon = IconLoader.findIcon("/icons/expandall.png");
   private final Icon collapseIcon = IconLoader.findIcon("/icons/collapseall.png");
   private boolean filterCheckboxSelected;
+  private List<JasmineFile> currentJasmineFiles;
 
   @Override
   public void createToolWindowContent(Project project, ToolWindow toolWindow) {
@@ -106,8 +105,8 @@ public class JasmineToolWindow implements ToolWindowFactory {
       public void run() {
         FileIterator fileIterator = new FileIterator(project, true);
         ProjectRootManager.getInstance(project).getFileIndex().iterateContent(fileIterator);
-        List<JasmineFile> jasmineFiles = fileIterator.getJasmineFiles();
-        doneCallback.fun(jasmineFiles);
+        currentJasmineFiles = fileIterator.getJasmineFiles();
+        doneCallback.fun(currentJasmineFiles);
       }
     });
   }
@@ -163,7 +162,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
         if (filterCheckboxSelected) {
           tree.showSelectedNodesOnly();
         } else {
-          refreshTree();
+          tree.showAllTests(currentJasmineFiles);
         }
       }
     });
@@ -200,31 +199,15 @@ public class JasmineToolWindow implements ToolWindowFactory {
     refreshButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        refreshTree();
+        findAllFilesContainingTests(new VoidFunction<List<JasmineFile>>() {
+          @Override
+          public void fun(List<JasmineFile> jasmineFiles) {
+            tree.updateFiles(jasmineFiles);
+          }
+        });
       }
     });
     return refreshButton;
-  }
-
-  private void refreshTree() {
-    findAllFilesContainingTests(new VoidFunction<List<JasmineFile>>() {
-      @Override
-      public void fun(List<JasmineFile> jasmineFiles) {
-        if (filterCheckboxSelected) {
-          // TODO: fix this.
-          root.removeAllChildren();
-          for (JasmineFile file : jasmineFiles) {
-            for (TestFindResult element : file.getElementsMarkedToRun()) {
-              root.add(new TreeNode(element));
-            }
-          }
-          updateTree(root);
-          return;
-        }
-
-        tree.updateFiles(jasmineFiles);
-      }
-    });
   }
 
   private JButton createExpandAllButton() {
@@ -250,12 +233,20 @@ public class JasmineToolWindow implements ToolWindowFactory {
   }
 
   private JComponent createTreePanel(List<JasmineFile> jasmineFiles) {
-    final JasmineTree tree = new JasmineTree();
+    tree = createJasmineTree();
 
-    tree.setCellRenderer(new CustomTreeCellRenderer(true));
+    JBScrollPane scrollPane = new JBScrollPane(tree);
+    tree.addFiles(jasmineFiles);
+
+    return scrollPane;
+  }
+
+  private JasmineTree createJasmineTree() {
+    final JasmineTree jasmineTree = new JasmineTree();
+    jasmineTree.setCellRenderer(new CustomTreeCellRenderer(true));
 
     // Add search, make it case insensitive.
-    new TreeSpeedSearch(tree) {
+    new TreeSpeedSearch(jasmineTree) {
       @Override
       protected boolean compare(String text, String pattern) {
         return super.compare(text.toLowerCase(), pattern.toLowerCase());
@@ -263,7 +254,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
     }.setComparator(new SpeedSearchComparator(false));
 
     // Go to the selected test on double-click.
-    JasmineTreeUtil.addDoubleClickListener(tree, new VoidFunction<TreePath>() {
+    JasmineTreeUtil.addDoubleClickListener(jasmineTree, new VoidFunction<TreePath>() {
       @Override
       public void fun(TreePath treePath) {
         // Get the test for the selected node.
@@ -272,11 +263,12 @@ public class JasmineToolWindow implements ToolWindowFactory {
     });
 
     // Go to selected test on enter.
-    tree.addKeyListener(new KeyAdapter() {
+    jasmineTree.addKeyListener(new KeyAdapter() {
       @Override
       public void keyPressed(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-          TreeNode[] selectedNodes = tree.getSelectedNodes(TreeNode.class, null);
+          TreeNode[] selectedNodes = jasmineTree
+              .getSelectedNodes(TreeNode.class, null);
           if (selectedNodes.length != 0) {
             goToTest(selectedNodes[0]);
           }
@@ -284,15 +276,7 @@ public class JasmineToolWindow implements ToolWindowFactory {
       }
     });
 
-    JBScrollPane scrollPane = new JBScrollPane(tree);
-
-    tree.addFiles(jasmineFiles);
-
-    // TODO: fix
-    this.tree = tree;
-    this.root = tree.getRootNode();
-
-    return scrollPane;
+    return jasmineTree;
   }
 
   private void goToTest(TreeNode treeNode) {
