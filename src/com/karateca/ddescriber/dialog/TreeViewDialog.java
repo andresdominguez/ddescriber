@@ -56,9 +56,10 @@ public class TreeViewDialog extends DialogWrapper {
 
     // Check if there are multiple describes in the file.
     if (root.getUserObject() instanceof String) {
-      TreeUtil.expandAll(tree);
       tree.setRootVisible(false);
     }
+
+    TreeUtil.expandAll(tree);
 
     // Add search, make it case insensitive.
     new TreeSpeedSearch(tree) {
