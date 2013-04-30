@@ -35,6 +35,9 @@ public class JasmineDescribeReplaceAction extends AnAction {
   public void actionPerformed(AnActionEvent actionEvent) {
     project = actionEvent.getData(PlatformDataKeys.PROJECT);
     editor = (EditorImpl) actionEvent.getData(PlatformDataKeys.EDITOR);
+    if (editor == null) {
+      return;
+    }
     document = (DocumentImpl) editor.getDocument();
 
     jasmineFile = new JasmineFileImpl(project, editor.getVirtualFile());
