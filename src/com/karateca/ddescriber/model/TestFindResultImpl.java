@@ -14,6 +14,7 @@ public class TestFindResultImpl implements TestFindResult {
   private final int indentation;
   private final boolean isDescribe;
   private final boolean markedForRun;
+  private final boolean excluded;
   private final int endOffset;
   private final int startOffset;
   private final int lineNumber;
@@ -31,6 +32,8 @@ public class TestFindResultImpl implements TestFindResult {
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
     isDescribe = lineText.contains("describe(");
     markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
+    excluded = false;
+//    excluded = lineText.contains("xdescribe(") || lineText.contains("xit(");
 
     // Leave the Test text.
     // TODO: improve this regular expression.

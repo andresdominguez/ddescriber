@@ -23,6 +23,17 @@ describe('suite1', function () {
                 it('test6', function () {
 
                 });
+
+                xit('should be excluded 1', function () {
+
+                });
+
+                xdescribe('excluded 2', function () {
+                    it('inner excluded', function () {
+
+                    });
+                });
+
             })
         });
 

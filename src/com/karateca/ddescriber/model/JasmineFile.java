@@ -13,8 +13,6 @@ public interface JasmineFile {
 
   void buildTreeNodeAsync();
 
-  void updateTreeNode();
-
   void updateTreeNode(TreeNode destination);
 
   void copyTree(TreeNode source, TreeNode destination);

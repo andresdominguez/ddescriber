@@ -82,55 +82,6 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(3, describeNode.getChildCount());
   }
 
-  public void testShouldAddJasmineFileWhenItHasResultsMarkedToRun() {
-    // Given a describe with tests marked to run.
-    JasmineFile jasmineFile = getJasmineFile();
-
-    // When you update the jasmine file.
-    tree.updateFile(jasmineFile);
-
-    // Then ensure the file was added.
-    expectRootNodeContainsDescribeWithName("top describe");
-  }
-
-  public void testShouldRemoveExistingTestFileWhenThereAreNoTestsMarked() {
-    JasmineFile jasmineFile = getJasmineFile();
-
-    // Given that you are showing a jasmine file.
-    tree.updateFile(jasmineFile);
-    assertEquals(1, rootNode.getChildCount());
-
-    // When you clean the file and update.
-    jasmineFile.cleanFile();
-    jasmineFile.buildTreeNodeSync();
-    tree.updateFile(jasmineFile);
-
-    // Then ensure the node was removed.
-    assertEquals(0, rootNode.getChildCount());
-  }
-
-  public void testShouldUpdateExistingTest() {
-    JasmineFile jasmineFile = getJasmineFile();
-
-    // Given that you are showing a jasmine file.
-    tree.updateFile(jasmineFile);
-    assertEquals(1, rootNode.getChildCount());
-
-    // When you update the file.
-    final Document doc = ActionUtil.getDocument(jasmineFile.getVirtualFile());
-    ActionUtil.runWriteActionInsideCommand(getProject(), new Runnable() {
-      @Override
-      public void run() {
-        doc.setText("ddescribe('changed', function(){})");
-      }
-    });
-    jasmineFile.buildTreeNodeSync();
-    tree.updateFile(jasmineFile);
-
-    // Then ensure the node was updated.
-    expectRootNodeContainsDescribeWithName("changed");
-  }
-
   public void testShouldClearTree() {
     // Given a tree with a test.
     tree.addFiles(Arrays.asList(getJasmineFile()));
@@ -166,23 +117,6 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Then ensure only the marked tests are shown.
     assertEquals(4, rootNode.getChildCount());
-  }
-
-  public void testShouldUpdateExistingFileOnSelectedOnlyMode() {
-    // Given that you are showing a file and you show only running.
-    JasmineFile jasmineFile = getJasmineFile();
-    tree.addFiles(Arrays.asList(jasmineFile));
-    tree.showSelectedNodesOnly();
-
-    // When you update the file.
-    TestFindResult findResult = jasmineFile.getElementsMarkedToRun().get(0);
-    Document doc = ActionUtil.getDocument(jasmineFile.getVirtualFile());
-    ActionUtil.changeSelectedLineRunningCommand(getProject(), doc, Arrays.asList(findResult));
-    jasmineFile.updateTreeNode();
-    tree.updateFile(jasmineFile);
-
-    // Then ensure there is only one node in the tree.
-    assertEquals(1, rootNode.getChildCount());
   }
 
   public void testShouldUpdateFileOnSelectedOnlyMode() {

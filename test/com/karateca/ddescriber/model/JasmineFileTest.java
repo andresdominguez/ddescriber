@@ -98,24 +98,6 @@ public class JasmineFileTest extends BaseTestCase {
     assertEquals(4, root.getChildCount());
   }
 
-  public void testUpdateNodeOnFileChange() throws IOException {
-    TreeNode treeNode = buildRootNodeFromFile("jasmineTestCaretTop.js");
-
-    // When the file changes.
-    virtualFile.setBinaryContent(("describe('file changed', function () {\n" +
-        "    it('should have changed', function () {\n" +
-        "        \n" +
-        "    });" +
-        "\n});" +
-        "\n").getBytes());
-    jasmineFile.updateTreeNode();
-
-
-    // Then ensure the tree node was modified.
-    assertEquals("file changed", treeNode.getNodeValue().getTestText());
-    assertEquals(1, treeNode.getChildCount());
-  }
-
   public void testTreeCopy() throws Exception {
     buildRootNodeFromFile("jasmineTestCaretTop.js");
 
@@ -179,5 +161,15 @@ public class JasmineFileTest extends BaseTestCase {
 
     // Then ensure the dd -> d and the iit > it.
     myFixture.checkResultByFile("jasmineTestAfter.js");
+  }
+
+  public void testShouldFindExcluded() {
+    // Given a jasmine file with excluded xdescribe and xit.
+    prepareScenarioWithTestFile("testWihManyLevels.js");
+    jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
+    jasmineFile.buildTreeNodeSync();
+
+    TreeNode treeNode = jasmineFile.getTreeNode();
+
   }
 }

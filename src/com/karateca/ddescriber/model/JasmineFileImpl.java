@@ -41,10 +41,6 @@ public class JasmineFileImpl implements JasmineFile {
     });
   }
 
-  public void updateTreeNode() {
-    updateTreeNode(treeNode);
-  }
-
   public void updateTreeNode(final TreeNode destination) {
     ActionUtil.runReadAction(new Runnable() {
       @Override
