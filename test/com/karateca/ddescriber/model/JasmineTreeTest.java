@@ -45,13 +45,6 @@ public class JasmineTreeTest extends BaseTestCase {
     return jasmineFiles;
   }
 
-  private void expectRootNodeContainsDescribeWithName(String expectedName) {
-    TreeNode firstChild = (TreeNode) rootNode.getFirstChild();
-
-    assertEquals(1, rootNode.getChildCount());
-    assertEquals(expectedName, firstChild.getNodeValue().getTestText());
-  }
-
   public void testShouldDeclareEmptyRoot() {
     assertEquals("Root node", rootNode.getUserObject());
   }
