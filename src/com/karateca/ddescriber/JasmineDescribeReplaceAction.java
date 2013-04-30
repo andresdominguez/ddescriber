@@ -17,7 +17,6 @@ import javax.swing.event.ChangeListener;
 
 /**
  * @author Andres Dominguez.
- *         TODO: Add button to remove all dd, ii in the project
  *         TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
@@ -61,12 +60,10 @@ public class JasmineDescribeReplaceAction extends AnAction {
       case TreeViewDialog.CLEAN_CURRENT_EXIT_CODE:
         // Clean the current file.
         jasmineFile.cleanFile();
-        JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
         break;
       case TreeViewDialog.OK_EXIT_CODE:
         // Flip the selected elements.
         ActionUtil.changeSelectedLineRunningCommand(project, document, dialog.getSelectedValues());
-        JasmineDescriberNotifier.getInstance().testWasChanged(jasmineFile);
         break;
       case TreeViewDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
