@@ -12,6 +12,8 @@ import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 import com.karateca.ddescriber.model.JasmineFile;
+
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -135,6 +137,7 @@ public class TreeViewDialog extends DialogWrapper {
     return selected;
   }
 
+  @NotNull
   @Override
   protected Action[] createLeftSideActions() {
     return new Action[]{
