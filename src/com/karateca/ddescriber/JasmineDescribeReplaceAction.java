@@ -17,7 +17,7 @@ import javax.swing.event.ChangeListener;
 
 /**
  * @author Andres Dominguez.
- *         TODO: Add tests for js files with double quotes
+ * TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 
