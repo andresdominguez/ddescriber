@@ -40,4 +40,22 @@ public class HierarchyTest extends BaseTestCase {
     assertEquals(23, elements.get(0).getLineNumber());
     assertEquals(33, elements.get(1).getLineNumber());
   }
+
+  public void testShouldFindExcludedElements() {
+    // Given a jasmine file with excluded xdescribe and xit.
+    Hierarchy hierarchy = getHierarchyForTestFile("testWihManyLevels.js");
+
+    // When you get the elements.
+    List<TestFindResult> tests = hierarchy.getAllUnitTests();
+
+    // Then ensure there are excluded elements.
+    TestFindResult itElement = tests.get(11);
+    assertEquals("should be excluded 1", itElement.getTestText());
+    assertTrue(itElement.isExcluded());
+
+    TestFindResult describeElement = tests.get(12);
+    assertEquals("excluded 2", describeElement.getTestText());
+    assertTrue(describeElement.isExcluded());
+
+  }
 }

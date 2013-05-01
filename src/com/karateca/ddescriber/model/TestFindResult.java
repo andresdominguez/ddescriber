@@ -18,4 +18,6 @@ public interface TestFindResult {
   int getLineNumber();
 
   String getTestText();
+
+  boolean isExcluded();
 }

@@ -9,7 +9,7 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResultImpl implements TestFindResult {
 
-  private static final String REMOVE_START_OF_LINE = "\\s*(d?describe\\(|i?it\\()[\"\'](\\S+)";
+  private static final String REMOVE_START_OF_LINE = "\\s*([xd]?describe\\(|[xi]?it\\()[\"\'](\\S+)";
   private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
@@ -32,8 +32,7 @@ public class TestFindResultImpl implements TestFindResult {
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
     isDescribe = lineText.contains("describe(");
     markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
-    excluded = false;
-//    excluded = lineText.contains("xdescribe(") || lineText.contains("xit(");
+    excluded = lineText.contains("xdescribe(") || lineText.contains("xit(");
 
     // Leave the Test text.
     // TODO: improve this regular expression.
@@ -76,6 +75,11 @@ public class TestFindResultImpl implements TestFindResult {
   @Override
   public String getTestText() {
     return testText;
+  }
+
+  @Override
+  public boolean isExcluded() {
+    return excluded;
   }
 
   @Override
