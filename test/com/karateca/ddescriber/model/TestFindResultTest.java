@@ -21,7 +21,7 @@ public class TestFindResultTest extends BaseTestCase {
     jasmineFinder.findAll();
     List<FindResult> findResults = jasmineFinder.getFindResults();
 
-    testFindResult = new TestFindResultImpl(document, findResults.get(0));
+    testFindResult = new TestFindResult(document, findResults.get(0));
   }
 
   public void testToString() throws Exception {
