@@ -2,6 +2,7 @@ package com.karateca.ddescriber.dialog;
 
 import com.intellij.openapi.util.IconLoader;
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TestState;
 import com.karateca.ddescriber.model.TreeNode;
 
 import javax.swing.*;
@@ -20,7 +21,9 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   private static final Color RED_FG_COLOR = new Color(194, 41, 39);
   private final Color defaultNonSelColor = getBackgroundNonSelectionColor();
   private final Color defaultBgSelColor = getBackgroundSelectionColor();
-  private final Icon itIcon = IconLoader.findIcon("/icons/it-icon.png");
+  private final Icon itGreenIcon = IconLoader.findIcon("/icons/it-icon.png");
+  private final Icon itRedIcon = IconLoader.findIcon("/icons/it-red-icon.png");
+  private final Icon itGrayIcon = IconLoader.findIcon("/icons/it-gray-icon.png");
   private final Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
   private final boolean showFileName;
 
@@ -58,7 +61,21 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     }
 
     // Set the icon depending on the type.
-    setIcon(findResult.isDescribe() ? descIcon : itIcon);
+    if (findResult.isDescribe()) {
+      setIcon(descIcon);
+    } else {
+      switch (findResult.getTestState()) {
+        case Excluded:
+          setIcon(itRedIcon);
+          break;
+        case Included:
+          setIcon(itGreenIcon);
+          break;
+        case NotModified:
+          setIcon(itGrayIcon);
+          break;
+      }
+    }
 
     String name = findResult.toString();
     if (showFileName && treeNode.isTopNode()) {
