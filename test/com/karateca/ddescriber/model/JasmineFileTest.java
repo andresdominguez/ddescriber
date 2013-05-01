@@ -162,14 +162,4 @@ public class JasmineFileTest extends BaseTestCase {
     // Then ensure the dd -> d and the iit > it.
     myFixture.checkResultByFile("jasmineTestAfter.js");
   }
-
-  public void testShouldFindExcluded() {
-    // Given a jasmine file with excluded xdescribe and xit.
-    prepareScenarioWithTestFile("testWihManyLevels.js");
-    jasmineFile = new JasmineFileImpl(getProject(), virtualFile);
-    jasmineFile.buildTreeNodeSync();
-
-    TreeNode treeNode = jasmineFile.getTreeNode();
-
-  }
 }
