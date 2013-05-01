@@ -35,27 +35,6 @@ public class JasmineTree extends Tree {
     return rootNode;
   }
 
-  public void updateFiles(List<JasmineFile> files) {
-    clear();
-
-    if (showingMarkedTests) {
-      addMarkedTestsToRootNode(files);
-    } else {
-      addFiles(files);
-    }
-
-    updateTree(rootNode);
-  }
-
-  private void addMarkedTestsToRootNode(List<JasmineFile> files) {
-    for (JasmineFile jasmineFile : files) {
-      jasmineFile.buildTreeNodeSync();
-      for (TestFindResult findResult : jasmineFile.getElementsMarkedToRun()) {
-        rootNode.add(new TreeNode(findResult, jasmineFile.getVirtualFile()));
-      }
-    }
-  }
-
   /**
    * Show the tests that have been marked to run only.
    */
@@ -74,7 +53,7 @@ public class JasmineTree extends Tree {
   }
 
   private void collectSelectedNodes(TreeNode node, List<TreeNode> markedTests) {
-    if (node != rootNode && node.isTestNode() && node.getNodeValue().isMarkedForRun()) {
+    if (node != rootNode && node.isTestNode() && node.getNodeValue().getTestState() != TestState.NotModified) {
       markedTests.add(node);
     }
 
@@ -84,11 +63,6 @@ public class JasmineTree extends Tree {
         collectSelectedNodes((TreeNode) children.nextElement(), markedTests);
       }
     }
-  }
-
-  public void showAllTests(List<JasmineFile> jasmineFiles) {
-    showingMarkedTests = false;
-    updateFiles(jasmineFiles);
   }
 
   /**

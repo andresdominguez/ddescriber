@@ -13,8 +13,8 @@ public class JasmineFinderTest extends BaseTestCase {
   public void testFindAll() throws Exception {
     List<FindResult> findResults = whenYouFindTestsForJsFile("jasmineTestBefore.js");
 
-    // Then ensure there are 7 tests and suites.
-    assertEquals(7, findResults.size());
+    // Then ensure there are 9 tests and suites.
+    assertEquals(9, findResults.size());
   }
 
   public void testWithCaretAtTheTop() {

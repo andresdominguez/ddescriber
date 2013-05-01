@@ -51,11 +51,11 @@ public class HierarchyTest extends BaseTestCase {
     // Then ensure there are excluded elements.
     TestFindResult itElement = tests.get(11);
     assertEquals("should be excluded 1", itElement.getTestText());
-    assertTrue(itElement.isExcluded());
+    assertTrue(itElement.getTestState() == TestState.Excluded);
 
     TestFindResult describeElement = tests.get(12);
     assertEquals("excluded 2", describeElement.getTestText());
-    assertTrue(describeElement.isExcluded());
+    assertTrue(describeElement.getTestState() == TestState.Excluded);
 
     // And ensure it found all the tests.
     assertEquals(16, tests.size());

@@ -7,6 +7,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TestState;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -80,18 +81,22 @@ public class ActionUtil {
    * @param test     The line that has to change.
    */
   private static void changeSelectedLine(Document document, TestFindResult test) {
-    String newText;
-
-    if (test.isDescribe()) {
-      newText = test.isMarkedForRun() ? "describe(" : "ddescribe(";
-    } else {
-      newText = test.isMarkedForRun() ? "it(" : "iit(";
-    }
+    String newText = getReplaceStringValue(test);
 
     int start = test.getStartOffset();
     int end = test.getEndOffset();
 
     document.replaceString(start, end, newText);
+  }
+
+  private static String getReplaceStringValue(TestFindResult test) {
+    switch (test.getTestState()) {
+      case Excluded:
+      case Included:
+        return test.isDescribe() ? "describe(" : "it(";
+      default:
+        return test.isDescribe() ? "ddescribe(" : "iit(";
+    }
   }
 
 }

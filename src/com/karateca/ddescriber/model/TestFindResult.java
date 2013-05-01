@@ -13,12 +13,11 @@ public class TestFindResult {
   private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
-  private final boolean markedForRun;
-  private final boolean excluded;
   private final int endOffset;
   private final int startOffset;
   private final int lineNumber;
   private String testText;
+  private final TestState testState;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -31,8 +30,14 @@ public class TestFindResult {
 
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
     isDescribe = lineText.contains("describe(");
-    markedForRun = lineText.contains("ddescribe(") || lineText.contains("iit(");
-    excluded = lineText.contains("xdescribe(") || lineText.contains("xit(");
+
+    if (lineText.contains("ddescribe") || lineText.contains("iit")) {
+      testState = TestState.Included;
+    } else if (lineText.contains("xdescribe") || lineText.contains("xit")) {
+      testState = TestState.Excluded;
+    } else {
+      testState = TestState.NotModified;
+    }
 
     // Leave the Test text.
     // TODO: improve this regular expression.
@@ -48,10 +53,6 @@ public class TestFindResult {
 
   public boolean isDescribe() {
     return isDescribe;
-  }
-
-  public boolean isMarkedForRun() {
-    return markedForRun;
   }
 
   public int getEndOffset() {
@@ -70,8 +71,8 @@ public class TestFindResult {
     return testText;
   }
 
-  public boolean isExcluded() {
-    return excluded;
+  public TestState getTestState() {
+    return testState;
   }
 
   public String toString() {

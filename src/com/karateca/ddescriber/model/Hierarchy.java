@@ -63,7 +63,7 @@ class Hierarchy {
     ArrayList<TestFindResult> results = new ArrayList<TestFindResult>();
 
     for (TestFindResult element : testFindResults) {
-      if (element.isMarkedForRun()) {
+      if (element.getTestState() != TestState.NotModified) {
         results.add(element);
       }
     }

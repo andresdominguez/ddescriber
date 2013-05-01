@@ -1,8 +1,6 @@
 package com.karateca.ddescriber.model;
 
-import com.intellij.openapi.editor.Document;
 import com.intellij.psi.PsiFile;
-import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.ArrayList;
@@ -86,19 +84,6 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(0, rootNode.getChildCount());
   }
 
-  public void testShouldRefreshTree() {
-    List<JasmineFile> files = getJasmineFiles("testWihManyLevels.js", "jasmineTestBefore.js");
-
-    // Given that you are showing a file.
-    tree.addFiles(Arrays.asList(files.get(0)));
-
-    // When you update the tree.
-    tree.updateFiles(files);
-
-    // Then ensure the tree got updated.
-    assertEquals(2, rootNode.getChildCount());
-  }
-
   public void testShouldShowSelectedNodesOnly() {
     // Given that you are showing files.
     List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
@@ -110,31 +95,5 @@ public class JasmineTreeTest extends BaseTestCase {
 
     // Then ensure only the marked tests are shown.
     assertEquals(4, rootNode.getChildCount());
-  }
-
-  public void testShouldUpdateFileOnSelectedOnlyMode() {
-    // Given that you are in selected only mode.
-    tree.showSelectedNodesOnly();
-
-    // When you update files.
-    List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
-    tree.updateFiles(files);
-
-    // Then ensure only the marked test are added.
-    assertEquals(4, rootNode.getChildCount());
-  }
-
-  public void testShouldExitSelectedOnlyMode() {
-    // Given that you are showing selected only.
-    List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
-    tree.addFiles(files);
-    tree.showSelectedNodesOnly();
-    assertEquals(4, rootNode.getChildCount());
-
-    // When you exit selected only.
-    tree.showAllTests(files);
-
-    // Then ensure the tree gets populated.
-    assertEquals(2, rootNode.getChildCount());
   }
 }

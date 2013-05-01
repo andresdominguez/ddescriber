@@ -38,5 +38,14 @@ describe('top describe', function () {
         iit('inner it 3', function () {
             var a;
         });
+
+        xdescribe('the xdescribe', function () {
+
+        });
+
+
+        xit('the xit', function () {
+
+        });
     });
 });
