@@ -53,7 +53,7 @@ public class ActionUtil {
    * @param document        The document to modify.
    * @param testFindResults The lines that have to change.
    */
-  public static void changeSelectedTests(Project project, final Document document, final List<TestFindResult> testFindResults) {
+  public static void changeSelectedTests(Project project, Document document, List<TestFindResult> testFindResults) {
     changeSelectedLineRunningCommand(project, document, testFindResults, false);
   }
 
@@ -64,7 +64,7 @@ public class ActionUtil {
    * @param document        The document to modify.
    * @param testFindResults The lines that have to change.
    */
-  public static void excludeTests(Project project, final Document document, final List<TestFindResult> testFindResults) {
+  public static void excludeTests(Project project, Document document, List<TestFindResult> testFindResults) {
     changeSelectedLineRunningCommand(project, document, testFindResults, true);
   }
 
