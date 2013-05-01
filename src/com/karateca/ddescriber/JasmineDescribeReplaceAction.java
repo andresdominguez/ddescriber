@@ -62,7 +62,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
         break;
       case TreeViewDialog.OK_EXIT_CODE:
         // Flip the selected elements.
-        ActionUtil.changeSelectedLineRunningCommand(project, document, dialog.getSelectedValues());
+        ActionUtil.changeSelectedTests(project, document, dialog.getSelectedValues());
         break;
       case TreeViewDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());

@@ -161,6 +161,6 @@ public class JasmineFile {
    */
   public void cleanFile() {
     Document document = ActionUtil.getDocument(getVirtualFile());
-    ActionUtil.changeSelectedLineRunningCommand(project, document, hierarchy.getMarkedElements());
+    ActionUtil.changeSelectedTests(project, document, hierarchy.getMarkedElements());
   }
 }
