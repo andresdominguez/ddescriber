@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class JasmineFinder {
 
-  private static final String FIND_REGEXP = "iit\\(|ddescribe\\(|it\\(|describe\\(";
+  private static final String FIND_REGEXP = "[ix]?it\\(|[dx]?describe\\(";
   private final Project project;
   private final Document document;
   public List<FindResult> findResults;
