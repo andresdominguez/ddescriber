@@ -30,8 +30,9 @@ import java.util.List;
 public class TreeViewDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
+  public static final int EXCLUDE_EXIT_CODE = 104;
 
-  private static final int VISIBLE_ROW_COUNT = 13;
+  private static final int VISIBLE_ROW_COUNT = 17;
   private final int caretOffset;
   private Tree tree;
   private TestFindResult selectedTest;
@@ -142,6 +143,16 @@ public class TreeViewDialog extends DialogWrapper {
   protected Action[] createLeftSideActions() {
     return new Action[]{
         new DialogWrapperExitAction("Clean file", CLEAN_CURRENT_EXIT_CODE)
+    };
+  }
+
+  @NotNull
+  @Override
+  protected Action[] createActions() {
+    return new Action[]{
+        new DialogWrapperExitAction("Exclude", EXCLUDE_EXIT_CODE),
+        getCancelAction(),
+        getOKAction()
     };
   }
 

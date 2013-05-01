@@ -67,6 +67,9 @@ public class JasmineDescribeReplaceAction extends AnAction {
       case TreeViewDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
         break;
+      case TreeViewDialog.EXCLUDE_EXIT_CODE:
+        ActionUtil.excludeTests(project, document, dialog.getSelectedValues());
+        break;
     }
   }
 

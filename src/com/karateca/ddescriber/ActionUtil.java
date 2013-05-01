@@ -54,6 +54,30 @@ public class ActionUtil {
    * @param testFindResults The lines that have to change.
    */
   public static void changeSelectedLineRunningCommand(Project project, final Document document, final List<TestFindResult> testFindResults) {
+    changeSelectedLineRunningCommand(project, document, testFindResults, false);
+  }
+
+  /**
+   * Exclude the selected tests by adding an x.
+   *
+   * @param project         The current project.
+   * @param document        The document to modify.
+   * @param testFindResults The lines that have to change.
+   */
+  public static void excludeTests(Project project, final Document document, final List<TestFindResult> testFindResults) {
+    changeSelectedLineRunningCommand(project, document, testFindResults, true);
+  }
+
+  /**
+   * Change the contents of the selected line. Wrap the call into command and
+   * write actions to support undo.
+   *
+   * @param project         The current project.
+   * @param document        The document to modify.
+   * @param testFindResults The lines that have to change.
+   * @param exclude         True if you want to exclude the tests.
+   */
+  private static void changeSelectedLineRunningCommand(Project project, final Document document, final List<TestFindResult> testFindResults, final boolean exclude) {
     // Replace the elements from the bottom up.
     Collections.sort(testFindResults, new Comparator<TestFindResult>() {
       @Override
@@ -66,7 +90,7 @@ public class ActionUtil {
       @Override
       public void run() {
         for (TestFindResult testFindResult : testFindResults) {
-          changeSelectedLine(document, testFindResult);
+          changeSelectedLine(document, testFindResult, exclude);
         }
       }
     });
@@ -78,9 +102,10 @@ public class ActionUtil {
    *
    * @param document The document you want to change.
    * @param test     The line that has to change.
+   * @param exclude  True if you want to exclude the test.
    */
-  private static void changeSelectedLine(Document document, TestFindResult test) {
-    String newText = getReplaceStringValue(test);
+  private static void changeSelectedLine(Document document, TestFindResult test, boolean exclude) {
+    String newText = getReplaceStringValue(test, exclude);
 
     int start = test.getStartOffset();
     int end = test.getEndOffset();
@@ -88,7 +113,11 @@ public class ActionUtil {
     document.replaceString(start, end, newText);
   }
 
-  private static String getReplaceStringValue(TestFindResult test) {
+  private static String getReplaceStringValue(TestFindResult test, boolean exclude) {
+    if (exclude) {
+      return test.isDescribe() ? "xdescribe(" : "xit(";
+    }
+
     switch (test.getTestState()) {
       case Excluded:
       case Included:
@@ -97,5 +126,4 @@ public class ActionUtil {
         return test.isDescribe() ? "ddescribe(" : "iit(";
     }
   }
-
 }
