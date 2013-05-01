@@ -7,7 +7,6 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.TestFindResult;
-import com.karateca.ddescriber.model.TestState;
 
 import java.util.Collections;
 import java.util.Comparator;

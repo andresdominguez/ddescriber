@@ -9,7 +9,6 @@ import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
 import com.karateca.ddescriber.dialog.TreeViewDialog;
 import com.karateca.ddescriber.model.JasmineFile;
-import com.karateca.ddescriber.model.JasmineFileImpl;
 import com.karateca.ddescriber.model.TestFindResult;
 
 import javax.swing.event.ChangeEvent;
@@ -39,7 +38,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
     }
     document = (DocumentImpl) editor.getDocument();
 
-    jasmineFile = new JasmineFileImpl(project, editor.getVirtualFile());
+    jasmineFile = new JasmineFile(project, editor.getVirtualFile());
 
     // Async callback to get the search results for it( and describe(
     jasmineFile.addResultsReadyListener(new ChangeListener() {

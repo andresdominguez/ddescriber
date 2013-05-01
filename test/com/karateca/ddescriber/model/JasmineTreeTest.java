@@ -34,7 +34,7 @@ public class JasmineTreeTest extends BaseTestCase {
     List<JasmineFile> jasmineFiles = new ArrayList<JasmineFile>();
 
     for (PsiFile file : myFixture.configureByFiles(fileNames)) {
-      JasmineFileImpl jasmineFile = new JasmineFileImpl(getProject(), file.getVirtualFile());
+      JasmineFile jasmineFile = new JasmineFile(getProject(), file.getVirtualFile());
       jasmineFile.buildTreeNodeSync();
 
       jasmineFiles.add(jasmineFile);

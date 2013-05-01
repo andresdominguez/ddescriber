@@ -1,13 +1,11 @@
 package com.karateca.ddescriber.model;
 
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.treeStructure.Tree;
 
+import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
-import javax.swing.tree.DefaultTreeModel;
 
 /**
  * @author andresdom@google.com (Andres Dominguez)
@@ -15,7 +13,6 @@ import javax.swing.tree.DefaultTreeModel;
 public class JasmineTree extends Tree {
 
   private final TreeNode rootNode;
-  private boolean showingMarkedTests;
 
   public JasmineTree() {
     super(new TreeNode("Root node"));
@@ -39,8 +36,6 @@ public class JasmineTree extends Tree {
    * Show the tests that have been marked to run only.
    */
   public void showSelectedNodesOnly() {
-    showingMarkedTests = true;
-
     List<TreeNode> markedTests = new ArrayList<TreeNode>();
     collectSelectedNodes(rootNode, markedTests);
 

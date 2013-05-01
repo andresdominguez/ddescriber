@@ -7,19 +7,19 @@ import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.tree.TreeUtil;
-import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.JasmineTreeUtil;
+import com.karateca.ddescriber.VoidFunction;
+import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
-import com.karateca.ddescriber.model.JasmineFile;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
