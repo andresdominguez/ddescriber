@@ -57,5 +57,7 @@ public class HierarchyTest extends BaseTestCase {
     assertEquals("excluded 2", describeElement.getTestText());
     assertTrue(describeElement.isExcluded());
 
+    // And ensure it found all the tests.
+    assertEquals(16, tests.size());
   }
 }
