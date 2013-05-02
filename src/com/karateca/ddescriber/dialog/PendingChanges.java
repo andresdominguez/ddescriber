@@ -1,7 +1,6 @@
 package com.karateca.ddescriber.dialog;
 
 import com.karateca.ddescriber.model.TestFindResult;
-import com.karateca.ddescriber.model.TestState;
 
 import java.util.ArrayList;
 import java.util.Collections;
