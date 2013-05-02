@@ -10,6 +10,7 @@ import com.intellij.util.ui.tree.TreeUtil;
 import com.karateca.ddescriber.JasmineTreeUtil;
 import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.model.JasmineFile;
+import com.karateca.ddescriber.model.TestCounts;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TreeNode;
 import org.jetbrains.annotations.NotNull;
@@ -89,11 +90,10 @@ public class TreeViewDialog extends DialogWrapper {
   private JPanel createPanelWithLabels() {
     JPanel panel = new JPanel(new BorderLayout());
 
-    int testCount = jasmineFile.getTestCount();
-    int includedCount = jasmineFile.getIncludedCount();
-    int excludedCount = jasmineFile.getExcludedCount();
+    TestCounts testCounts = jasmineFile.getTestCounts();
 
-    String values = String.format("Tests: %s, Excluded: %s, Included: %s", testCount, excludedCount, includedCount);
+    String values = String.format("Tests: %s, Excluded: %s, Included: %s", testCounts.getTestCount(),
+        testCounts.getExcludedCount(), testCounts.getIncludedCount());
     panel.add(BorderLayout.CENTER, new JLabel(values));
     return panel;
   }

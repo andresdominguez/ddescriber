@@ -4,22 +4,22 @@ package com.karateca.ddescriber.model;
  * @author Andres Dominguez.
  */
 public class TestCounts {
-  private final int totalCount;
-  private final int runCount;
+  private final int testCount;
+  private final int includedCount;
   private final int excludedCount;
 
-  public TestCounts(int totalCount, int runCount, int excludedCount) {
-    this.totalCount = totalCount;
-    this.runCount = runCount;
+  public TestCounts(int testCount, int includedCount, int excludedCount) {
+    this.testCount = testCount;
+    this.includedCount = includedCount;
     this.excludedCount = excludedCount;
   }
 
-  public int getTotalCount() {
-    return totalCount;
+  public int getTestCount() {
+    return testCount;
   }
 
-  public int getRunCount() {
-    return runCount;
+  public int getIncludedCount() {
+    return includedCount;
   }
 
   public int getExcludedCount() {

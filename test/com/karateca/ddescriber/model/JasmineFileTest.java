@@ -169,13 +169,11 @@ public class JasmineFileTest extends BaseTestCase {
     jasmineFile.buildTreeNodeSync();
 
     // When you count the tests.
-    int includedCount = jasmineFile.getIncludedCount();
-    int excludedCount = jasmineFile.getExcludedCount();
-    int testCount = jasmineFile.getTestCount();
+    TestCounts testCounts = jasmineFile.getTestCounts();
 
     // Then ensure there are counts for all the items.
-    assertEquals(2, includedCount);
-    assertEquals(2, excludedCount);
-    assertEquals(6, testCount);
+    assertEquals(2, testCounts.getIncludedCount());
+    assertEquals(2, testCounts.getExcludedCount());
+    assertEquals(6, testCounts.getTestCount());
   }
 }

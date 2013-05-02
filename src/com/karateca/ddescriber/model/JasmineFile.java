@@ -164,33 +164,22 @@ public class JasmineFile {
     ActionUtil.changeSelectedTests(project, document, hierarchy.getMarkedElements());
   }
 
-  public int getExcludedCount() {
-    int count = 0;
+  public TestCounts getTestCounts() {
+    int excluded = 0;
+    int included = 0;
+    int testCount = 0;
+
     for (TestFindResult findResult : hierarchy.getAllUnitTests()) {
       if (findResult.getTestState() == TestState.Excluded) {
-        count += 1;
+        excluded++;
+      } else if (findResult.getTestState() == TestState.Included) {
+        included++;
       }
-    }
-    return count;
-  }
-
-  public int getIncludedCount() {
-    int count = 0;
-    for (TestFindResult findResult : hierarchy.getAllUnitTests()) {
-      if (findResult.getTestState() == TestState.Included) {
-        count += 1;
-      }
-    }
-    return count;
-  }
-
-  public int getTestCount() {
-    int count = 0;
-    for (TestFindResult findResult : hierarchy.getAllUnitTests()) {
       if (!findResult.isDescribe()) {
-        count += 1;
+        testCount++;
       }
     }
-    return count;
+
+    return new TestCounts(testCount, included, excluded);
   }
 }
