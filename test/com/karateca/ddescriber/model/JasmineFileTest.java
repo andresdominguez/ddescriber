@@ -160,7 +160,22 @@ public class JasmineFileTest extends BaseTestCase {
 
     // Then ensure the dd -> d and the iit > it.
     myFixture.checkResultByFile("jasmineTestAfter.js");
+  }
 
-    // TODO: upgrade the remove
+  public void testShouldCountTests() {
+    // Given a jasmine file with included and excluded tests.
+    prepareScenarioWithTestFile("jasmineTestBefore.js");
+    jasmineFile = new JasmineFile(getProject(), virtualFile);
+    jasmineFile.buildTreeNodeSync();
+
+    // When you count the tests.
+    int includedCount = jasmineFile.getIncludedCount();
+    int excludedCount = jasmineFile.getExcludedCount();
+    int testCount = jasmineFile.getTestCount();
+
+    // Then ensure there are counts for all the items.
+    assertEquals(2, includedCount);
+    assertEquals(2, excludedCount);
+    assertEquals(6, testCount);
   }
 }

@@ -84,16 +84,16 @@ public class JasmineTreeTest extends BaseTestCase {
     assertEquals(0, rootNode.getChildCount());
   }
 
-  public void testShouldShowSelectedNodesOnly() {
-    // Given that you are showing files.
-    List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
-    tree.addFiles(files);
-    assertEquals(2, rootNode.getChildCount());
-
-    // When you show the marked only.
-    tree.showSelectedNodesOnly();
-
-    // Then ensure only the marked tests are shown.
-    assertEquals(4, rootNode.getChildCount());
-  }
+//  public void testShouldShowSelectedNodesOnly() {
+//    // Given that you are showing files.
+//    List<JasmineFile> files = getJasmineFiles("jasmineTestCaretTop.js", "jasmineTestBefore.js");
+//    tree.addFiles(files);
+//    assertEquals(2, rootNode.getChildCount());
+//
+//    // When you show the marked only.
+//    tree.showSelectedNodesOnly();
+//
+//    // Then ensure only the marked tests are shown.
+//    assertEquals(4, rootNode.getChildCount());
+//  }
 }

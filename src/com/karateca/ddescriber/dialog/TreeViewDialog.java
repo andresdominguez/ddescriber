@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -77,7 +78,24 @@ public class TreeViewDialog extends DialogWrapper {
     JBScrollPane scrollPane = new JBScrollPane(tree);
     selectClosestTest(root, closest);
 
-    return scrollPane;
+    JPanel panel = new JPanel(new BorderLayout());
+
+    panel.add(BorderLayout.CENTER, scrollPane);
+    panel.add(BorderLayout.SOUTH, createPanelWithLabels());
+
+    return panel;
+  }
+
+  private JPanel createPanelWithLabels() {
+    JPanel panel = new JPanel(new BorderLayout());
+
+    int testCount = jasmineFile.getTestCount();
+    int includedCount = jasmineFile.getIncludedCount();
+    int excludedCount = jasmineFile.getExcludedCount();
+
+    String values = String.format("Tests: %s, Excluded: %s, Included: %s", testCount, excludedCount, includedCount);
+    panel.add(BorderLayout.CENTER, new JLabel(values));
+    return panel;
   }
 
   private void addKeyAndMouseEvents() {
