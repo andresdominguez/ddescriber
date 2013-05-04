@@ -6,5 +6,6 @@ package com.karateca.ddescriber.model;
 public enum TestState {
   Excluded,
   Included,
-  NotModified
+  NotModified,
+  RolledBack
 }
