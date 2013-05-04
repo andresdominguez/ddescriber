@@ -36,11 +36,6 @@ public class PendingChanges {
 
     if (pendingState == null) {
       add(testFindResult, newState);
-      if (originalState == newState) {
-        testFindResult.setPendingChangeState(TestState.RolledBack);
-      } else {
-        testFindResult.setPendingChangeState(newState);
-      }
       return;
     }
 
@@ -48,11 +43,6 @@ public class PendingChanges {
 
     if (!alreadyInSet) {
       add(testFindResult, newState);
-      if (originalState == newState) {
-        testFindResult.setPendingChangeState(TestState.RolledBack);
-      } else {
-        testFindResult.setPendingChangeState(newState);
-      }
       return;
     }
 
@@ -86,5 +76,10 @@ public class PendingChanges {
 
   private void add(TestFindResult testFindResult, TestState newState) {
     pendingChanges.add(testFindResult);
+    if (testFindResult.getTestState() == newState) {
+      testFindResult.setPendingChangeState(TestState.RolledBack);
+    } else {
+      testFindResult.setPendingChangeState(newState);
+    }
   }
 }
