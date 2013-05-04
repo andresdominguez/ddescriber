@@ -1,6 +1,7 @@
 package com.karateca.ddescriber.dialog;
 
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TestState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class PendingChanges {
     pendingChanges.add(testFindResult);
     if (testFindResult.getPendingChangeState() == testFindResult.getTestState()) {
       pendingChanges.remove(testFindResult);
+      testFindResult.setPendingChangeState(TestState.RolledBack);
     }
   }
 }
