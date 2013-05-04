@@ -17,7 +17,8 @@ public class TestFindResult {
   private final int startOffset;
   private final int lineNumber;
   private String testText;
-  private final TestState testState;
+  private TestState testState;
+  private TestState pendingChangeState;
 
   public TestFindResult(Document document, FindResult findResult) {
     startOffset = findResult.getStartOffset();
@@ -75,8 +76,19 @@ public class TestFindResult {
     return testState;
   }
 
+  public void setTestState(TestState testState) {
+    this.testState = testState;
+  }
+
   public String toString() {
-//    return String.format("%s (line: %d)", testText.trim(), lineNumber);
     return testText.trim();
+  }
+
+  public TestState getPendingChangeState() {
+    return pendingChangeState;
+  }
+
+  public void setPendingChangeState(TestState pendingChangeState) {
+    this.pendingChangeState = pendingChangeState;
   }
 }
