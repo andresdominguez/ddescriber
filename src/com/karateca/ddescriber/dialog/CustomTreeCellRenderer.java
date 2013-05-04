@@ -45,35 +45,29 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     TreeNode treeNode = (TreeNode) node;
     TestFindResult findResult = treeNode.getNodeValue();
 
-    switch (findResult.getTestState()) {
-      case Excluded:
-        setBackgroundNonSelectionColor(RED_BG_COLOR);
-        setBackgroundSelectionColor(RED_FG_COLOR);
-        break;
-      case Included:
-        setBackgroundNonSelectionColor(GREEN_BG_COLOR);
-        setBackgroundSelectionColor(GREEN_FG_COLOR);
-        break;
-      case NotModified:
-        setBackgroundNonSelectionColor(defaultNonSelColor);
-        setBackgroundSelectionColor(defaultBgSelColor);
-        break;
+    if (findResult.isExcluded()) {
+      setBackgroundNonSelectionColor(RED_BG_COLOR);
+      setBackgroundSelectionColor(RED_FG_COLOR);
+
+    } else if (findResult.isIncluded()) {
+      setBackgroundNonSelectionColor(GREEN_BG_COLOR);
+      setBackgroundSelectionColor(GREEN_FG_COLOR);
+
+    } else {
+      setBackgroundNonSelectionColor(defaultNonSelColor);
+      setBackgroundSelectionColor(defaultBgSelColor);
     }
 
     // Set the icon depending on the type.
     if (findResult.isDescribe()) {
       setIcon(descIcon);
     } else {
-      switch (findResult.getTestState()) {
-        case Excluded:
-          setIcon(itRedIcon);
-          break;
-        case Included:
-          setIcon(itGreenIcon);
-          break;
-        case NotModified:
-          setIcon(itGrayIcon);
-          break;
+      if (findResult.isExcluded()) {
+        setIcon(itRedIcon);
+      } else if (findResult.isIncluded()) {
+        setIcon(itGreenIcon);
+      } else {
+        setIcon(itGrayIcon);
       }
     }
 
