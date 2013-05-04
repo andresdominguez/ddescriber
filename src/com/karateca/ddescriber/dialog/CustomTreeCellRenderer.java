@@ -45,30 +45,26 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     TreeNode treeNode = (TreeNode) node;
     TestFindResult findResult = treeNode.getNodeValue();
 
-    if (findResult.isExcluded()) {
-      setBackgroundNonSelectionColor(RED_BG_COLOR);
-      setBackgroundSelectionColor(RED_FG_COLOR);
-
-    } else if (findResult.isIncluded()) {
-      setBackgroundNonSelectionColor(GREEN_BG_COLOR);
-      setBackgroundSelectionColor(GREEN_FG_COLOR);
-
-    } else {
-      setBackgroundNonSelectionColor(defaultNonSelColor);
-      setBackgroundSelectionColor(defaultBgSelColor);
+    switch (getTestState(findResult)) {
+      case Excluded:
+        setBackgroundNonSelectionColor(RED_BG_COLOR);
+        setBackgroundSelectionColor(RED_FG_COLOR);
+        setIcon(itRedIcon);
+        break;
+      case Included:
+        setBackgroundNonSelectionColor(GREEN_BG_COLOR);
+        setBackgroundSelectionColor(GREEN_FG_COLOR);
+        setIcon(itGreenIcon);
+        break;
+      default:
+        setBackgroundNonSelectionColor(defaultNonSelColor);
+        setBackgroundSelectionColor(defaultBgSelColor);
+        setIcon(itGrayIcon);
+        break;
     }
 
-    // Set the icon depending on the type.
     if (findResult.isDescribe()) {
       setIcon(descIcon);
-    } else {
-      if (findResult.isExcluded()) {
-        setIcon(itRedIcon);
-      } else if (findResult.isIncluded()) {
-        setIcon(itGreenIcon);
-      } else {
-        setIcon(itGrayIcon);
-      }
     }
 
     String name = findResult.toString();
@@ -78,5 +74,16 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     setText(name);
 
     return component;
+  }
+
+  private TestState getTestState(TestFindResult testFindResult) {
+    TestState pendingState = testFindResult.getPendingChangeState();
+    TestState testState = testFindResult.getTestState();
+
+    if (pendingState == TestState.Included || pendingState == TestState.Excluded) {
+      return pendingState;
+    }
+
+    return testState;
   }
 }
