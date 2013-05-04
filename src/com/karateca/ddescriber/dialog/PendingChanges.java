@@ -39,26 +39,23 @@ public class PendingChanges {
       return;
     }
 
-    boolean alreadyInSet = pendingChanges.contains(testFindResult);
-
-    if (!alreadyInSet) {
+    // Not in pending changes.
+    if (!pendingChanges.contains(testFindResult)) {
       add(testFindResult, newState);
       return;
     }
 
-    // Already in set.
+    // Reverting to original not modified state.
     if (originalState == TestState.NotModified && pendingState == newState) {
       remove(testFindResult);
       return;
     }
 
-    if (originalState == newState && pendingState == TestState.RolledBack) {
-      remove(testFindResult);
-      return;
-    }
-
-    if (originalState == newState && originalState != pendingState) {
-      remove(testFindResult);
+    // Included or excluded twice.
+    if (originalState == newState) {
+      if (pendingState == TestState.RolledBack || originalState != pendingState) {
+        remove(testFindResult);
+      }
       return;
     }
 
