@@ -30,11 +30,61 @@ public class PendingChanges {
     return changeList;
   }
 
-  public void itemChanged(TestFindResult testFindResult) {
-    pendingChanges.add(testFindResult);
-    if (testFindResult.getPendingChangeState() == testFindResult.getTestState()) {
-      pendingChanges.remove(testFindResult);
-      testFindResult.setPendingChangeState(TestState.RolledBack);
+  public void itemChanged(TestFindResult testFindResult, TestState newState) {
+    TestState originalState = testFindResult.getTestState();
+    TestState pendingState = testFindResult.getPendingChangeState();
+
+    if (pendingState == null) {
+      add(testFindResult, newState);
+      if (originalState == newState) {
+        testFindResult.setPendingChangeState(TestState.RolledBack);
+      } else {
+        testFindResult.setPendingChangeState(newState);
+      }
+      return;
     }
+
+    boolean alreadyInSet = pendingChanges.contains(testFindResult);
+
+    if (!alreadyInSet) {
+      add(testFindResult, newState);
+      if (originalState == newState) {
+        testFindResult.setPendingChangeState(TestState.RolledBack);
+      } else {
+        testFindResult.setPendingChangeState(newState);
+      }
+      return;
+    }
+
+    // Already in set.
+    if (originalState == TestState.NotModified && pendingState == newState) {
+      remove(testFindResult);
+      return;
+    }
+
+    if (originalState == newState && pendingState == TestState.RolledBack) {
+      remove(testFindResult);
+      return;
+    }
+
+    if (originalState == newState && originalState != pendingState) {
+      remove(testFindResult);
+      return;
+    }
+
+    if (originalState != pendingState && pendingState == newState) {
+      testFindResult.setPendingChangeState(TestState.RolledBack);
+    } else {
+      testFindResult.setPendingChangeState(newState);
+    }
+  }
+
+  private void remove(TestFindResult testFindResult) {
+    testFindResult.setPendingChangeState(null);
+    pendingChanges.remove(testFindResult);
+  }
+
+  private void add(TestFindResult testFindResult, TestState newState) {
+    pendingChanges.add(testFindResult);
   }
 }
