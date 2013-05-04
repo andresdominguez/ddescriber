@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Andres Dominguez.
@@ -26,8 +28,36 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   private final Icon itGrayIcon = IconLoader.findIcon("/icons/it-gray-icon.png");
   private final Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
   private final boolean showFileName;
+  private final Map<TestState, NodeSettings> colorMap = new HashMap<TestState, NodeSettings>();
+
+  private final NodeSettings includeColor = new NodeSettings(GREEN_BG_COLOR, GREEN_FG_COLOR, itGreenIcon);
+  private final NodeSettings excludeColor = new NodeSettings(RED_BG_COLOR, RED_FG_COLOR, itRedIcon);
+  private final NodeSettings defaultColor = new NodeSettings(defaultNonSelColor, defaultBgSelColor, itGrayIcon);
+
+  private class NodeSettings {
+    final Color bgColor;
+    final Color fgColor;
+    final Icon icon;
+
+    private NodeSettings(Color bgColor, Color fgColor, Icon icon) {
+      this.bgColor = bgColor;
+      this.fgColor = fgColor;
+      this.icon = icon;
+    }
+
+    public void paintNode() {
+      setBackgroundNonSelectionColor(bgColor);
+      setBackgroundSelectionColor(fgColor);
+      setIcon(icon);
+    }
+  }
 
   public CustomTreeCellRenderer(boolean showFileName) {
+    colorMap.put(TestState.Excluded, excludeColor);
+    colorMap.put(TestState.Included, includeColor);
+    colorMap.put(TestState.NotModified, defaultColor);
+    colorMap.put(TestState.RolledBack, defaultColor);
+
     this.showFileName = showFileName;
   }
 
@@ -45,23 +75,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     TreeNode treeNode = (TreeNode) node;
     TestFindResult findResult = treeNode.getNodeValue();
 
-    switch (getTestState(findResult)) {
-      case Excluded:
-        setBackgroundNonSelectionColor(RED_BG_COLOR);
-        setBackgroundSelectionColor(RED_FG_COLOR);
-        setIcon(itRedIcon);
-        break;
-      case Included:
-        setBackgroundNonSelectionColor(GREEN_BG_COLOR);
-        setBackgroundSelectionColor(GREEN_FG_COLOR);
-        setIcon(itGreenIcon);
-        break;
-      default:
-        setBackgroundNonSelectionColor(defaultNonSelColor);
-        setBackgroundSelectionColor(defaultBgSelColor);
-        setIcon(itGrayIcon);
-        break;
-    }
+    getNodeSettings(findResult).paintNode();
 
     if (findResult.isDescribe()) {
       setIcon(descIcon);
@@ -76,14 +90,19 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     return component;
   }
 
-  private TestState getTestState(TestFindResult testFindResult) {
+  private NodeSettings getNodeSettings(TestFindResult testFindResult) {
     TestState pendingState = testFindResult.getPendingChangeState();
-    TestState testState = testFindResult.getTestState();
+    TestState originalState = testFindResult.getTestState();
 
-    if (pendingState == TestState.Included || pendingState == TestState.Excluded) {
-      return pendingState;
+    if (pendingState == TestState.RolledBack &&
+        (originalState == TestState.Included || originalState == TestState.Excluded)) {
+      return colorMap.get(TestState.NotModified);
     }
 
-    return testState;
+    if (pendingState == TestState.Included || pendingState == TestState.Excluded) {
+      return colorMap.get(pendingState);
+    }
+
+    return colorMap.get(originalState);
   }
 }
