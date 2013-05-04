@@ -37,8 +37,8 @@ public class PendingChangesTest extends TestCase {
 
   public void testShouldAddItems() {
     // When you add two items.
-    pendingChanges.itemChanged(createIncluded(), TestState.Excluded);
-    pendingChanges.itemChanged(createExcluded(), TestState.Included);
+    pendingChanges.itemChanged(getTestFindResult(TestState.Included), TestState.Excluded);
+    pendingChanges.itemChanged(getTestFindResult(TestState.Excluded), TestState.Included);
 
     // Then ensure there are two items.
     assertEquals(2, pendingChanges.getTestsToChange().size());
@@ -46,10 +46,9 @@ public class PendingChangesTest extends TestCase {
 
   public void testShouldRemoveTestResultThatDidNotChangeStatus() {
     // Given that you add two items.
-    TestFindResult included = createIncluded();
-    TestFindResult excluded = createExcluded();
-    TestFindResult notModified = createExcluded();
-    notModified.setTestState(TestState.NotModified);
+    TestFindResult included = getTestFindResult(TestState.Included);
+    TestFindResult excluded = getTestFindResult(TestState.Excluded);
+    TestFindResult notModified = getTestFindResult(TestState.NotModified);
 
     pendingChanges.itemChanged(included, TestState.Excluded);
     pendingChanges.itemChanged(excluded, TestState.Included);
@@ -66,8 +65,8 @@ public class PendingChangesTest extends TestCase {
 
   public void testShouldSetRollbackStateWhenRemovingFromPendingChanges() {
     // Given that you have an included and an excluded tests.
-    TestFindResult included = createIncluded();
-    TestFindResult excluded = createExcluded();
+    TestFindResult included = getTestFindResult(TestState.Included);
+    TestFindResult excluded = getTestFindResult(TestState.Excluded);
 
     // When you remove the changed state.
     included.setPendingChangeState(TestState.Included);
@@ -81,15 +80,9 @@ public class PendingChangesTest extends TestCase {
     assertEquals(TestState.RolledBack, excluded.getPendingChangeState());
   }
 
-  private TestFindResult createIncluded() {
+  private TestFindResult getTestFindResult(TestState testState) {
     TestFindResult pendingChange = createPendingChange(1);
-    pendingChange.setTestState(TestState.Included);
-    return pendingChange;
-  }
-
-  private TestFindResult createExcluded() {
-    TestFindResult pendingChange = createPendingChange(1);
-    pendingChange.setTestState(TestState.Excluded);
+    pendingChange.setTestState(testState);
     return pendingChange;
   }
 
