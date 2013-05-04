@@ -60,8 +60,10 @@ public class PendingChanges {
     }
 
     if (originalState != pendingState && pendingState == newState) {
+      // Included or excluded twice. The first state flip went from included to excluded or vice versa.
       testFindResult.setPendingChangeState(TestState.RolledBack);
     } else {
+      // Just flipping state.
       testFindResult.setPendingChangeState(newState);
     }
   }
