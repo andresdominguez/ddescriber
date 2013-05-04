@@ -44,8 +44,8 @@ public class PendingChangesTest extends TestCase {
     assertEquals(2, pendingChanges.getTestsToChange().size());
   }
 
-  public void testShouldRemoveTestResultThatDidNotChangeStatus() {
-    // Given that you add two items.
+  public void testShouldRemoveTestThatDidNotChangeStatus() {
+    // Given that you add three items.
     TestFindResult included = getTestFindResult(TestState.Included);
     TestFindResult excluded = getTestFindResult(TestState.Excluded);
     TestFindResult notModified = getTestFindResult(TestState.NotModified);
@@ -54,7 +54,7 @@ public class PendingChangesTest extends TestCase {
     pendingChanges.itemChanged(excluded, TestState.Included);
     pendingChanges.itemChanged(notModified, TestState.Included);
 
-    // When you remove the change of the included.
+    // When you include the included and the not modified.
     pendingChanges.itemChanged(included, TestState.Included);
     pendingChanges.itemChanged(notModified, TestState.Included);
 
@@ -63,21 +63,33 @@ public class PendingChangesTest extends TestCase {
     assertEquals(excluded, pendingChanges.getTestsToChange().get(0));
   }
 
-  public void testShouldSetRollbackStateWhenRemovingFromPendingChanges() {
-    // Given that you have an included and an excluded tests.
-    TestFindResult included = getTestFindResult(TestState.Included);
+  public void testShouldRollbackOriginalState() {
+    // Given an excluded test.
     TestFindResult excluded = getTestFindResult(TestState.Excluded);
 
-    // When you remove the changed state.
-    included.setPendingChangeState(TestState.Included);
-    excluded.setPendingChangeState(TestState.Excluded);
-
-    pendingChanges.itemChanged(included, TestState.Included);
+    // When you exclude it.
     pendingChanges.itemChanged(excluded, TestState.Excluded);
 
-    // Then ensure the new state is rolled back.
-    assertEquals(TestState.RolledBack, included.getPendingChangeState());
+    // Then ensure the pending state is rollback and there is one pending change.
     assertEquals(TestState.RolledBack, excluded.getPendingChangeState());
+    assertEquals(1, pendingChanges.getTestsToChange().size());
+
+    // When you exclude the test again.
+    pendingChanges.itemChanged(excluded, TestState.Excluded);
+
+    // Then ensure the pending state is null and there are no pending changes.
+    assertEquals(null, excluded.getPendingChangeState());
+    assertEquals(0, pendingChanges.getTestsToChange().size());
+  }
+
+  public void testChangingNotModifiedTestShouldRevertToOriginal() {
+    TestFindResult notModified = getTestFindResult(TestState.NotModified);
+
+    pendingChanges.itemChanged(notModified, TestState.Included);
+    pendingChanges.itemChanged(notModified, TestState.Included);
+
+    assertEquals(null, notModified.getPendingChangeState());
+    assertEquals(0, pendingChanges.getTestsToChange().size());
   }
 
   private TestFindResult getTestFindResult(TestState testState) {
