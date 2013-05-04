@@ -20,11 +20,11 @@ public class PendingChangesTest extends TestCase {
   }
 
   public void testGetTestsToChange() throws Exception {
-    pendingChanges.itemChanged(createPendingChange(10));
-    pendingChanges.itemChanged(createPendingChange(30));
+    pendingChanges.itemChanged(createPendingChange(10), TestState.Excluded);
+    pendingChanges.itemChanged(createPendingChange(30), TestState.Excluded);
 
-    pendingChanges.itemChanged(createPendingChange(20));
-    pendingChanges.itemChanged(createPendingChange(40));
+    pendingChanges.itemChanged(createPendingChange(20), TestState.Excluded);
+    pendingChanges.itemChanged(createPendingChange(40), TestState.Excluded);
 
     List<TestFindResult> testsToChange = pendingChanges.getTestsToChange();
 
@@ -37,8 +37,8 @@ public class PendingChangesTest extends TestCase {
 
   public void testShouldAddItems() {
     // When you add two items.
-    pendingChanges.itemChanged(createIncluded());
-    pendingChanges.itemChanged(createExcluded());
+    pendingChanges.itemChanged(createIncluded(), TestState.Excluded);
+    pendingChanges.itemChanged(createExcluded(), TestState.Included);
 
     // Then ensure there are two items.
     assertEquals(2, pendingChanges.getTestsToChange().size());
@@ -48,20 +48,23 @@ public class PendingChangesTest extends TestCase {
     // Given that you add two items.
     TestFindResult included = createIncluded();
     TestFindResult excluded = createExcluded();
+    TestFindResult notModified = createExcluded();
+    notModified.setTestState(TestState.NotModified);
 
-    pendingChanges.itemChanged(included);
-    pendingChanges.itemChanged(excluded);
+    pendingChanges.itemChanged(included, TestState.Excluded);
+    pendingChanges.itemChanged(excluded, TestState.Included);
+    pendingChanges.itemChanged(notModified, TestState.Included);
 
     // When you remove the change of the included.
-    included.setPendingChangeState(TestState.Included);
-    pendingChanges.itemChanged(included);
+    pendingChanges.itemChanged(included, TestState.Included);
+    pendingChanges.itemChanged(notModified, TestState.Included);
 
     // Then ensure there is on item.
     assertEquals(1, pendingChanges.getTestsToChange().size());
     assertEquals(excluded, pendingChanges.getTestsToChange().get(0));
   }
 
-  public void testShouldClearPendingStateWhenRemovingFromPendingChanges() {
+  public void testShouldSetRollbackStateWhenRemovingFromPendingChanges() {
     // Given that you have an included and an excluded tests.
     TestFindResult included = createIncluded();
     TestFindResult excluded = createExcluded();
@@ -70,8 +73,8 @@ public class PendingChangesTest extends TestCase {
     included.setPendingChangeState(TestState.Included);
     excluded.setPendingChangeState(TestState.Excluded);
 
-    pendingChanges.itemChanged(included);
-    pendingChanges.itemChanged(excluded);
+    pendingChanges.itemChanged(included, TestState.Included);
+    pendingChanges.itemChanged(excluded, TestState.Excluded);
 
     // Then ensure the new state is rolled back.
     assertEquals(TestState.RolledBack, included.getPendingChangeState());
@@ -91,6 +94,9 @@ public class PendingChangesTest extends TestCase {
   }
 
   private TestFindResult createPendingChange(int startOffset) {
-    return new TestFindResult(new MockDocument(""), new FindResultImpl(startOffset, startOffset + 10));
+    FindResultImpl findResult = new FindResultImpl(startOffset, startOffset + 10);
+    TestFindResult testFindResult = new TestFindResult(new MockDocument(""), findResult);
+    testFindResult.setTestState(TestState.NotModified);
+    return testFindResult;
   }
 }
