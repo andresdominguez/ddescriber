@@ -61,6 +61,23 @@ public class PendingChangesTest extends TestCase {
     assertEquals(excluded, pendingChanges.getTestsToChange().get(0));
   }
 
+  public void testShouldClearPendingStateWhenRemovingFromPendingChanges() {
+    // Given that you have an included and an excluded tests.
+    TestFindResult included = createIncluded();
+    TestFindResult excluded = createExcluded();
+
+    // When you remove the changed state.
+    included.setPendingChangeState(TestState.Included);
+    excluded.setPendingChangeState(TestState.Excluded);
+
+    pendingChanges.itemChanged(included);
+    pendingChanges.itemChanged(excluded);
+
+    // Then ensure the new state is rolled back.
+    assertEquals(TestState.RolledBack, included.getPendingChangeState());
+    assertEquals(TestState.RolledBack, excluded.getPendingChangeState());
+  }
+
   private TestFindResult createIncluded() {
     TestFindResult pendingChange = createPendingChange(1);
     pendingChange.setTestState(TestState.Included);
