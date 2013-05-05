@@ -89,6 +89,9 @@ public class DDescriberDialog extends DialogWrapper {
       @Override
       public void keyPressed(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+          // Set the selected node when you click OK.
+          DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
+          selectedTest = (TestFindResult) lastPathComponent.getUserObject();
           doOKAction();
         }
       }
@@ -182,7 +185,6 @@ public class DDescriberDialog extends DialogWrapper {
         excludeAction,
         includeAction,
         goAction,
-//        getCancelAction(),
         getOKAction()
     };
   }
