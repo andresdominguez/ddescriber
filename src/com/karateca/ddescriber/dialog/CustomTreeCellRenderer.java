@@ -21,12 +21,6 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   private static final Color GREEN_FG_COLOR = new Color(57, 194, 70);
   private static final Color RED_BG_COLOR = new Color(232, 117, 107);
   private static final Color RED_FG_COLOR = new Color(194, 41, 39);
-  private final Color defaultNonSelColor = getBackgroundNonSelectionColor();
-  private final Color defaultBgSelColor = getBackgroundSelectionColor();
-  private final Icon itGreenIcon = IconLoader.findIcon("/icons/it-icon.png");
-  private final Icon itRedIcon = IconLoader.findIcon("/icons/it-red-icon.png");
-  private final Icon itGrayIcon = IconLoader.findIcon("/icons/it-gray-icon.png");
-  private final Icon descIcon = IconLoader.findIcon("/icons/desc-icon.png");
   private final boolean showFileName;
   private final Map<TestState, NodeSettings> colorMap = new HashMap<TestState, NodeSettings>();
 
@@ -49,10 +43,11 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   }
 
   public CustomTreeCellRenderer(boolean showFileName) {
-    NodeSettings defaultColor = new NodeSettings(defaultNonSelColor, defaultBgSelColor, itGrayIcon);
-
-    colorMap.put(TestState.Excluded, new NodeSettings(RED_BG_COLOR, RED_FG_COLOR, itRedIcon));
-    colorMap.put(TestState.Included, new NodeSettings(GREEN_BG_COLOR, GREEN_FG_COLOR, itGreenIcon));
+    Color defaultBgSelColor = getBackgroundSelectionColor();
+    Color defaultNonSelColor = getBackgroundNonSelectionColor();
+    NodeSettings defaultColor = new NodeSettings(defaultNonSelColor, defaultBgSelColor, DialogIcons.itGrayIcon);
+    colorMap.put(TestState.Excluded, new NodeSettings(RED_BG_COLOR, RED_FG_COLOR, DialogIcons.itRedIcon));
+    colorMap.put(TestState.Included, new NodeSettings(GREEN_BG_COLOR, GREEN_FG_COLOR, DialogIcons.itGreenIcon));
     colorMap.put(TestState.NotModified, defaultColor);
     colorMap.put(TestState.RolledBack, defaultColor);
 
@@ -76,7 +71,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     getNodeSettings(findResult).paintNode();
 
     if (findResult.isDescribe()) {
-      setIcon(descIcon);
+      setIcon(DialogIcons.descIcon);
     }
 
     String name = findResult.toString();
