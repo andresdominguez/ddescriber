@@ -14,7 +14,6 @@ import com.karateca.ddescriber.model.TestState;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.Arrays;
 import java.util.List;
 
 /**
