@@ -1,5 +1,9 @@
 package com.karateca.ddescriber.dialog;
 
+import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import com.intellij.openapi.actionSystem.KeyboardShortcut;
+import com.intellij.openapi.actionSystem.Shortcut;
+import com.intellij.openapi.actionSystem.ShortcutSet;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.SpeedSearchComparator;
@@ -12,6 +16,7 @@ import com.karateca.ddescriber.VoidFunction;
 import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.TestCounts;
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TestState;
 import com.karateca.ddescriber.model.TreeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +25,9 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -39,11 +47,13 @@ public class TreeViewDialog extends DialogWrapper {
   private Tree tree;
   private TestFindResult selectedTest;
   private final JasmineFile jasmineFile;
+  private final PendingChanges pendingChanges;
 
   public TreeViewDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
     this.jasmineFile = jasmineFile;
     this.caretOffset = caretOffset;
+    pendingChanges = new PendingChanges();
     init();
     setTitle("Select the Test or Suite to Add / Remove");
   }
@@ -57,7 +67,7 @@ public class TreeViewDialog extends DialogWrapper {
     TreeNode root = jasmineFile.getTreeNode();
     tree = new Tree(root);
     tree.setVisibleRowCount(VISIBLE_ROW_COUNT);
-    tree.setCellRenderer(new CustomTreeCellRenderer(false));
+    tree.setCellRenderer(new CustomTreeCellRenderer());
 
     // Check if there are multiple describes in the file.
     if (root.getUserObject() instanceof String) {
@@ -167,14 +177,55 @@ public class TreeViewDialog extends DialogWrapper {
   @NotNull
   @Override
   protected Action[] createActions() {
+    Action excludeAction = new MyAction("Exclude (Alt E)", TestState.Excluded);
+    Action includeAction = new MyAction("Include (Alt I)", TestState.Included);
+
+    ShortcutSet ALT_X = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK));
+    ShortcutSet ALT_I = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK));
+
+    registerForEveryKeyboardShortcut(excludeAction, ALT_X);
+    registerForEveryKeyboardShortcut(includeAction, ALT_I);
+
     return new Action[]{
-        new DialogWrapperExitAction("Exclude", EXCLUDE_EXIT_CODE),
+        excludeAction,
+        includeAction,
         getCancelAction(),
         getOKAction()
     };
   }
 
+  // todo: fix this
+  private void registerForEveryKeyboardShortcut(ActionListener action, @NotNull ShortcutSet shortcuts) {
+    for (Shortcut shortcut : shortcuts.getShortcuts()) {
+      if (shortcut instanceof KeyboardShortcut) {
+        KeyboardShortcut ks = (KeyboardShortcut) shortcut;
+        KeyStroke first = ks.getFirstKeyStroke();
+        KeyStroke second = ks.getSecondKeyStroke();
+        if (second == null) {
+          getRootPane().registerKeyboardAction(action, first, JComponent.WHEN_IN_FOCUSED_WINDOW);
+        }
+      }
+    }
+  }
+
   public TestFindResult getSelectedTest() {
     return selectedTest;
+  }
+
+  class MyAction extends DialogWrapperAction {
+    private final TestState changeState;
+
+    MyAction(String name, TestState changeState) {
+      super(name);
+      this.changeState = changeState;
+    }
+
+    @Override
+    protected void doAction(ActionEvent e) {
+      for (TestFindResult testFindResult : getSelectedValues()) {
+        pendingChanges.itemChanged(testFindResult, changeState);
+      }
+      tree.repaint();
+    }
   }
 }
