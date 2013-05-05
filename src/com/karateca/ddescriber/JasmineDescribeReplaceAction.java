@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
-import com.karateca.ddescriber.dialog.DDescriberDialog;
+import com.karateca.ddescriber.dialog.DescriberDialog;
 import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TestState;
@@ -54,15 +54,15 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   private void showDialog() {
     // Open a pop-up to select which describe() or it() you want to change.
-    DDescriberDialog dialog = new DDescriberDialog(project, jasmineFile, editor.getCaretModel().getOffset());
+    DescriberDialog dialog = new DescriberDialog(project, jasmineFile, editor.getCaretModel().getOffset());
     dialog.show();
 
     switch (dialog.getExitCode()) {
-      case DDescriberDialog.CLEAN_CURRENT_EXIT_CODE:
+      case DescriberDialog.CLEAN_CURRENT_EXIT_CODE:
         // Clean the current file.
         jasmineFile.cleanFile();
         break;
-      case DDescriberDialog.OK_EXIT_CODE:
+      case DescriberDialog.OK_EXIT_CODE:
         // Change all of the pending changes.
         List<TestFindResult> pendingChanges = dialog.getPendingChanges();
 
@@ -80,7 +80,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
         ActionUtil.changeTestList(project, document, pendingChanges);
         break;
-      case DDescriberDialog.GO_TO_TEST_EXIT_CODE:
+      case DescriberDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
         break;
     }

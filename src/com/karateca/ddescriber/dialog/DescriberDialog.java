@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * @author Andres Dominguez.
  */
-public class DDescriberDialog extends DialogWrapper {
+public class DescriberDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
 
@@ -49,7 +49,7 @@ public class DDescriberDialog extends DialogWrapper {
   private final ShortcutSet ALT_I = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK));
   private final ShortcutSet ALT_G = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.ALT_DOWN_MASK));
 
-  public DDescriberDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
+  public DescriberDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
     this.jasmineFile = jasmineFile;
     this.caretOffset = caretOffset;
