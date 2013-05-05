@@ -3,8 +3,8 @@ describe('suite1', function () {
     it('test1', function () {
     });
 
-    describe("suite2", function () {
-        it('test2', function () {
+    describe ("suite2", function () {
+        it ('test2', function () {
         });
 
         it('test3', function () {

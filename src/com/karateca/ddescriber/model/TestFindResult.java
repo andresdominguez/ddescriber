@@ -9,7 +9,7 @@ import com.intellij.openapi.util.TextRange;
  */
 public class TestFindResult {
 
-  private static final String REMOVE_START_OF_LINE = "\\s*([xd]?describe\\(|[xi]?it\\()[\"\'](\\S+)";
+  private static final String REMOVE_START_OF_LINE = "\\s*([xd]?describe\\s*\\(|[xi]?it\\s*\\()[\"\'](\\S+)";
   private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
