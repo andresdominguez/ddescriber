@@ -10,13 +10,16 @@ import com.intellij.openapi.project.Project;
 import com.karateca.ddescriber.dialog.DDescriberDialog;
 import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TestState;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Andres Dominguez.
- * TODO: Add tests for js files with double quotes
+ *         TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 
@@ -62,7 +65,20 @@ public class JasmineDescribeReplaceAction extends AnAction {
         break;
       case DDescriberDialog.OK_EXIT_CODE:
         // Change all of the pending changes.
-        ActionUtil.changeTestList(project, document, dialog.getPendingChanges());
+        List<TestFindResult> pendingChanges = dialog.getPendingChanges();
+        if (pendingChanges.size() == 0) {
+          // If there are no pending changes then flip the currently selected node.
+          TestFindResult selectedTest = dialog.getSelectedTest();
+          if (selectedTest.getTestState() == TestState.NotModified) {
+            selectedTest.setPendingChangeState(TestState.Included);
+          } else {
+            selectedTest.setPendingChangeState(TestState.RolledBack);
+          }
+
+          pendingChanges.add(selectedTest);
+        }
+
+        ActionUtil.changeTestList(project, document, pendingChanges);
         break;
       case DDescriberDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
