@@ -1,20 +1,21 @@
 <idea-plugin version="2">
   <id>com.karateca.jasmineDescriber</id>
   <name>ddescriber for jasmine</name>
-  <version>1.2.2</version>
+  <version>2.0</version>
   <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
     <p>
-      This is an idea plugin to quickly run jasmine unit tests and suites by switching between describe() / ddescribe()
-      and it() / iit()
+      This is an idea plugin to quickly run jasmine unit tests and suites by switching between
+      describe() / ddescribe() / xdescribe() and it() / iit() / xit()
     </p>
     <p>
-      Just type shit+ctrl+D to launch a dialog the lets you choose which suite of unit test you want to flip.
+      Just type Ctrl + Shift + D (Command + Shift + D on a Mac) to launch a dialog that lets you choose which suites or
+      unit tests you want to include or exclude.
     </p>
     <p>
-      Use the tool window to see the files that have a ddescribe() of an iit(). You can filter and clean all the tests
-      and suites that have been marked.
+      Use the following shortcuts: (Alt I) to include, (Alt X) to exclude, and (Alt G) to jump to the selected test. The
+      plugin will automatically add an iit or ddescribe to the selected node if you don't have any pending changes.
     </p>
     <p>
       I have tested it on Websotrm and Intellij.
@@ -31,6 +32,7 @@
       1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.<br>
       1.2.1 Add support for files with multiple top-level describe().
       1.2.2 Small enhancements. Expand all nodes on the dialog. Mode stable tool window.
+      2.0 Drop the tool window. Added exclude and multi select and shortcuts.
       ]]>
   </change-notes>
 
