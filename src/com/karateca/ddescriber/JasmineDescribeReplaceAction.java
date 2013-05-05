@@ -66,8 +66,9 @@ public class JasmineDescribeReplaceAction extends AnAction {
       case DDescriberDialog.OK_EXIT_CODE:
         // Change all of the pending changes.
         List<TestFindResult> pendingChanges = dialog.getPendingChanges();
+
+        // If there are no pending changes then flip the currently selected node.
         if (pendingChanges.size() == 0) {
-          // If there are no pending changes then flip the currently selected node.
           TestFindResult selectedTest = dialog.getSelectedTest();
           if (selectedTest.getTestState() == TestState.NotModified) {
             selectedTest.setPendingChangeState(TestState.Included);
