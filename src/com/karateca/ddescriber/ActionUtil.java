@@ -7,6 +7,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.model.TestFindResult;
+import com.karateca.ddescriber.model.TestState;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,21 +17,6 @@ import java.util.List;
  * @author Andres Dominguez.
  */
 public class ActionUtil {
-  /**
-   * Run a write operation within a command.
-   *
-   * @param project The current project.
-   * @param action  The action to run.
-   */
-  private static void runWriteActionInsideCommand(Project project, final Runnable action) {
-    CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-      @Override
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(action);
-      }
-    }, "Add / Remove tests", null);
-  }
-
   /**
    * Run a read operation.
    *
@@ -53,19 +39,8 @@ public class ActionUtil {
    * @param document        The document to modify.
    * @param testFindResults The lines that have to change.
    */
-  public static void changeSelectedTests(Project project, Document document, List<TestFindResult> testFindResults) {
+  public static void changeTestList(Project project, Document document, List<TestFindResult> testFindResults) {
     changeSelectedLineRunningCommand(project, document, testFindResults, false);
-  }
-
-  /**
-   * Exclude the selected tests by adding an x.
-   *
-   * @param project         The current project.
-   * @param document        The document to modify.
-   * @param testFindResults The lines that have to change.
-   */
-  public static void excludeTests(Project project, Document document, List<TestFindResult> testFindResults) {
-    changeSelectedLineRunningCommand(project, document, testFindResults, true);
   }
 
   /**
@@ -90,10 +65,25 @@ public class ActionUtil {
       @Override
       public void run() {
         for (TestFindResult testFindResult : testFindResults) {
-          changeSelectedLine(document, testFindResult, exclude);
+          changeSelectedLine(document, testFindResult);
         }
       }
     });
+  }
+
+  /**
+   * Run a write operation within a command.
+   *
+   * @param project The current project.
+   * @param action  The action to run.
+   */
+  private static void runWriteActionInsideCommand(Project project, final Runnable action) {
+    CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+      @Override
+      public void run() {
+        ApplicationManager.getApplication().runWriteAction(action);
+      }
+    }, "Add / Remove tests", null);
   }
 
   /**
@@ -102,10 +92,9 @@ public class ActionUtil {
    *
    * @param document The document you want to change.
    * @param test     The line that has to change.
-   * @param exclude  True if you want to exclude the test.
    */
-  private static void changeSelectedLine(Document document, TestFindResult test, boolean exclude) {
-    String newText = getReplaceStringValue(test, exclude);
+  private static void changeSelectedLine(Document document, TestFindResult test) {
+    String newText = getReplaceStringValue(test);
 
     int start = test.getStartOffset();
     int end = test.getEndOffset();
@@ -113,17 +102,18 @@ public class ActionUtil {
     document.replaceString(start, end, newText);
   }
 
-  private static String getReplaceStringValue(TestFindResult test, boolean exclude) {
-    if (exclude) {
+  private static String getReplaceStringValue(TestFindResult test) {
+    TestState newState = test.getPendingChangeState();
+
+    if (newState == TestState.Excluded) {
       return test.isDescribe() ? "xdescribe(" : "xit(";
     }
 
-    switch (test.getTestState()) {
-      case Excluded:
-      case Included:
-        return test.isDescribe() ? "describe(" : "it(";
-      default:
-        return test.isDescribe() ? "ddescribe(" : "iit(";
+    if (newState == TestState.Included) {
+      return test.isDescribe() ? "ddescribe(" : "iit(";
     }
+
+    // Rollback to original state.
+    return test.isDescribe() ? "describe(" : "it(";
   }
 }

@@ -61,14 +61,11 @@ public class JasmineDescribeReplaceAction extends AnAction {
         jasmineFile.cleanFile();
         break;
       case TreeViewDialog.OK_EXIT_CODE:
-        // Flip the selected elements.
-        ActionUtil.changeSelectedTests(project, document, dialog.getSelectedValues());
+        // Change all of the pending changes.
+        ActionUtil.changeTestList(project, document, dialog.getPendingChanges());
         break;
       case TreeViewDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
-        break;
-      case TreeViewDialog.EXCLUDE_EXIT_CODE:
-        ActionUtil.excludeTests(project, document, dialog.getSelectedValues());
         break;
     }
   }

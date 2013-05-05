@@ -40,7 +40,6 @@ import java.util.List;
 public class TreeViewDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
-  public static final int EXCLUDE_EXIT_CODE = 104;
 
   private static final int VISIBLE_ROW_COUNT = 17;
   private final int caretOffset;
@@ -48,6 +47,8 @@ public class TreeViewDialog extends DialogWrapper {
   private TestFindResult selectedTest;
   private final JasmineFile jasmineFile;
   private final PendingChanges pendingChanges;
+  private final ShortcutSet ALT_X = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK));
+  private final ShortcutSet ALT_I = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK));
 
   public TreeViewDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
@@ -156,7 +157,11 @@ public class TreeViewDialog extends DialogWrapper {
     return tree;
   }
 
-  public List<TestFindResult> getSelectedValues() {
+  public List<TestFindResult> getPendingChanges() {
+    return pendingChanges.getTestsToChange();
+  }
+
+  private List<TestFindResult> getSelectedValues() {
     List<TestFindResult> selected = new ArrayList<TestFindResult>();
 
     for (DefaultMutableTreeNode node : tree.getSelectedNodes(DefaultMutableTreeNode.class, null)) {
@@ -177,11 +182,8 @@ public class TreeViewDialog extends DialogWrapper {
   @NotNull
   @Override
   protected Action[] createActions() {
-    Action excludeAction = new MyAction("Exclude (Alt E)", TestState.Excluded);
+    Action excludeAction = new MyAction("Exclude (Alt X)", TestState.Excluded);
     Action includeAction = new MyAction("Include (Alt I)", TestState.Included);
-
-    ShortcutSet ALT_X = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK));
-    ShortcutSet ALT_I = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK));
 
     registerForEveryKeyboardShortcut(excludeAction, ALT_X);
     registerForEveryKeyboardShortcut(includeAction, ALT_I);
@@ -194,7 +196,10 @@ public class TreeViewDialog extends DialogWrapper {
     };
   }
 
-  // todo: fix this
+  public TestFindResult getSelectedTest() {
+    return selectedTest;
+  }
+
   private void registerForEveryKeyboardShortcut(ActionListener action, @NotNull ShortcutSet shortcuts) {
     for (Shortcut shortcut : shortcuts.getShortcuts()) {
       if (shortcut instanceof KeyboardShortcut) {
@@ -206,10 +211,6 @@ public class TreeViewDialog extends DialogWrapper {
         }
       }
     }
-  }
-
-  public TestFindResult getSelectedTest() {
-    return selectedTest;
   }
 
   class MyAction extends DialogWrapperAction {

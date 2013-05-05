@@ -161,7 +161,7 @@ public class JasmineFile {
    */
   public void cleanFile() {
     Document document = ActionUtil.getDocument(getVirtualFile());
-    ActionUtil.changeSelectedTests(project, document, hierarchy.getMarkedElements());
+    ActionUtil.changeTestList(project, document, hierarchy.getMarkedElements());
   }
 
   public TestCounts getTestCounts() {
