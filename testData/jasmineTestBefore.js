@@ -39,7 +39,7 @@ describe('top describe', function () {
             var a;
         });
 
-        xdescribe('the xdescribe', function () {
+        xdescribe  ('the xdescribe', function () {
 
         });
 

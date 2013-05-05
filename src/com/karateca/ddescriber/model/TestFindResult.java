@@ -30,7 +30,7 @@ public class TestFindResult {
     this.lineNumber = lineNumber + 1;
 
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
-    isDescribe = lineText.contains("describe(");
+    isDescribe = lineText.contains("describe");
 
     if (lineText.contains("ddescribe") || lineText.contains("iit")) {
       testState = TestState.Included;
