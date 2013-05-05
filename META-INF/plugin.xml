@@ -30,9 +30,9 @@
       1.1 Added a tree view when you launch the dialog. Added a tool window that shows you all the test files and their
       internal test structure.<br>
       1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.<br>
-      1.2.1 Add support for files with multiple top-level describe().
-      1.2.2 Small enhancements. Expand all nodes on the dialog. Mode stable tool window.
-      2.0 Drop the tool window. Added exclude and multi select and shortcuts.
+      1.2.1 Add support for files with multiple top-level describe().<br>
+      1.2.2 Small enhancements. Expand all nodes on the dialog. Mode stable tool window.<br>
+      2.0 Drop the tool window. Added exclude and multi select and shortcuts.<br>
       ]]>
   </change-notes>
 
