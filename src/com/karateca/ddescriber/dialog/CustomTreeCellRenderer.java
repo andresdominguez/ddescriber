@@ -30,10 +30,6 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   private final boolean showFileName;
   private final Map<TestState, NodeSettings> colorMap = new HashMap<TestState, NodeSettings>();
 
-  private final NodeSettings includeColor = new NodeSettings(GREEN_BG_COLOR, GREEN_FG_COLOR, itGreenIcon);
-  private final NodeSettings excludeColor = new NodeSettings(RED_BG_COLOR, RED_FG_COLOR, itRedIcon);
-  private final NodeSettings defaultColor = new NodeSettings(defaultNonSelColor, defaultBgSelColor, itGrayIcon);
-
   private class NodeSettings {
     final Color bgColor;
     final Color fgColor;
@@ -53,8 +49,10 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
   }
 
   public CustomTreeCellRenderer(boolean showFileName) {
-    colorMap.put(TestState.Excluded, excludeColor);
-    colorMap.put(TestState.Included, includeColor);
+    NodeSettings defaultColor = new NodeSettings(defaultNonSelColor, defaultBgSelColor, itGrayIcon);
+
+    colorMap.put(TestState.Excluded, new NodeSettings(RED_BG_COLOR, RED_FG_COLOR, itRedIcon));
+    colorMap.put(TestState.Included, new NodeSettings(GREEN_BG_COLOR, GREEN_FG_COLOR, itGreenIcon));
     colorMap.put(TestState.NotModified, defaultColor);
     colorMap.put(TestState.RolledBack, defaultColor);
 
