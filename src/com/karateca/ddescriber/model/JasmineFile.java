@@ -140,7 +140,7 @@ public class JasmineFile {
     return this.hierarchy.getMarkedElements().size() > 0;
   }
 
-  public VirtualFile getVirtualFile() {
+  VirtualFile getVirtualFile() {
     return virtualFile;
   }
 

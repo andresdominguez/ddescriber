@@ -22,7 +22,7 @@ public class ActionUtil {
    * @param project The current project.
    * @param action  The action to run.
    */
-  public static void runWriteActionInsideCommand(Project project, final Runnable action) {
+  private static void runWriteActionInsideCommand(Project project, final Runnable action) {
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
       @Override
       public void run() {

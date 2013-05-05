@@ -1,6 +1,5 @@
 package com.karateca.ddescriber.dialog;
 
-import com.intellij.openapi.util.IconLoader;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TestState;
 import com.karateca.ddescriber.model.TreeNode;
@@ -15,13 +14,12 @@ import java.util.Map;
 /**
  * @author Andres Dominguez.
  */
-public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
+class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 
   private static final Color GREEN_BG_COLOR = new Color(182, 232, 172);
   private static final Color GREEN_FG_COLOR = new Color(57, 194, 70);
   private static final Color RED_BG_COLOR = new Color(232, 117, 107);
   private static final Color RED_FG_COLOR = new Color(194, 41, 39);
-  private final boolean showFileName;
   private final Map<TestState, NodeSettings> colorMap = new HashMap<TestState, NodeSettings>();
 
   private class NodeSettings {
@@ -42,16 +40,15 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     }
   }
 
-  public CustomTreeCellRenderer(boolean showFileName) {
+  public CustomTreeCellRenderer() {
     Color defaultBgSelColor = getBackgroundSelectionColor();
     Color defaultNonSelColor = getBackgroundNonSelectionColor();
     NodeSettings defaultColor = new NodeSettings(defaultNonSelColor, defaultBgSelColor, DialogIcons.itGrayIcon);
+
     colorMap.put(TestState.Excluded, new NodeSettings(RED_BG_COLOR, RED_FG_COLOR, DialogIcons.itRedIcon));
     colorMap.put(TestState.Included, new NodeSettings(GREEN_BG_COLOR, GREEN_FG_COLOR, DialogIcons.itGreenIcon));
     colorMap.put(TestState.NotModified, defaultColor);
     colorMap.put(TestState.RolledBack, defaultColor);
-
-    this.showFileName = showFileName;
   }
 
   @Override
@@ -74,11 +71,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
       setIcon(DialogIcons.descIcon);
     }
 
-    String name = findResult.toString();
-    if (showFileName && treeNode.isTopNode()) {
-      name = String.format("%s - [%s]", name, treeNode.getVirtualFile().getName());
-    }
-    setText(name);
+    setText(findResult.toString());
 
     return component;
   }

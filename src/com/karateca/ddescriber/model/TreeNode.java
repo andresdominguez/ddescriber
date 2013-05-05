@@ -23,15 +23,6 @@ public class TreeNode extends DefaultMutableTreeNode {
     this.virtualFile = virtualFile;
   }
 
-  /**
-   * Copy a node.
-   * @param copyFrom source.
-   */
-  public TreeNode(TreeNode copyFrom) {
-    this(copyFrom.userObject);
-    this.virtualFile = copyFrom.virtualFile;
-  }
-
   public TestFindResult getNodeValue() {
     return (TestFindResult) getUserObject();
   }
