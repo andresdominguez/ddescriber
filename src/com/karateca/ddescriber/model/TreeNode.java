@@ -11,11 +11,9 @@ public class TreeNode extends DefaultMutableTreeNode {
 
   private VirtualFile virtualFile;
   private boolean topNode;
-  private final boolean testNode;
 
   public TreeNode(Object userObject) {
     super(userObject);
-    testNode = userObject instanceof TestFindResult;
   }
 
   public TreeNode(Object userObject, VirtualFile virtualFile) {
