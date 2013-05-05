@@ -32,29 +32,15 @@ public class ActionUtil {
   }
 
   /**
-   * Change the contents of the selected line. Wrap the call into command and
-   * write actions to support undo.
+   * Include, exclude, or rollback the selected tests.
    *
-   * @param project         The current project.
-   * @param document        The document to modify.
-   * @param testFindResults The lines that have to change.
+   * @param project  The current project.
+   * @param document The document to modify.
+   * @param testList The tests that have to change.
    */
-  public static void changeTestList(Project project, Document document, List<TestFindResult> testFindResults) {
-    changeSelectedLineRunningCommand(project, document, testFindResults, false);
-  }
-
-  /**
-   * Change the contents of the selected line. Wrap the call into command and
-   * write actions to support undo.
-   *
-   * @param project         The current project.
-   * @param document        The document to modify.
-   * @param testFindResults The lines that have to change.
-   * @param exclude         True if you want to exclude the tests.
-   */
-  private static void changeSelectedLineRunningCommand(Project project, final Document document, final List<TestFindResult> testFindResults, final boolean exclude) {
-    // Replace the elements from the bottom up.
-    Collections.sort(testFindResults, new Comparator<TestFindResult>() {
+  public static void changeTestList(Project project, final Document document, final List<TestFindResult> testList) {
+    // Change the test from the bottom up to avoid shifting the offsets.
+    Collections.sort(testList, new Comparator<TestFindResult>() {
       @Override
       public int compare(TestFindResult left, TestFindResult right) {
         return right.getEndOffset() - left.getStartOffset();
@@ -64,7 +50,7 @@ public class ActionUtil {
     runWriteActionInsideCommand(project, new Runnable() {
       @Override
       public void run() {
-        for (TestFindResult testFindResult : testFindResults) {
+        for (TestFindResult testFindResult : testList) {
           changeSelectedLine(document, testFindResult);
         }
       }

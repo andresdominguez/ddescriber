@@ -42,8 +42,4 @@ public class TreeNode extends DefaultMutableTreeNode {
   public void setTopNode(boolean topNode) {
     this.topNode = topNode;
   }
-
-  public boolean isTestNode() {
-    return testNode;
-  }
 }
