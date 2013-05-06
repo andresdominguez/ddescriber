@@ -1,25 +1,17 @@
 The Jasmine DDescriber is an idea plug-in to simplify unit testing in Jasmine (http://pivotal.github.com/jasmine/).
 
-With the plugin you can quickly change a describe() into a ddescribe() and an
-it() into an iit() to make your test runner, such as Testacular or JSTD, run a
-specific set of suites (describe()) and unit tests (it()).
+With the plugin you can quickly change a describe() into a ddescribe() /
+xdescribe() and an it() into an iit() / xit() to make your test runner, such as 
+Karma or JSTD, run a specific set of suites (describe()) and unit tests (it()).
 
-It contains two components: a dialog and a tool window.
+You can launch the dialog by pressing Ctrl SHIFT D (Command Shift D on a Mac).
 
-You can launch the dialog by pressing Ctrl SHIFT D (Command Shift D on a mac).
 The dialog has the following features:
 
 Change a single describe() or it() by hitting Enter or clicking on the OK button.
-Double-click to jump to a specific describe() or it().
-Start typing to search.
-Clean all the ddescribe()'s and iit()'s with one button.
-Select multiple items and click OK to change many elements at a time.
-
-The tool window has the following features:
-
-See which files have an iit() or a ddescribe() in the project.
-Clean all the files.
-Double click to jump to the location of an it() or describe().
-Filter to show only the elements marked for run.
-It automatically updates when you use the dialog.
-Refresh to update when you make changes manually.
+- Start typing to search the list.
+- Hit Enter on the currently selected test or suite to transform it / revert it into and iit() and ddescribe()
+- Click Clean file (Alt C) to clean all the ddescribe() / xdescribe() and iit() / xit() in the current file.
+- Click Exclude (Alt X) to exclude a suite (xdescribe()) or unit test (xit())
+- Click include (Alt I) to include a suite (ddescribe()) or unit test (iit()) 
+- Click Go (Alt G) to jump to the currently selected test.
