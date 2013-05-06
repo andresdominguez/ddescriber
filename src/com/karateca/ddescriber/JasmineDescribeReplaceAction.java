@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.dialog.DescriberDialog;
 import com.karateca.ddescriber.model.JasmineFile;
 import com.karateca.ddescriber.model.TestFindResult;
@@ -40,7 +41,12 @@ public class JasmineDescribeReplaceAction extends AnAction {
     }
     document = (DocumentImpl) editor.getDocument();
 
-    jasmineFile = new JasmineFile(project, editor.getVirtualFile());
+    VirtualFile virtualFile = editor.getVirtualFile();
+    if (virtualFile == null) {
+      return;
+    }
+
+    jasmineFile = new JasmineFile(project, virtualFile);
 
     // Async callback to get the search results for it( and describe(
     jasmineFile.addResultsReadyListener(new ChangeListener() {
