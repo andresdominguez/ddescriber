@@ -1,4 +1,6 @@
-The Jasmine DDescriber is an idea plug-in to simplify unit testing in Jasmine (http://pivotal.github.com/jasmine/).
+The DDescriber for Jasmine is an idea plug-in to simplify unit testing in Jasmine (http://pivotal.github.com/jasmine/).
+
+See a how-to video here: http://www.youtube.com/watch?v=xdSofu-lEMA
 
 With the plugin you can quickly change a describe() into a ddescribe() /
 xdescribe() and an it() into an iit() / xit() to make your test runner, such as 
