@@ -24,6 +24,13 @@ public class JasmineFinderTest extends BaseTestCase {
     assertEquals(7, findResults.size());
   }
 
+  public void testShouldFindTestsWithTrickyText() {
+    List<FindResult> findResults = whenYouFindTestsForJsFile("jasmineWithWeirdRegularExpressions.js");
+
+    // Then ensure all the tests were found.
+    assertEquals(11, findResults.size());
+  }
+
   private List<FindResult> whenYouFindTestsForJsFile(String fileName) {
     prepareScenarioWithTestFile(fileName);
     jasmineFinder.findAll();
