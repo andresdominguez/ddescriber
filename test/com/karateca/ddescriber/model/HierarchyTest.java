@@ -72,39 +72,28 @@ public class HierarchyTest extends BaseTestCase {
     assertEquals(11, tests.size());
 
     int i = 0;
-    TestFindResult findResult;
+    assertDescribe(tests.get(i++), "top describe", TestState.NotModified);
+    assertIt(tests.get(i++), "should not be included iit", TestState.NotModified);
+    assertIt(tests.get(i++), "should not be excluded exit", TestState.NotModified);
+    assertIt(tests.get(i++), "should not be a describe()", TestState.NotModified);
+    assertIt(tests.get(i++), "should not be a ddescribe", TestState.NotModified);
+    assertIt(tests.get(i++), "should be excluded it( iit( describe(", TestState.Excluded);
+    assertIt(tests.get(i++), "should be included it( xit( describe( xdescribe(", TestState.Included);
+    assertDescribe(tests.get(i++), "suite not excluded xdescribe(", TestState.NotModified);
+    assertDescribe(tests.get(i++), "suite not included ddescribe(", TestState.NotModified);
+    assertDescribe(tests.get(i++), "suite excluded describe( it(", TestState.Excluded);
+    assertDescribe(tests.get(i++), "suite included describe( xdescribe( iit(", TestState.Included);
+  }
 
-    findResult = tests.get(i++);
-    assertEquals("top describe", findResult.getTestText());
+  private void assertDescribe(TestFindResult findResult, String expectedText, TestState expectedState) {
+    assertEquals(expectedText, findResult.getTestText());
+    assertEquals(expectedState, findResult.getTestState());
+    assertTrue(findResult.isDescribe());
+  }
 
-    findResult = tests.get(i++);
-    assertEquals("should not be included iit", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("should not be excluded exit", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("should not be a describe()", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("should not be a ddescribe", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("should be excluded it( iit( describe(", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("should be included it( xit( describe( xdescribe(", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("suite not excluded xdescribe(", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("suite not included ddescribe(", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("suite excluded describe( it(", findResult.getTestText());
-
-    findResult = tests.get(i++);
-    assertEquals("suite included describe( xdescribe( iit(", findResult.getTestText());
+  private void assertIt(TestFindResult findResult, String expectedText, TestState expectedState) {
+    assertEquals(expectedText, findResult.getTestText());
+    assertEquals(expectedState, findResult.getTestState());
+    assertFalse(findResult.isDescribe());
   }
 }
