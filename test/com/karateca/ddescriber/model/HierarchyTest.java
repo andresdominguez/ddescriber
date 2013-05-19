@@ -60,4 +60,51 @@ public class HierarchyTest extends BaseTestCase {
     // And ensure it found all the tests.
     assertEquals(16, tests.size());
   }
+
+  public void testShouldFindTestsWithTrickyText() {
+    // Load a file with tricky text.
+    Hierarchy hierarchy = getHierarchyForTestFile("jasmineWithWeirdRegularExpressions.js");
+
+    // When you get the elements.
+    List<TestFindResult> tests = hierarchy.getAllUnitTests();
+
+    // Then ensure the test count is correct.
+    assertEquals(11, tests.size());
+
+    int i = 0;
+    TestFindResult findResult;
+
+    findResult = tests.get(i++);
+    assertEquals("top describe", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("should not be included iit", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("should not be excluded exit", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("should not be a describe()", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("should not be a ddescribe", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("should be excluded it( iit( describe(", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("should be included it( xit( describe( xdescribe(", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("suite not excluded xdescribe(", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("suite not included ddescribe(", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("suite excluded describe( it(", findResult.getTestText());
+
+    findResult = tests.get(i++);
+    assertEquals("suite included describe( xdescribe( iit(", findResult.getTestText());
+  }
 }
