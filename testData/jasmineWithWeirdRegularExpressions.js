@@ -18,7 +18,7 @@ describe('top describe', function () {
     xit('should be excluded it( iit( describe(', function () {
     });
 
-    iit('should be included it( xit( describe( xescribe(', function () {
+    iit('should be included it( xit( describe( xdescribe(', function () {
     });
 
     describe('suite not excluded xdescribe(', function () {
