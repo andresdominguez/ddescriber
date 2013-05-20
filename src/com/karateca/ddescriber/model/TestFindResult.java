@@ -4,6 +4,9 @@ import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Andres Dominguez.
  */
@@ -19,9 +22,9 @@ public class TestFindResult {
   private String testText;
   private TestState testState;
   private TestState pendingChangeState;
+  public static final Pattern INDENTATION_PATTERN = Pattern.compile("xit|iit|it|xdescribe|ddescribe|describe");
 
   public TestFindResult(Document document, FindResult findResult) {
-    startOffset = findResult.getStartOffset();
     endOffset = findResult.getEndOffset();
 
     int lineNumber = document.getLineNumber(endOffset);
@@ -30,11 +33,11 @@ public class TestFindResult {
     this.lineNumber = lineNumber + 1;
 
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
-    isDescribe = lineText.contains("describe");
+    isDescribe = lineText.matches("\\s*[xd]?describe.*");
 
-    if (lineText.contains("ddescribe") || lineText.contains("iit")) {
+    if (lineText.matches("\\s*(ddescribe|iit).*")) {
       testState = TestState.Included;
-    } else if (lineText.contains("xdescribe") || lineText.contains("xit")) {
+    } else if (lineText.matches("\\s*(xdescribe|xit).*")) {
       testState = TestState.Excluded;
     } else {
       testState = TestState.NotModified;
@@ -45,7 +48,14 @@ public class TestFindResult {
     testText = lineText.replaceAll(REMOVE_END_OF_LINE, "$1");
     testText = testText.replaceAll(REMOVE_START_OF_LINE, "$2");
 
-    indentation = startOffset - startOfLine;
+    // Calculate the indentation.
+    int indentation = 0;
+    Matcher matcher = INDENTATION_PATTERN.matcher(lineText);
+    if (matcher.find()) {
+      indentation = matcher.start();
+    }
+    this.indentation = indentation;
+    this.startOffset = startOfLine + indentation;
   }
 
   public int getIndentation() {
