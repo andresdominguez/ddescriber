@@ -28,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -94,6 +96,16 @@ public class DescriberDialog extends DialogWrapper {
           DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
           selectedTest = (TestFindResult) lastPathComponent.getUserObject();
           doOKAction();
+        }
+      }
+    });
+
+    // Jump to code on double click.
+    tree.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        int selRow = tree.getRowForLocation(e.getX(), e.getY());
+        if (selRow != -1 && e.getClickCount() == 2) {
+          goToTest(tree.getPathForLocation(e.getX(), e.getY()));
         }
       }
     });
