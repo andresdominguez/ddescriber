@@ -19,7 +19,7 @@ public class PendingChangesTest extends TestCase {
     pendingChanges = new PendingChanges();
   }
 
-  public void testGetTestsToChange() throws Exception {
+  public void testShouldSortTestsToChange() throws Exception {
     pendingChanges.itemChanged(createPendingChange(10), TestState.Excluded);
     pendingChanges.itemChanged(createPendingChange(30), TestState.Excluded);
 
@@ -98,9 +98,14 @@ public class PendingChangesTest extends TestCase {
     return pendingChange;
   }
 
-  private TestFindResult createPendingChange(int startOffset) {
+  private TestFindResult createPendingChange(final int startOffset) {
     FindResultImpl findResult = new FindResultImpl(startOffset, startOffset + 10);
-    TestFindResult testFindResult = new TestFindResult(new MockDocument(""), findResult);
+    TestFindResult testFindResult = new TestFindResult(new MockDocument(""), findResult) {
+      @Override
+      public int getStartOffset() {
+        return startOffset;
+      }
+    };
     testFindResult.setTestState(TestState.NotModified);
     return testFindResult;
   }
