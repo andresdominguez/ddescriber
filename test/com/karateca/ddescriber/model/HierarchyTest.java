@@ -4,9 +4,6 @@ import com.karateca.ddescriber.BaseTestCase;
 
 import java.util.List;
 
-/**
- * @author Andres Dominguez.
- */
 public class HierarchyTest extends BaseTestCase {
 
   private Hierarchy getHierarchyForTestFile(String testFile) {
@@ -17,8 +14,13 @@ public class HierarchyTest extends BaseTestCase {
   }
 
   public void testGetClosest() throws Exception {
+    getClosest("jasmine1/jasmineTestBefore.js");
+    getClosest("jasmine2/jasmineTestBefore.js");
+  }
+
+  private void getClosest(String testFile) {
     // Given that the caret is under "inner it 2".
-    Hierarchy hierarchy = getHierarchyForTestFile("jasmineTestBefore.js");
+    Hierarchy hierarchy = getHierarchyForTestFile(testFile);
 
     // When you find the closest test or fixture.
     TestFindResult closest = hierarchy.getClosest();
@@ -28,9 +30,14 @@ public class HierarchyTest extends BaseTestCase {
     assertEquals("inner it 2", closest.getTestText());
   }
 
-  public void testGetMarkedElements() {
+  public void testGetMarkedElementsJasmine1() {
+    getMarkedElements("jasmine1/jasmineTestCaretTop.js");
+    getMarkedElements("jasmine2/jasmineTestCaretTop.js");
+  }
+
+  private void getMarkedElements(String testFile) {
     // Given that you have the caret at the top.
-    Hierarchy hierarchy = getHierarchyForTestFile("jasmineTestCaretTop.js");
+    Hierarchy hierarchy = getHierarchyForTestFile(testFile);
 
     // When you get the marked elements.
     List<TestFindResult> elements = hierarchy.getMarkedElements();
@@ -62,8 +69,13 @@ public class HierarchyTest extends BaseTestCase {
   }
 
   public void testShouldFindTestsWithTrickyText() {
+    shouldFindTestsWithTrickyText("jasmine1/jasmineWithWeirdRegularExpressions.js");
+    shouldFindTestsWithTrickyText("jasmine2/jasmineWithWeirdRegularExpressions.js");
+  }
+
+  private void shouldFindTestsWithTrickyText(String testFile) {
     // Load a file with tricky text.
-    Hierarchy hierarchy = getHierarchyForTestFile("jasmineWithWeirdRegularExpressions.js");
+    Hierarchy hierarchy = getHierarchyForTestFile(testFile);
 
     // When you get the elements.
     List<TestFindResult> tests = hierarchy.getAllUnitTests();
