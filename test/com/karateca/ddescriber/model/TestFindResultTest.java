@@ -17,7 +17,7 @@ public class TestFindResultTest extends BaseTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    prepareScenarioWithTestFile("jasmineTestCaretTop.js");
+    prepareScenarioWithTestFile("jasmine1/jasmineTestCaretTop.js");
     jasmineFinder.findAll();
     List<FindResult> findResults = jasmineFinder.getFindResults();
 
@@ -25,6 +25,6 @@ public class TestFindResultTest extends BaseTestCase {
   }
 
   public void testToString() throws Exception {
-    Assert.assertEquals("top describe", testFindResult.toString());
+    assertEquals("top describe", testFindResult.toString());
   }
 }
