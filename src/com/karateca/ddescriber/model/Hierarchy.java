@@ -60,7 +60,7 @@ class Hierarchy {
   }
 
   public List<TestFindResult> getMarkedElements() {
-    ArrayList<TestFindResult> results = new ArrayList<TestFindResult>();
+    List<TestFindResult> results = new ArrayList<TestFindResult>();
 
     for (TestFindResult element : testFindResults) {
       if (element.getTestState() != TestState.NotModified) {
