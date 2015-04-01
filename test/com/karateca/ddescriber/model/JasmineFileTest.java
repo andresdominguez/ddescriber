@@ -6,9 +6,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.List;
 
-/**
- * @author Andres Dominguez.
- */
 public class JasmineFileTest extends BaseTestCase {
 
   private JasmineFile jasmineFile;
@@ -76,7 +73,12 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testElementsMarkedForRun() {
-    buildRootNodeFromFile("jasmineTestCaretTop.js");
+    elementsMarkedForRun("jasmine1/jasmineTestCaretTop.js");
+    elementsMarkedForRun("jasmine2/jasmineTestCaretTop.js");
+  }
+
+  private void elementsMarkedForRun(String fileName) {
+    buildRootNodeFromFile(fileName);
 
     // Ensure there are tests marked to run.
     assertTrue(jasmineFile.hasTestsMarkedToRun());
@@ -98,7 +100,12 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testTreeCopy() throws Exception {
-    buildRootNodeFromFile("jasmineTestCaretTop.js");
+    copiesTree("jasmine1/jasmineTestCaretTop.js");
+    copiesTree("jasmine2/jasmineTestCaretTop.js");
+  }
+
+  private void copiesTree(String fileName) {
+    buildRootNodeFromFile(fileName);
 
     // Given that you have a tree to copy and a destination.
     TreeNode destination = new TreeNode("destRoot");
@@ -129,7 +136,7 @@ public class JasmineFileTest extends BaseTestCase {
 
   public void testSearchResultsListener() {
     // Given a jasmine file.
-    prepareScenarioWithTestFile("jasmineTestCaretTop.js");
+    prepareScenarioWithTestFile("jasmine1/jasmineTestCaretTop.js");
     jasmineFile = new JasmineFile(getProject(), virtualFile);
     final boolean[] buildDone = new boolean[1];
 
@@ -151,7 +158,15 @@ public class JasmineFileTest extends BaseTestCase {
 
   public void testCleanFile() {
     // Given a jasmine file with a ddescribe() and an iit().
-    prepareScenarioWithTestFile("jasmineTestBefore.js");
+    shouldCleanFile("jasmine1/jasmineTestBefore.js");
+
+    // Given a jasmine file with a fdescribe() and an fit().
+    shouldCleanFile("jasmine2/jasmineTestBefore.js");
+  }
+
+  private void shouldCleanFile(String fileName) {
+    // Given a jasmine file with a [fd]describe() and an [fi]it().
+    prepareScenarioWithTestFile(fileName);
     jasmineFile = new JasmineFile(getProject(), virtualFile);
     jasmineFile.buildTreeNodeSync();
 
@@ -163,8 +178,13 @@ public class JasmineFileTest extends BaseTestCase {
   }
 
   public void testShouldCountTests() {
+    shouldCountTests("jasmine1/jasmineTestBefore.js");
+    shouldCountTests("jasmine2/jasmineTestBefore.js");
+  }
+
+  private void shouldCountTests(String fileName) {
     // Given a jasmine file with included and excluded tests.
-    prepareScenarioWithTestFile("jasmineTestBefore.js");
+    prepareScenarioWithTestFile(fileName);
     jasmineFile = new JasmineFile(getProject(), virtualFile);
     jasmineFile.buildTreeNodeSync();
 
