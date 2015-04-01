@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.karateca.jasmineDescriber</id>
   <name>ddescriber for jasmine</name>
-  <version>2.1</version>
+  <version>3.0</version>
   <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
@@ -26,14 +26,15 @@
   ]]></description>
 
   <change-notes><![CDATA[
-      First version 1.0<br>
-      1.1 Added a tree view when you launch the dialog. Added a tool window that shows you all the test files and their
-      internal test structure.<br>
-      1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.<br>
-      1.2.1 Add support for files with multiple top-level describe().<br>
-      1.2.2 Small enhancements. Expand all nodes on the dialog. More stable tool window.<br>
-      2.0 Drop the tool window. Added exclude, multi-select and shortcuts.<br>
+      3.0 Add support for jasmine 2 (fdescriber, fit)<br>
       2.1 Fix some bugs with regular expressions. Jump to test when you double-click.<br>
+      2.0 Drop the tool window. Added exclude, multi-select and shortcuts.<br>
+      1.2.2 Small enhancements. Expand all nodes on the dialog. More stable tool window.<br>
+      1.2.1 Add support for files with multiple top-level describe().<br>
+      1.2 Added tool window. Now you can clean all, filter by marked tests, and jump to tests.<br>
+      1.1 Added a tree view when you launch the dialog. Added a tool window that shows you all the
+      test files and their internal test structure.<br>
+      1.0 First version<br>
       ]]>
   </change-notes>
 

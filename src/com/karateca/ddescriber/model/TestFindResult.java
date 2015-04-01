@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
  */
 public class TestFindResult {
 
-  private static final String REMOVE_START_OF_LINE = "\\s*([xd]?describe\\s*\\(|[xi]?it\\s*\\()[\"\'](\\S+)";
+  private static final String REMOVE_START_OF_LINE =
+      "\\s*([xfd]?describe\\s*\\(|[xfi]?it\\s*\\()[\"\'](\\S+)";
   private static final String REMOVE_END_OF_LINE = "(\\S+)([\"\'])(\\s*[,+]\\s*.*$)";
   private final int indentation;
   private final boolean isDescribe;
@@ -22,7 +23,8 @@ public class TestFindResult {
   private String testText;
   private TestState testState;
   private TestState pendingChangeState;
-  public static final Pattern INDENTATION_PATTERN = Pattern.compile("xit|iit|it|xdescribe|ddescribe|describe");
+  public static final Pattern INDENTATION_PATTERN =
+      Pattern.compile("xit|fit|iit|it|xdescribe|fdescribe|ddescribe|describe");
 
   public TestFindResult(Document document, FindResult findResult) {
     endOffset = findResult.getEndOffset();
@@ -33,9 +35,9 @@ public class TestFindResult {
     this.lineNumber = lineNumber + 1;
 
     String lineText = document.getText(new TextRange(startOfLine, endOfLine));
-    isDescribe = lineText.matches("\\s*[xd]?describe.*");
+    isDescribe = lineText.matches("\\s*[xdf]?describe.*");
 
-    if (lineText.matches("\\s*(ddescribe|iit).*")) {
+    if (lineText.matches("\\s*([fd]describe|[fi]it).*")) {
       testState = TestState.Included;
     } else if (lineText.matches("\\s*(xdescribe|xit).*")) {
       testState = TestState.Excluded;
