@@ -1,9 +1,16 @@
-The DDescriber for Jasmine is an idea plug-in to simplify unit testing in Jasmine (http://pivotal.github.com/jasmine/).
+# ddescriber
+
+The ddescriber for Jasmine is an idea plug-in to simplify unit testing in Jasmine (http://pivotal.github.com/jasmine/).
 
 See a how-to video here: http://www.youtube.com/watch?v=xdSofu-lEMA
 
-With the plugin you can quickly change a describe() into a ddescribe() /
-xdescribe() and an it() into an iit() / xit() to make your test runner, such as 
+## New (April 2nd, 2015). Added support for Jasmine 2 and 1.
+
+* Version 3.0 now it supports `fit` and `fdescribe` for Jasmine 2. 
+* The old support for `iit` and `ddescribe` still works. Just make sure you click on the checkbox after launching the dialog.
+
+With the plugin you can quickly change a `describe()` into a `fdescribe()` / `ddescribe()` /
+`xdescribe()` and an `it()` into a `fit()` / `iit()` / `xit()` to make your test runner, such as 
 Karma or JSTD, run a specific set of suites (describe()) and unit tests (it()).
 
 You can launch the dialog by pressing Ctrl SHIFT D (Command Shift D on a Mac).
