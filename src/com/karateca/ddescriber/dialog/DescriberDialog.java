@@ -53,6 +53,9 @@ public class DescriberDialog extends DialogWrapper {
   private final ShortcutSet ALT_C =
       new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_DOWN_MASK));
 
+  // TODO: Save this as a plugin setting.
+  public static boolean useJasmine1Syntax = false;
+
   public DescriberDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
     this.jasmineFile = jasmineFile;
@@ -126,11 +129,20 @@ public class DescriberDialog extends DialogWrapper {
   private JPanel createPanelWithLabels() {
     JPanel panel = new JPanel(new BorderLayout());
 
-    TestCounts testCounts = jasmineFile.getTestCounts();
+    String values = String.format("Tests: %s", jasmineFile.getTestCounts().getTestCount());
+    panel.add(BorderLayout.EAST, new JLabel(values));
 
-    String values = String.format("Tests: %s, Excluded: %s, Included: %s",
-        testCounts.getTestCount(), testCounts.getExcludedCount(), testCounts.getIncludedCount());
-    panel.add(BorderLayout.CENTER, new JLabel(values));
+    // Jasmine 1 checkbox
+    final JCheckBox checkBox = new JCheckBox("Use Jasmine 1 syntax (ddescribe, iit)",
+        useJasmine1Syntax);
+    panel.add(BorderLayout.CENTER, checkBox);
+    checkBox.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        useJasmine1Syntax = checkBox.isSelected();
+      }
+    });
+
     return panel;
   }
 
