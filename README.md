@@ -1,6 +1,6 @@
 # ddescriber
 
-The ddescriber for Jasmine is an idea plug-in to simplify unit testing in Jasmine (http://pivotal.github.com/jasmine/).
+The ddescriber for Jasmine is an idea plug-in to simplify unit testing in [Jasmine](http://pivotal.github.com/jasmine/).
 
 See a how-to video here: http://www.youtube.com/watch?v=xdSofu-lEMA
 
