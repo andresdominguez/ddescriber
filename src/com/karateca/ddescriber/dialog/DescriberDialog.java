@@ -34,9 +34,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * @author Andres Dominguez.
- */
 public class DescriberDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
   public static final int GO_TO_TEST_EXIT_CODE = 101;
