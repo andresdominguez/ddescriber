@@ -47,10 +47,14 @@ public class DescriberDialog extends DialogWrapper {
   private TestFindResult selectedTest;
   private final JasmineFile jasmineFile;
   private final PendingChanges pendingChanges;
-  private final ShortcutSet ALT_X = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK));
-  private final ShortcutSet ALT_I = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK));
-  private final ShortcutSet ALT_G = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.ALT_DOWN_MASK));
-  private final ShortcutSet ALT_C = new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_DOWN_MASK));
+  private final ShortcutSet ALT_X =
+      new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK));
+  private final ShortcutSet ALT_I =
+      new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK));
+  private final ShortcutSet ALT_G =
+      new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.ALT_DOWN_MASK));
+  private final ShortcutSet ALT_C =
+      new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_DOWN_MASK));
 
   public DescriberDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
@@ -93,7 +97,8 @@ public class DescriberDialog extends DialogWrapper {
       public void keyPressed(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
           // Set the selected node when you click OK.
-          DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
+          DefaultMutableTreeNode lastPathComponent =
+              (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
           selectedTest = (TestFindResult) lastPathComponent.getUserObject();
           doOKAction();
         }
@@ -126,14 +131,15 @@ public class DescriberDialog extends DialogWrapper {
 
     TestCounts testCounts = jasmineFile.getTestCounts();
 
-    String values = String.format("Tests: %s, Excluded: %s, Included: %s", testCounts.getTestCount(),
-        testCounts.getExcludedCount(), testCounts.getIncludedCount());
+    String values = String.format("Tests: %s, Excluded: %s, Included: %s",
+        testCounts.getTestCount(), testCounts.getExcludedCount(), testCounts.getIncludedCount());
     panel.add(BorderLayout.CENTER, new JLabel(values));
     return panel;
   }
 
   private void goToTest(TreePath selPath) {
-    DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+    DefaultMutableTreeNode lastPathComponent =
+        (DefaultMutableTreeNode) selPath.getLastPathComponent();
     selectedTest = (TestFindResult) lastPathComponent.getUserObject();
     close(GO_TO_TEST_EXIT_CODE);
   }
@@ -190,8 +196,10 @@ public class DescriberDialog extends DialogWrapper {
   @NotNull
   @Override
   protected Action[] createActions() {
-    Action excludeAction = new MyAction("Exclude", TestState.Excluded, ALT_X, "Exclude test (Alt X)");
-    Action includeAction = new MyAction("Include", TestState.Included, ALT_I, "Include test (Alt I)");
+    Action excludeAction = new MyAction("Exclude", TestState.Excluded, ALT_X,
+        "Exclude test (Alt X)");
+    Action includeAction = new MyAction("Include", TestState.Included, ALT_I,
+        "Include test (Alt I)");
     Action goAction = new MyAction("Go", TestState.Included, ALT_G, "Go to test (Alt G)") {
       @Override
       protected void doAction(ActionEvent e) {
@@ -211,7 +219,8 @@ public class DescriberDialog extends DialogWrapper {
     return selectedTest;
   }
 
-  private void registerForEveryKeyboardShortcut(ActionListener action, @NotNull ShortcutSet shortcuts) {
+  private void registerForEveryKeyboardShortcut(ActionListener action,
+      @NotNull ShortcutSet shortcuts) {
     for (Shortcut shortcut : shortcuts.getShortcuts()) {
       if (shortcut instanceof KeyboardShortcut) {
         KeyboardShortcut ks = (KeyboardShortcut) shortcut;
