@@ -17,6 +17,7 @@ import java.util.List;
  * @author Andres Dominguez.
  */
 public class ActionUtil {
+
   /**
    * Run a read operation.
    *
@@ -34,11 +35,14 @@ public class ActionUtil {
   /**
    * Include, exclude, or rollback the selected tests.
    *
-   * @param project  The current project.
+   * @param project The current project.
    * @param document The document to modify.
    * @param testList The tests that have to change.
    */
-  public static void changeTestList(Project project, final Document document, final List<TestFindResult> testList) {
+  public static void changeTestList(
+      Project project,
+      final Document document,
+      final List<TestFindResult> testList) {
     // Change the test from the bottom up to avoid shifting the offsets.
     Collections.sort(testList, new Comparator<TestFindResult>() {
       @Override
@@ -61,7 +65,7 @@ public class ActionUtil {
    * Run a write operation within a command.
    *
    * @param project The current project.
-   * @param action  The action to run.
+   * @param action The action to run.
    */
   private static void runWriteActionInsideCommand(Project project, final Runnable action) {
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
@@ -73,11 +77,11 @@ public class ActionUtil {
   }
 
   /**
-   * Perform the replace for the selected line. It will add or remove a
-   * "d" from describe() and an "i" form it().
+   * Perform the replace for the selected line. It will add or remove a "d" from describe() and an
+   * "i" form it().
    *
    * @param document The document you want to change.
-   * @param test     The line that has to change.
+   * @param test The line that has to change.
    */
   private static void changeSelectedLine(Document document, TestFindResult test) {
     String newText = getReplaceStringValue(test);
