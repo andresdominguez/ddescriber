@@ -75,6 +75,10 @@ public class JasmineDescribeReplaceAction extends AnAction {
         // If there are no pending changes then flip the currently selected node.
         if (pendingChanges.size() == 0) {
           TestFindResult selectedTest = dialog.getSelectedTest();
+          if (selectedTest == null) {
+            return;
+          }
+
           if (selectedTest.getTestState() == TestState.NotModified) {
             selectedTest.setPendingChangeState(TestState.Included);
           } else {
@@ -84,7 +88,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
           pendingChanges.add(selectedTest);
         }
 
-        ActionUtil.changeTestList(project, document, pendingChanges);
+        ActionUtil.changeTestList(project, document, pendingChanges, dialog.jasmineSyntax);
         break;
       case DescriberDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
