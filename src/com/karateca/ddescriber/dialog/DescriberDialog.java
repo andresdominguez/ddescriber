@@ -11,18 +11,16 @@ import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.tree.TreeUtil;
+import com.karateca.ddescriber.JasmineSyntax;
 import com.karateca.ddescriber.model.JasmineFile;
-import com.karateca.ddescriber.model.TestCounts;
 import com.karateca.ddescriber.model.TestFindResult;
 import com.karateca.ddescriber.model.TestState;
 import com.karateca.ddescriber.model.TreeNode;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -33,6 +31,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+
+import javax.swing.Action;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 public class DescriberDialog extends DialogWrapper {
   public static final int CLEAN_CURRENT_EXIT_CODE = 100;
@@ -54,7 +61,7 @@ public class DescriberDialog extends DialogWrapper {
       new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_DOWN_MASK));
 
   // TODO: Save this as a plugin setting.
-  public static boolean useJasmine1Syntax = false;
+  public static JasmineSyntax jasmineSyntax = JasmineSyntax.Version2;
 
   public DescriberDialog(Project project, JasmineFile jasmineFile, int caretOffset) {
     super(project);
@@ -134,12 +141,12 @@ public class DescriberDialog extends DialogWrapper {
 
     // Jasmine 1 checkbox
     final JCheckBox checkBox = new JCheckBox("Use Jasmine 1 syntax (ddescribe, iit)",
-        useJasmine1Syntax);
+        jasmineSyntax == JasmineSyntax.Version1);
     panel.add(BorderLayout.CENTER, checkBox);
     checkBox.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        useJasmine1Syntax = checkBox.isSelected();
+        jasmineSyntax = checkBox.isSelected() ? JasmineSyntax.Version1 : JasmineSyntax.Version2;
       }
     });
 

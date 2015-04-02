@@ -35,13 +35,13 @@ public class ActionUtil {
    * @param project The current project.
    * @param document The document to modify.
    * @param testList The tests that have to change.
-   * @param useJasmine1Syntax Whether to use ddescribe of fdescribe.
+   * @param jasmineSyntax Whether to use ddescribe of fdescribe.
    */
   public static void changeTestList(
       Project project,
       final Document document,
       final List<TestFindResult> testList,
-      final boolean useJasmine1Syntax) {
+      final JasmineSyntax jasmineSyntax) {
     // Change the test from the bottom up to avoid shifting the offsets.
     Collections.sort(testList, new Comparator<TestFindResult>() {
       @Override
@@ -54,7 +54,7 @@ public class ActionUtil {
       @Override
       public void run() {
         for (TestFindResult testFindResult : testList) {
-          changeSelectedLine(document, testFindResult, useJasmine1Syntax);
+          changeSelectedLine(document, testFindResult, jasmineSyntax);
         }
       }
     });
@@ -78,14 +78,14 @@ public class ActionUtil {
   /**
    * Perform the replace for the selected line. It will add or remove a "d" from describe() and an
    * "i" form it().
-   *  @param document The document you want to change.
+   * @param document The document you want to change.
    * @param test The line that has to change.
-   * @param useJasmine1Syntax Whether to use ddescribe of fdescribe.
+   * @param jasmineSyntax Whether to use ddescribe of fdescribe.
    */
   private static void changeSelectedLine(Document document,
       TestFindResult test,
-      boolean useJasmine1Syntax) {
-    String newText = getReplaceStringValue(test, useJasmine1Syntax);
+      JasmineSyntax jasmineSyntax) {
+    String newText = getReplaceStringValue(test, jasmineSyntax);
 
     int start = test.getStartOffset();
     int end = test.getEndOffset();
@@ -93,7 +93,8 @@ public class ActionUtil {
     document.replaceString(start, end, newText);
   }
 
-  private static String getReplaceStringValue(TestFindResult test, boolean useJasmine1Syntax) {
+  private static String getReplaceStringValue(TestFindResult test,
+      JasmineSyntax jasmineSyntax) {
     TestState newState = test.getPendingChangeState();
 
     if (newState == TestState.Excluded) {
@@ -101,11 +102,9 @@ public class ActionUtil {
     }
 
     if (newState == TestState.Included) {
-      if (test.isDescribe()) {
-        return useJasmine1Syntax ? "ddescribe(" : "fdescribe(";
-      } else {
-        return useJasmine1Syntax ? "iit(": "fit(";
-      }
+      return test.isDescribe() ?
+          jasmineSyntax.getIncludedDescribe() + "(" :
+          jasmineSyntax.getIncludedit() + "(";
     }
 
     // Rollback to original state.

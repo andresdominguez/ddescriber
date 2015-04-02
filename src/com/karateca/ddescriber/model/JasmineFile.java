@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.EventDispatcher;
 import com.karateca.ddescriber.ActionUtil;
 import com.karateca.ddescriber.JasmineFinder;
+import com.karateca.ddescriber.JasmineSyntax;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -161,7 +162,8 @@ public class JasmineFile {
    */
   public void cleanFile() {
     Document document = ActionUtil.getDocument(getVirtualFile());
-    ActionUtil.changeTestList(project, document, hierarchy.getMarkedElements());
+    ActionUtil.changeTestList(project, document, hierarchy.getMarkedElements(),
+        JasmineSyntax.Version2);
   }
 
   public TestCounts getTestCounts() {
