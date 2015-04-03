@@ -6,8 +6,8 @@
 
   <description><![CDATA[
     <p>
-      This is an idea plugin to quickly run jasmine unit tests and suites by switching between
-      describe() / ddescribe() / xdescribe() and it() / iit() / xit()
+      A plugin to quickly run jasmine unit tests and suites by switching between
+      describe() / fdescribe() / ddescribe() / xdescribe() and it() / fit() / iit() / xit()
     </p>
     <p>
       Just type Ctrl + Shift + D (Command + Shift + D on a Mac) to launch a dialog that lets you choose which suites or
@@ -15,10 +15,10 @@
     </p>
     <p>
       Use the following shortcuts: (Alt I) to include, (Alt X) to exclude, and (Alt G) to jump to the selected test. The
-      plugin will automatically add an iit or ddescribe to the selected node if you don't have any pending changes.
+      plugin will automatically add an iit/fit or fdescribe/ddescribe to the selected node if you don't have any pending changes.
     </p>
     <p>
-      I have tested it on Websotrm and Intellij.
+      I have tested it on Webstorm and Intellij.
     </p>
     <p>
       Download the code at: https://github.com/andresdominguez/ddescriber
