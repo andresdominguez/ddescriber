@@ -3,6 +3,7 @@ package com.karateca.ddescriber.model;
 import com.intellij.find.FindResult;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.EventDispatcher;
 import com.karateca.ddescriber.ActionUtil;
@@ -161,7 +162,8 @@ public class JasmineFile {
    * Clean the file and notify all the changes.
    */
   public void cleanFile() {
-    Document document = ActionUtil.getDocument(getVirtualFile());
+    Document document = ActionUtil.getDocument(this.virtualFile);
+    ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(this.virtualFile);
     ActionUtil.changeTestList(project, document, hierarchy.getMarkedElements(),
         JasmineSyntax.Version2);
   }

@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.karateca.jasmineDescriber</id>
   <name>ddescriber for jasmine</name>
-  <version>3.3</version>
+  <version>3.4</version>
   <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
@@ -27,10 +27,11 @@
 
   <change-notes><![CDATA[
     <ul>
+      <li>3.4 Check read-only status before writing file.</li>
       <li>3.3 Another way to fix windows.</li>
       <li>3.2 Try to fix the action not found error on Windows.</li>
       <li>3.1 Fix in action not found error on Mac.</li>
-      <li>3.0 Add support for jasmine 2 (fdescriber, fit)</li>
+      <li>3.0 Add support for jasmine 2 (fdescribe, fit)</li>
       <li>2.1 Fix some bugs with regular expressions. Jump to test when you double-click.</li>
       <li>2.0 Drop the tool window. Added exclude, multi-select and shortcuts.</li>
       <li>1.2.2 Small enhancements. Expand all nodes on the dialog. More stable tool window.</li>

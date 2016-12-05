@@ -3,10 +3,11 @@ package com.karateca.ddescriber;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.karateca.ddescriber.dialog.DescriberDialog;
 import com.karateca.ddescriber.model.JasmineFile;
@@ -19,12 +20,12 @@ import java.util.List;
 
 /**
  * @author Andres Dominguez.
- *         TODO: Add tests for js files with double quotes
+ * TODO: Add tests for js files with double quotes
  */
 public class JasmineDescribeReplaceAction extends AnAction {
 
   private Project project;
-  private DocumentImpl document;
+  private Document document;
   private EditorImpl editor;
   private JasmineFile jasmineFile;
 
@@ -39,7 +40,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
     if (editor == null) {
       return;
     }
-    document = (DocumentImpl) editor.getDocument();
+    document = editor.getDocument();
 
     VirtualFile virtualFile = editor.getVirtualFile();
     if (virtualFile == null) {
@@ -52,13 +53,13 @@ public class JasmineDescribeReplaceAction extends AnAction {
     jasmineFile.addResultsReadyListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent changeEvent) {
-        showDialog();
+        showDialog(virtualFile);
       }
     });
     jasmineFile.buildTreeNodeAsync();
   }
 
-  private void showDialog() {
+  private void showDialog(VirtualFile virtualFile) {
     // Open a pop-up to select which describe() or it() you want to change.
     DescriberDialog dialog = new DescriberDialog(project, jasmineFile, editor.getCaretModel().getOffset());
     dialog.show();
@@ -88,7 +89,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
           pendingChanges.add(selectedTest);
         }
 
-        ActionUtil.changeTestList(project, document, pendingChanges, dialog.jasmineSyntax);
+        ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(virtualFile);
+        ActionUtil.changeTestList(project, document, pendingChanges, DescriberDialog.jasmineSyntax);
         break;
       case DescriberDialog.GO_TO_TEST_EXIT_CODE:
         goToSelectedTest(dialog.getSelectedTest());
