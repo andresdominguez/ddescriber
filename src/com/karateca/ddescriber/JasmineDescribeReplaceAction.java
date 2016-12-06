@@ -42,7 +42,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
     }
     document = editor.getDocument();
 
-    VirtualFile virtualFile = editor.getVirtualFile();
+    final VirtualFile virtualFile = editor.getVirtualFile();
     if (virtualFile == null) {
       return;
     }
