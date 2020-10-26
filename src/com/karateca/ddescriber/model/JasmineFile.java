@@ -25,7 +25,8 @@ public class JasmineFile {
   private final VirtualFile virtualFile;
   private TreeNode treeNode;
 
-  private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher.create(ChangeListener.class);
+  private final EventDispatcher<ChangeListener> myEventDispatcher = EventDispatcher
+      .create(ChangeListener.class);
   private Hierarchy hierarchy;
 
   public JasmineFile(Project project, VirtualFile virtualFile) {
@@ -109,7 +110,8 @@ public class JasmineFile {
         do {
           // Find a parent that is not under the current level.
           parent = stack.pop();
-        } while (!(parent.getUserObject() instanceof String) && parent.getNodeValue().getIndentation() >= ind);
+        } while (!(parent.getUserObject() instanceof String)
+            && parent.getNodeValue().getIndentation() >= ind);
       }
       last = newNode;
       parent.add(last);
@@ -163,7 +165,7 @@ public class JasmineFile {
    */
   public void cleanFile() {
     Document document = ActionUtil.getDocument(this.virtualFile);
-    ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(this.virtualFile);
+    ReadonlyStatusHandler.ensureFilesWritable(project, this.virtualFile);
     ActionUtil.changeTestList(project, document, hierarchy.getMarkedElements(),
         JasmineSyntax.Version2);
   }

@@ -61,7 +61,8 @@ public class JasmineDescribeReplaceAction extends AnAction {
 
   private void showDialog(VirtualFile virtualFile) {
     // Open a pop-up to select which describe() or it() you want to change.
-    DescriberDialog dialog = new DescriberDialog(project, jasmineFile, editor.getCaretModel().getOffset());
+    DescriberDialog dialog = new DescriberDialog(project, jasmineFile,
+        editor.getCaretModel().getOffset());
     dialog.show();
 
     switch (dialog.getExitCode()) {
@@ -89,7 +90,7 @@ public class JasmineDescribeReplaceAction extends AnAction {
           pendingChanges.add(selectedTest);
         }
 
-        ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(virtualFile);
+        ReadonlyStatusHandler.ensureFilesWritable(project, virtualFile);
         ActionUtil.changeTestList(project, document, pendingChanges, DescriberDialog.jasmineSyntax);
         break;
       case DescriberDialog.GO_TO_TEST_EXIT_CODE:
