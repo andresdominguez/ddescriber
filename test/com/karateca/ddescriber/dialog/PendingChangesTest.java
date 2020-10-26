@@ -15,11 +15,11 @@ public class PendingChangesTest extends TestCase {
 
   private PendingChanges pendingChanges;
 
-  public void setUp() throws Exception {
+  public void setUp() {
     pendingChanges = new PendingChanges();
   }
 
-  public void testShouldSortTestsToChange() throws Exception {
+  public void testShouldSortTestsToChange() {
     pendingChanges.itemChanged(createPendingChange(10), TestState.Excluded);
     pendingChanges.itemChanged(createPendingChange(30), TestState.Excluded);
 
@@ -78,7 +78,7 @@ public class PendingChangesTest extends TestCase {
     pendingChanges.itemChanged(excluded, TestState.Excluded);
 
     // Then ensure the pending state is null and there are no pending changes.
-    assertEquals(null, excluded.getPendingChangeState());
+    assertNull(excluded.getPendingChangeState());
     assertEquals(0, pendingChanges.getTestsToChange().size());
   }
 
@@ -88,7 +88,7 @@ public class PendingChangesTest extends TestCase {
     pendingChanges.itemChanged(notModified, TestState.Included);
     pendingChanges.itemChanged(notModified, TestState.Included);
 
-    assertEquals(null, notModified.getPendingChangeState());
+    assertNull(notModified.getPendingChangeState());
     assertEquals(0, pendingChanges.getTestsToChange().size());
   }
 
@@ -100,7 +100,7 @@ public class PendingChangesTest extends TestCase {
 
   private TestFindResult createPendingChange(final int startOffset) {
     FindResultImpl findResult = new FindResultImpl(startOffset, startOffset + 10);
-    TestFindResult testFindResult = new TestFindResult(new MockDocument(""), findResult) {
+    TestFindResult testFindResult = new TestFindResult(new MockDocument(), findResult) {
       @Override
       public int getStartOffset() {
         return startOffset;

@@ -3,8 +3,6 @@ package com.karateca.ddescriber.model;
 import com.intellij.find.FindResult;
 import com.karateca.ddescriber.BaseTestCase;
 
-import junit.framework.Assert;
-
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ public class TestFindResultTest extends BaseTestCase {
     testFindResult = new TestFindResult(document, findResults.get(0));
   }
 
-  public void testToString() throws Exception {
+  public void testToString() {
     assertEquals("top describe", testFindResult.toString());
   }
 }

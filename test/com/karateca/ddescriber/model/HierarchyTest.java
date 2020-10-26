@@ -13,7 +13,7 @@ public class HierarchyTest extends BaseTestCase {
     return new Hierarchy(document, jasmineFinder.findResults, myFixture.getCaretOffset());
   }
 
-  public void testGetClosest() throws Exception {
+  public void testGetClosest() {
     getClosest("jasmine1/jasmineTestBefore.js");
     getClosest("jasmine2/jasmineTestBefore.js");
   }
@@ -58,11 +58,11 @@ public class HierarchyTest extends BaseTestCase {
     // Then ensure there are excluded elements.
     TestFindResult itElement = tests.get(11);
     assertEquals("should be excluded 1", itElement.getTestText());
-    assertTrue(itElement.getTestState() == TestState.Excluded);
+    assertSame(itElement.getTestState(), TestState.Excluded);
 
     TestFindResult describeElement = tests.get(12);
     assertEquals("excluded 2", describeElement.getTestText());
-    assertTrue(describeElement.getTestState() == TestState.Excluded);
+    assertSame(describeElement.getTestState(), TestState.Excluded);
 
     // And ensure it found all the tests.
     assertEquals(16, tests.size());
@@ -90,14 +90,16 @@ public class HierarchyTest extends BaseTestCase {
     assertIt(tests.get(i++), "should not be a describe()", TestState.NotModified);
     assertIt(tests.get(i++), "should not be a ddescribe", TestState.NotModified);
     assertIt(tests.get(i++), "should be excluded it( iit( describe(", TestState.Excluded);
-    assertIt(tests.get(i++), "should be included it( xit( describe( xdescribe(", TestState.Included);
+    assertIt(tests.get(i++), "should be included it( xit( describe( xdescribe(",
+        TestState.Included);
     assertDescribe(tests.get(i++), "suite not excluded xdescribe(", TestState.NotModified);
     assertDescribe(tests.get(i++), "suite not included ddescribe(", TestState.NotModified);
     assertDescribe(tests.get(i++), "suite excluded describe( it(", TestState.Excluded);
     assertDescribe(tests.get(i++), "suite included describe( xdescribe( iit(", TestState.Included);
   }
 
-  private void assertDescribe(TestFindResult findResult, String expectedText, TestState expectedState) {
+  private void assertDescribe(TestFindResult findResult, String expectedText,
+      TestState expectedState) {
     assertEquals(expectedText, findResult.getTestText());
     assertEquals(expectedState, findResult.getTestState());
     assertTrue(findResult.isDescribe());
