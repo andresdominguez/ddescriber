@@ -25,7 +25,7 @@ public class JasmineFinder {
   }
 
   FindModel createFindModel(FindManager findManager) {
-    FindModel clone = (FindModel) findManager.getFindInFileModel().clone();
+    FindModel clone = findManager.getFindInFileModel().clone();
     clone.setFindAll(true);
     clone.setFromCursor(true);
     clone.setForward(true);
